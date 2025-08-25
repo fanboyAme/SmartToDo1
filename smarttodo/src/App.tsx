@@ -1,59 +1,48 @@
 import React, { useEffect, useState } from "react";
-import { Priority, Form } from "./types/task";
+import { Form } from "./types/task";
 import TaskList from "./components/TaskList";
+import { LocalStorageProvider } from "./services/LocalStorageProvider";
+const provider = new LocalStorageProvider();
 
 function App() {
-	function loadInitialTasks() {
-		const savedData = localStorage.getItem("smarttodo-tasks");
-		if (savedData == null) {
-			return [];
-		}
-		try {
-			const parsedTasks = JSON.parse(savedData);
-			if (Array.isArray(parsedTasks)) {
-				return parsedTasks;
-			} else {
-				return [];
-			}
-		} catch (error) {
-			return [];
-		}
-	}
-	const [tasks, setTasks] = useState<Form[]>(loadInitialTasks);
-	useEffect(() => {
-		const localTask = JSON.stringify(tasks);
-		localStorage.setItem("smarttodo-tasks", localTask);
-	}, [tasks]);
-	const addNewTask = (newTaskData: {
-		title: string;
-		description?: string;
-		priority: Priority;
-	}) => {
-		const newTask = {
-			id: crypto.randomUUID(),
-			title: newTaskData.title,
-			description: newTaskData.description,
-			completed: false,
-			createdAt: new Date(),
-			priority: newTaskData.priority,
-		};
+	const [tasks, setTasks] = useState<Form[]>([]);
+	const [editingTask, setEditingTask] = useState<Form | null>(null);
 
-		setTasks((prevTasks) => [...prevTasks, newTask]);
+	useEffect(() => {
+		const loadTasks = async () => {
+			const savedTasks = await provider.getAllTask();
+			setTasks(savedTasks);
+		};
+		loadTasks();
+	}, []);
+	const addNewTask = async (
+		newTaskData: Omit<Form, "id" | "createdAt" | "completed">
+	) => {
+		const createdTask = await provider.createTask(newTaskData);
+		setTasks((prevTasks) => [...prevTasks, createdTask]);
 	};
-	function toggleTask(id: string) {
-		setTasks(
-			tasks.map((currentTask) => {
-				if (currentTask.id === id) {
-					return { ...currentTask, completed: !currentTask.completed };
-				} else {
-					return currentTask;
-				}
-			})
+
+	const deleteTask = async (id: string) => {
+		await provider.deleteTask(id);
+		setTasks((prevTask) => prevTask.filter((tasks) => tasks.id !== id));
+	};
+
+	const toggleTask = async (id: string) => {
+		const taskToToggle = tasks.find((currentTask) => currentTask.id === id);
+		if (!taskToToggle) {
+			return;
+		}
+		const updates = { completed: !taskToToggle.completed };
+		await provider.updateTask(id, updates);
+		setTasks((prevTasks) =>
+			prevTasks.map((task) =>
+				task.id === id ? { ...task, completed: !task.completed } : task
+			)
 		);
-	}
-	function deleteTask(id: string) {
-		setTasks(tasks.filter((prevTask) => prevTask.id !== id));
-	}
+	};
+	const startEditing = (task: Form): void => {
+		setEditingTask(task);
+	};
 	return (
 		<div>
 			<TaskList
@@ -61,6 +50,7 @@ function App() {
 				onAddTask={addNewTask}
 				onToggleTask={toggleTask}
 				onDeleteTask={deleteTask}
+				onStartEditing={startEditing}
 			/>
 		</div>
 	);

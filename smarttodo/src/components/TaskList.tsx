@@ -12,12 +12,14 @@ interface TaskListProps {
 	}) => void;
 	onToggleTask: (id: string) => void;
 	onDeleteTask: (id: string) => void;
+	onStartEditing: (task: Form) => void;
 }
 function TaskList({
 	tasks,
 	onAddTask,
 	onToggleTask,
 	onDeleteTask,
+	onStartEditing,
 }: TaskListProps) {
 	return (
 		<div>
@@ -30,6 +32,7 @@ function TaskList({
 						key={task.id}
 						onToggleTask={onToggleTask}
 						onDeleteTask={onDeleteTask}
+						onStartEditing={onStartEditing}
 					/>
 				))}
 			</ul>

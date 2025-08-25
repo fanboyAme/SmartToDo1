@@ -4,13 +4,22 @@ interface TaskCardProps {
 	task: Form;
 	onToggleTask: (id: string) => void;
 	onDeleteTask: (id: string) => void;
+	onStartEditing: (task: Form) => void;
 }
-function TaskCard({ task, onToggleTask, onDeleteTask }: TaskCardProps) {
+function TaskCard({
+	task,
+	onToggleTask,
+	onDeleteTask,
+	onStartEditing,
+}: TaskCardProps) {
 	function handleCheckboxChange() {
 		onToggleTask(task.id);
 	}
 	function handleDeleteClick() {
 		onDeleteTask(task.id);
+	}
+	function handleEditingClick() {
+		onStartEditing(task);
 	}
 	return (
 		<li>
@@ -30,7 +39,7 @@ function TaskCard({ task, onToggleTask, onDeleteTask }: TaskCardProps) {
 			<p>Приоритет {task.priority}</p>
 			<div>
 				<button onClick={handleDeleteClick}>Удалить</button>
-				<button>Редактировать</button>
+				<button onClick={handleEditingClick}>Редактировать</button>
 			</div>
 		</li>
 	);
