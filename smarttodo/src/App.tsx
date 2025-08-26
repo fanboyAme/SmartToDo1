@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Form } from "./types/task";
 import TaskList from "./components/TaskList";
 import { LocalStorageProvider } from "./services/LocalStorageProvider";
+import EditModal from "./components/EditModal";
+
 const provider = new LocalStorageProvider();
 
 function App() {
@@ -43,6 +45,18 @@ function App() {
 	const startEditing = (task: Form): void => {
 		setEditingTask(task);
 	};
+	const handleSaveEditedTask = async (updates: Partial<Form>) => {
+		if (editingTask == null) {
+			return;
+		}
+		const updateTask = await provider.updateTask(editingTask.id, updates);
+		setTasks((prevTask) =>
+			prevTask.map((task) =>
+				task.id === editingTask.id ? { ...task, ...updates } : task
+			)
+		);
+		setEditingTask(null);
+	};
 	return (
 		<div>
 			<TaskList
@@ -52,6 +66,13 @@ function App() {
 				onDeleteTask={deleteTask}
 				onStartEditing={startEditing}
 			/>
+			{editingTask && (
+				<EditModal
+					task={editingTask}
+					onSave={handleSaveEditedTask}
+					onClose={() => setEditingTask(null)}
+				/>
+			)}
 		</div>
 	);
 }

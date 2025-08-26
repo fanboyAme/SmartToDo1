@@ -21,6 +21,7 @@ function TaskCard({
 	function handleEditingClick() {
 		onStartEditing(task);
 	}
+
 	return (
 		<li>
 			<div>
