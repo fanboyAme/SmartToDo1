@@ -1,24 +1,36 @@
 import React, { useEffect, useState } from "react";
-import { Form } from "./types/task";
+import { Task } from "./types/task";
 import TaskList from "./components/TaskList";
 import { LocalStorageProvider } from "./services/LocalStorageProvider";
 import EditModal from "./components/EditModal";
+import { IndexedDbProvider } from "./services/IndexedDbProvider";
+import TaskForm from "./components/TaskForm";
 
-const provider = new LocalStorageProvider();
+const providers = {
+	local: new LocalStorageProvider(),
+	indexeddb: new IndexedDbProvider(),
+};
 
 function App() {
-	const [tasks, setTasks] = useState<Form[]>([]);
-	const [editingTask, setEditingTask] = useState<Form | null>(null);
+	const [tasks, setTasks] = useState<Task[]>([]);
+	const [editingTask, setEditingTask] = useState<Task | null>(null);
+	const [isLoading, setIsLoading] = useState(true);
+	const [storageType, setStorageType] = useState<"local" | "indexeddb">(
+		"local"
+	);
+	const provider = providers[storageType];
 
 	useEffect(() => {
 		const loadTasks = async () => {
+			setIsLoading(true);
 			const savedTasks = await provider.getAllTask();
 			setTasks(savedTasks);
+			setIsLoading(false);
 		};
 		loadTasks();
-	}, []);
+	}, [provider]);
 	const addNewTask = async (
-		newTaskData: Omit<Form, "id" | "createdAt" | "completed">
+		newTaskData: Omit<Task, "id" | "createdAt" | "completed">
 	) => {
 		const createdTask = await provider.createTask(newTaskData);
 		setTasks((prevTasks) => [...prevTasks, createdTask]);
@@ -42,10 +54,10 @@ function App() {
 			)
 		);
 	};
-	const startEditing = (task: Form): void => {
+	const startEditing = (task: Task): void => {
 		setEditingTask(task);
 	};
-	const handleSaveEditedTask = async (updates: Partial<Form>) => {
+	const handleSaveEditedTask = async (updates: Partial<Task>) => {
 		if (editingTask == null) {
 			return;
 		}
@@ -56,25 +68,43 @@ function App() {
 			)
 		);
 		setEditingTask(null);
+		function Load() {
+			if (isLoading == true) {
+				return <div>загрузка</div>;
+			}
+		}
+		const selectStorage = (event: React.ChangeEvent<HTMLSelectElement>) => {
+			setStorageType(event.target.value as "local" | "indexeddb");
+		};
 	};
 	return (
 		<div>
-			<TaskList
-				tasks={tasks}
-				onAddTask={addNewTask}
-				onToggleTask={toggleTask}
-				onDeleteTask={deleteTask}
-				onStartEditing={startEditing}
-			/>
-			{editingTask && (
-				<EditModal
-					task={editingTask}
-					onSave={handleSaveEditedTask}
-					onClose={() => setEditingTask(null)}
-				/>
+			{isLoading ? (
+				<div>загрузка</div>
+			) : (
+				<>
+					{" "}
+					<TaskForm
+						onAddTask={addNewTask}
+						storageType={storageType}
+						onStorageType={setStorageType}
+					/>
+					<TaskList
+						tasks={tasks}
+						onToggleTask={toggleTask}
+						onDeleteTask={deleteTask}
+						onStartEditing={startEditing}
+					/>
+					{editingTask && (
+						<EditModal
+							task={editingTask}
+							onSave={handleSaveEditedTask}
+							onClose={() => setEditingTask(null)}
+						/>
+					)}
+				</>
 			)}
 		</div>
 	);
 }
-
 export default App;

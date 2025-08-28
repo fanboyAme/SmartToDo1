@@ -1,17 +1,20 @@
 import React, { useState } from "react";
-import { Form, Priority } from "../types/task";
+import { Task, Priority } from "../types/task";
 interface TaskFormProps {
 	onAddTask: (newTaskData: {
 		title: string;
 		description?: string;
 		priority: Priority;
 	}) => void;
+	storageType: "local" | "indexeddb";
+	onStorageType: (type: "local" | "indexeddb") => void;
 }
 
-function TaskForm({ onAddTask }: TaskFormProps) {
+function TaskForm({ onAddTask, storageType, onStorageType }: TaskFormProps) {
 	const [title, setTitle] = useState("");
 	const [description, setDescription] = useState("");
 	const [priority, setPriority] = useState<Priority>("low");
+
 	const inputTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setTitle(event.target.value);
 	};
@@ -20,6 +23,9 @@ function TaskForm({ onAddTask }: TaskFormProps) {
 	};
 	const selectPriopity = (event: React.ChangeEvent<HTMLSelectElement>) => {
 		setPriority(event.target.value as Priority);
+	};
+	const selectStorage = (event: React.ChangeEvent<HTMLSelectElement>) => {
+		onStorageType(event.target.value as "local" | "indexeddb");
 	};
 	function handleSubmit(event: React.ChangeEvent<HTMLFormElement>) {
 		event.preventDefault();
@@ -49,6 +55,15 @@ function TaskForm({ onAddTask }: TaskFormProps) {
 						<option value={"low"}>low</option>
 						<option value={"medium"}>medium</option>
 						<option value={"high"}>high</option>
+					</select>
+				</label>
+			</div>
+			<div>
+				<label>
+					Сохранить:
+					<select value={storageType} onChange={selectStorage}>
+						<option value={"local"}>LocalStorage</option>
+						<option value={"indexeddb"}>IndexedDb</option>
 					</select>
 				</label>
 			</div>

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import App from "../App";
-import { Form, Priority } from "../types/task";
+import { Task, Priority } from "../types/task";
 import { EditModalProps } from "../interfaces/EditModalProps";
 import "../styles/main.css";
 
@@ -49,11 +49,6 @@ function EditModal({ task, onSave, onClose }: EditModalProps) {
 					</select>
 				</label>
 			</div>
-			<input
-				type="checkbox"
-				checked={task.completed}
-				// onChange={handleCheckboxChange}
-			/>
 			<button type="submit">Сохранить</button>
 			<button onClick={onClose}>Отменить</button>
 		</form>

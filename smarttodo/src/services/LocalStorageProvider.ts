@@ -1,7 +1,7 @@
-import { Form } from "../types/task";
+import { Task } from "../types/task";
 import { IStorageProvider } from "../interfaces/IStorageProvider";
 export class LocalStorageProvider implements IStorageProvider {
-	async getAllTask(): Promise<Form[]> {
+	async getAllTask(): Promise<Task[]> {
 		const savedData = localStorage.getItem("smarttodo-tasks");
 		if (savedData == null) {
 			return [];
@@ -9,7 +9,17 @@ export class LocalStorageProvider implements IStorageProvider {
 		try {
 			const parsedTasks = JSON.parse(savedData);
 			if (Array.isArray(parsedTasks)) {
-				return parsedTasks;
+				const filtredTask = parsedTasks.filter(
+					(element) =>
+						typeof element === "object" &&
+						element !== null &&
+						typeof element.title === "string" &&
+						(typeof element.description === "string" ||
+							element.description === undefined) &&
+						typeof element.id === "string" &&
+						["low", "medium", "high"].includes(element.priority)
+				);
+				return filtredTask;
 			} else {
 				return [];
 			}
@@ -17,13 +27,13 @@ export class LocalStorageProvider implements IStorageProvider {
 			return [];
 		}
 	}
-	private saveTasks(tasks: Form[]): void {
+	private saveTasks(tasks: Task[]): void {
 		const jsonString = JSON.stringify(tasks);
 		localStorage.setItem("smarttodo-tasks", jsonString);
 	}
 	async createTask(
-		task: Omit<Form, "id" | "createdAt" | "completed">
-	): Promise<Form> {
+		task: Omit<Task, "id" | "createdAt" | "completed">
+	): Promise<Task> {
 		const newTask = {
 			id: crypto.randomUUID(),
 			title: task.title,
@@ -38,7 +48,7 @@ export class LocalStorageProvider implements IStorageProvider {
 		await this.saveTasks(allTask);
 		return newTask;
 	}
-	async updateTask(id: string, update: Partial<Form>): Promise<void> {
+	async updateTask(id: string, update: Partial<Task>): Promise<void> {
 		const actualTask = await this.getAllTask();
 		const updateTask = actualTask.map((currentTask) => {
 			if (currentTask.id === id) {

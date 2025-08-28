@@ -1,10 +1,10 @@
 import React from "react";
-import { Form, Priority } from "../types/task";
+import { Task, Priority } from "../types/task";
 interface TaskCardProps {
-	task: Form;
+	task: Task;
 	onToggleTask: (id: string) => void;
 	onDeleteTask: (id: string) => void;
-	onStartEditing: (task: Form) => void;
+	onStartEditing: (task: Task) => void;
 }
 function TaskCard({
 	task,

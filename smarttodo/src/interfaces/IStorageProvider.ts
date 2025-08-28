@@ -1,8 +1,8 @@
-import { Form } from "../types/task";
+import { Task } from "../types/task";
 
 export interface IStorageProvider {
-	getAllTask(): Promise<Form[]>;
-	updateTask(id: string, update: Partial<Form>): Promise<void>;
+	getAllTask(): Promise<Task[]>;
+	updateTask(id: string, update: Partial<Task>): Promise<void>;
 	deleteTask(id: string): Promise<void>;
-	createTask(task: Omit<Form, "id" | "createdAt">): Promise<Form>;
+	createTask(task: Omit<Task, "id" | "createdAt">): Promise<Task>;
 }

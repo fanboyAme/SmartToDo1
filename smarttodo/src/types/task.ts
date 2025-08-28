@@ -1,5 +1,5 @@
 export type Priority = "low" | "medium" | "high";
-export interface Form {
+export interface Task {
 	id: string;
 	title: string;
 	description?: string;

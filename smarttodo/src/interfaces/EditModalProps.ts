@@ -1,6 +1,6 @@
-import { Form } from "../types/task";
+import { Task } from "../types/task";
 export interface EditModalProps {
-	task: Form;
-	onSave: (update: Partial<Form>) => Promise<void>;
+	task: Task;
+	onSave: (update: Partial<Task>) => Promise<void>;
 	onClose: () => void;
 }
