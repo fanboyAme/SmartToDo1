@@ -50,14 +50,13 @@ export class LocalStorageProvider implements IStorageProvider {
 	}
 	async updateTask(id: string, update: Partial<Task>): Promise<void> {
 		const actualTask = await this.getAllTask();
-		const updateTask = actualTask.map((currentTask) => {
-			if (currentTask.id === id) {
-				return { ...currentTask, ...update };
-			} else {
-				return currentTask;
-			}
-		});
-		this.saveTasks(updateTask);
+		const taskMap = new Map(actualTask.map((task) => [task.id, task]));
+		const taskToUpdate = taskMap.get(id);
+		if (taskToUpdate) {
+			taskMap.set(id, { ...taskToUpdate, ...update });
+		}
+		const updatedTask = Array.from(taskMap.values());
+		this.saveTasks(updatedTask);
 	}
 	async deleteTask(id: string): Promise<void> {
 		const actualTask = await this.getAllTask();

@@ -1,13 +1,6 @@
-import React from "react";
-import { Priority, Task } from "../types/task";
 import TaskCard from "./TaskCard";
+import { TaskListProps } from "../interfaces/TaskListProps";
 
-interface TaskListProps {
-	tasks: Task[];
-	onToggleTask: (id: string) => void;
-	onDeleteTask: (id: string) => void;
-	onStartEditing: (task: Task) => void;
-}
 function TaskList({
 	tasks,
 	onToggleTask,
@@ -18,15 +11,17 @@ function TaskList({
 		<div>
 			<h2>Список задач:</h2>
 			<ul>
-				{tasks.map((task) => (
-					<TaskCard
-						task={task}
-						key={task.id}
-						onToggleTask={onToggleTask}
-						onDeleteTask={onDeleteTask}
-						onStartEditing={onStartEditing}
-					/>
-				))}
+				{tasks
+					.filter((task) => task && task.id)
+					.map((task) => (
+						<TaskCard
+							task={task}
+							key={task.id}
+							onToggleTask={onToggleTask}
+							onDeleteTask={onDeleteTask}
+							onStartEditing={onStartEditing}
+						/>
+					))}
 			</ul>
 		</div>
 	);

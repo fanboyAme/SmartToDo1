@@ -1,6 +1,5 @@
-import React, { useState } from "react";
-import App from "../App";
-import { Task, Priority } from "../types/task";
+import React, { useEffect, useState } from "react";
+import { Priority } from "../types/task";
 import { EditModalProps } from "../interfaces/EditModalProps";
 import "../styles/main.css";
 
@@ -10,6 +9,12 @@ function EditModal({ task, onSave, onClose }: EditModalProps) {
 	const [priority, setPriority] = useState(task.priority);
 	const [completed, setCompleted] = useState(task.completed);
 
+	useEffect(() => {
+		setTitle(task.title);
+		setDescription(task.description);
+		setPriority(task.priority);
+		setCompleted(task.completed);
+	}, [task]);
 	function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
 		event.preventDefault();
 		onSave({ title, priority, description, completed });
