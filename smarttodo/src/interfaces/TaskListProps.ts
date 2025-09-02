@@ -4,4 +4,6 @@ export interface TaskListProps {
 	onToggleTask: (id: string) => void;
 	onDeleteTask: (id: string) => void;
 	onStartEditing: (task: Task) => void;
+	currentPage: number;
+	totalPage: number;
 }

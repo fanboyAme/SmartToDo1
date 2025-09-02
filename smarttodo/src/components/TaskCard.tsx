@@ -1,5 +1,5 @@
 import { TaskCardProps } from "../interfaces/TaskCardProps";
-
+import "../styles/main.css";
 function TaskCard({
 	task,
 	onToggleTask,
@@ -17,7 +17,7 @@ function TaskCard({
 	}
 
 	return (
-		<li>
+		<li className="TaskCard">
 			<div>
 				<input
 					type="checkbox"

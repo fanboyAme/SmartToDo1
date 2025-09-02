@@ -1,3 +1,9 @@
 .ModalWindow {
 	background-color: black;
 }
+.TaskList {
+	display: grid;
+	grid-template-columns: repeat(3, 0.5fr);
+	margin: 0 auto;
+	max-width: 1200px;
+}

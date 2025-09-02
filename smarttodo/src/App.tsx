@@ -5,6 +5,8 @@ import { LocalStorageProvider } from "./services/LocalStorageProvider";
 import EditModal from "./components/EditModal";
 import { IndexedDbProvider } from "./services/IndexedDbProvider";
 import TaskForm from "./components/TaskForm";
+import Pagination from "./components/Pagination";
+import toast from "react-hot-toast";
 
 function App() {
 	const [tasks, setTasks] = useState<Task[]>([]);
@@ -49,21 +51,31 @@ function App() {
 		medium: 2,
 		low: 1,
 	};
+	const [currentPage, setCurrentPage] = useState(1);
+	const tasksPerPage = 9;
+	const indexLastTask = tasksPerPage * currentPage;
+	const indexFirstTask = indexLastTask - tasksPerPage;
+	const filteredTask = getFiltredTask();
+	const currentTask = filteredTask.slice(indexFirstTask, indexLastTask);
+	const totalPage = Math.ceil(filteredTask.length / tasksPerPage);
 	const addNewTask = async (
 		newTaskData: Omit<Task, "id" | "createdAt" | "completed">
 	) => {
 		const createdTask = await provider.createTask(newTaskData);
 		setTasks((prevTasks) => [...prevTasks, createdTask]);
+		toast.success("Задача добавлена! ");
 	};
 
 	const deleteTask = async (id: string) => {
 		await provider.deleteTask(id);
 		setTasks((prevTask) => prevTask.filter((tasks) => tasks.id !== id));
+		toast.success("Задача удалена! ");
 	};
 
 	const toggleTask = async (id: string) => {
 		const taskToToggle = tasks.find((currentTask) => currentTask.id === id);
 		if (!taskToToggle) {
+			toast.error(" Что-то пошло не так");
 			return;
 		}
 		const updates = { completed: !taskToToggle.completed };
@@ -74,6 +86,7 @@ function App() {
 			)
 		);
 		setEditingTask(null);
+		toast.success("Статус изменен! ");
 	};
 	const startEditing = (task: Task): void => {
 		setEditingTask(task);
@@ -91,9 +104,9 @@ function App() {
 			)
 		);
 		setEditingTask(null);
+		toast.success("Задача обновлена! ");
 	};
 	function getFiltredTask() {
-		console.log("Filtering tasks...", tasks.length);
 		let res = tasks;
 		if (filterTitle) {
 			res = res.filter((task) =>
@@ -106,12 +119,11 @@ function App() {
 		if (filterPriorities.length > 0) {
 			res = res.filter((task) => filterPriorities.includes(task.priority));
 		}
-		const sorted = res.sort((A, B) => {
+		res.sort((A, B) => {
 			const weightA = priorityWeight[A.priority];
 			const weightB = priorityWeight[B.priority];
 			return weightB - weightA;
 		});
-		console.log("Filtered result:", res.length);
 		return res;
 	}
 	function handleResetFilter() {
@@ -140,10 +152,12 @@ function App() {
 						onResetFilter={handleResetFilter}
 					/>
 					<TaskList
-						tasks={getFiltredTask()}
+						tasks={currentTask}
 						onToggleTask={toggleTask}
 						onDeleteTask={deleteTask}
 						onStartEditing={startEditing}
+						currentPage={currentPage}
+						totalPage={totalPage}
 					/>
 					{editingTask && (
 						<EditModal
@@ -154,6 +168,11 @@ function App() {
 					)}
 				</>
 			)}
+			<Pagination
+				currentPage={currentPage}
+				totalPage={totalPage}
+				onCurrentPage={setCurrentPage}
+			/>
 		</div>
 	);
 }
