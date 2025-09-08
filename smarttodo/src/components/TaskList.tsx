@@ -1,29 +1,24 @@
+import { useTask } from "./TaskManager";
 import TaskCard from "./TaskCard";
-import { TaskListProps } from "../interfaces/TaskListProps";
 import "../styles/main.css";
 
-function TaskList({
-	tasks,
-	onToggleTask,
-	onDeleteTask,
-	onStartEditing,
-	currentPage,
-	totalPage,
-}: TaskListProps) {
+function TaskList() {
+	const { currentTasks, toggleTask, deleteTask, startEditing } = useTask();
+
 	return (
 		<div>
 			<h2>Список задач:</h2>
 			<ul className="TaskList">
-				{tasks.length === 0 ? (
+				{currentTasks.length === 0 ? (
 					<li>Задач не найдено</li>
 				) : (
-					tasks.map((task) => (
+					currentTasks.map((task) => (
 						<TaskCard
 							task={task}
 							key={task.id}
-							onToggleTask={onToggleTask}
-							onDeleteTask={onDeleteTask}
-							onStartEditing={onStartEditing}
+							onToggleTask={toggleTask}
+							onDeleteTask={deleteTask}
+							onStartEditing={startEditing}
 						/>
 					))
 				)}
@@ -31,4 +26,5 @@ function TaskList({
 		</div>
 	);
 }
+
 export default TaskList;

@@ -1,11 +1,7 @@
-import React from "react";
-import { PaginationProps } from "../interfaces/PaginationProps";
+import { useTask } from "./TaskManager";
 
-function Pagination({
-	currentPage,
-	totalPage,
-	onCurrentPage,
-}: PaginationProps) {
+function Pagination() {
+	const { currentPage, totalPage, setCurrentPage } = useTask();
 	function getVisiblePages(
 		currentPage: number,
 		totalPage: number
@@ -37,7 +33,7 @@ function Pagination({
 			<button
 				type="button"
 				disabled={currentPage === 1 || currentPage === 0}
-				onClick={() => onCurrentPage(currentPage - 1)}
+				onClick={() => setCurrentPage(currentPage - 1)}
 			>
 				Назад
 			</button>
@@ -45,7 +41,7 @@ function Pagination({
 				if (typeof item === "number") {
 					return (
 						<div>
-							<button onClick={() => onCurrentPage(item)}>{item}</button>
+							<button onClick={() => setCurrentPage(item)}>{item}</button>
 						</div>
 					);
 				} else {
@@ -56,7 +52,7 @@ function Pagination({
 			<button
 				type="button"
 				disabled={currentPage === totalPage || totalPage === 0}
-				onClick={() => onCurrentPage(currentPage + 1)}
+				onClick={() => setCurrentPage(currentPage + 1)}
 			>
 				Вперед
 			</button>

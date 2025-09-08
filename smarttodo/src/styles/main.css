@@ -3,7 +3,7 @@
 }
 .TaskList {
 	display: grid;
-	grid-template-columns: repeat(3, 0.5fr);
+	grid-template-columns: repeat(5, 0.5fr);
 	margin: 0 auto;
 	max-width: 1200px;
 }
