@@ -1,5 +1,5 @@
 import { useState, useCallback, useMemo, useEffect } from "react";
-import { Task, Priority } from "../types/task";
+import { Task } from "../types/task";
 import { LocalStorageProvider } from "../services/LocalStorageProvider";
 import { IndexedDbProvider } from "../services/IndexedDbProvider";
 

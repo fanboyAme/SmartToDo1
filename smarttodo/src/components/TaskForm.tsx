@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Priority } from "../types/task";
 import { TaskFormProps } from "../interfaces/TaskFormProps";
+import "../styles/Modals.css";
+
 function TaskForm({
 	onAddTask,
 	storageType,
@@ -20,61 +22,76 @@ function TaskForm({
 	};
 
 	return (
-		<div>
-			<form onSubmit={handleSubmit}>
-				<div>
-					<label>
-						Название
-						<input
-							type="text"
-							value={title}
-							onChange={(e) => setTitle(e.target.value)}
-							required
-						/>
-					</label>
+		<div className="modalOverlay" onClick={onClose}>
+			<div className="ModalWindow" onClick={(e) => e.stopPropagation()}>
+				<div className="modalHeader">
+					<h2 className="modalTitle">Создание новой задачи</h2>
+					<button className="closeButton" onClick={onClose}>
+						×
+					</button>
 				</div>
 
-				<div>
-					<label>
-						Описание
-						<textarea
-							value={description}
-							onChange={(e) => setDescription(e.target.value)}
-						/>
-					</label>
-				</div>
+				<div className="modalBody">
+					<form onSubmit={handleSubmit}>
+						<div className="formGroup">
+							<input
+								type="text"
+								value={title}
+								onChange={(e) => setTitle(e.target.value)}
+								className="formInput"
+								placeholder=" "
+								required
+							/>
+							<label className="formLabel">Название</label>
+						</div>
 
-				<div>
-					<label>
-						Приоритет
-						<select
-							value={priority}
-							onChange={(e) => setPriority(e.target.value as Priority)}
-						>
-							<option value="low">low</option>
-							<option value="medium">medium</option>
-							<option value="high">high</option>
-						</select>
-					</label>
-				</div>
+						<div className="formGroup">
+							<textarea
+								value={description}
+								onChange={(e) => setDescription(e.target.value)}
+								className="formTextarea"
+								placeholder=" "
+								rows={4}
+							/>
+							<label className="formLabel">Описание</label>
+						</div>
 
-				<div>
-					<label>
-						Сохранить в:
-						<select
-							value={storageType}
-							onChange={(e) =>
-								onStorageType(e.target.value as "local" | "indexeddb")
-							}
-						>
-							<option value="local">LocalStorage</option>
-							<option value="indexeddb">IndexedDB</option>
-						</select>
-					</label>
-				</div>
+						<div className="selectGroup">
+							<label>Приоритет</label>
+							<select
+								value={priority}
+								onChange={(e) => setPriority(e.target.value as Priority)}
+							>
+								<option value="low">Low</option>
+								<option value="medium">Medium</option>
+								<option value="high">High</option>
+							</select>
+						</div>
 
-				<button type="submit">Добавить задачу</button>
-			</form>
+						<div className="selectGroup">
+							<label>Сохранить в:</label>
+							<select
+								value={storageType}
+								onChange={(e) =>
+									onStorageType(e.target.value as "local" | "indexeddb")
+								}
+							>
+								<option value="local">LocalStorage</option>
+								<option value="indexeddb">IndexedDB</option>
+							</select>
+						</div>
+
+						<div className="buttonGroup">
+							<button type="button" onClick={onClose} className="cancelButton">
+								Отменить
+							</button>
+							<button type="submit" className="submitButton">
+								Добавить задачу
+							</button>
+						</div>
+					</form>
+				</div>
+			</div>
 		</div>
 	);
 }

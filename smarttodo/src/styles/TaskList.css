@@ -1,0 +1,123 @@
+.taskListContainer {
+	flex: 1;
+	min-width: 0;
+	background: white;
+	padding: 2rem;
+	border-radius: 12px;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+	display: flex;
+	flex-direction: column;
+	min-height: 600px;
+}
+
+.taskListTitle {
+	font-family: "Raleway", sans-serif;
+	font-size: 1.5rem;
+	font-weight: 600;
+	color: #2d3748;
+	margin-bottom: 1.5rem;
+	padding-bottom: 0.5rem;
+	border-bottom: 2px solid #e2e8f0;
+}
+
+.taskGrid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+	gap: 1.5rem;
+	padding: 0;
+	margin: 0;
+	list-style: none;
+	flex: 1;
+	align-content: start;
+}
+
+.emptyState {
+	grid-column: 1 / -1;
+	font-family: "Raleway", sans-serif;
+	font-size: 1.1rem;
+	color: #718096;
+	text-align: center;
+	padding: 3rem;
+	background: #f7fafc;
+	border-radius: 12px;
+	border: 2px dashed #cbd5e0;
+	margin: 2rem 0;
+}
+
+.tasksPerPageSelector {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	margin-bottom: 1.5rem;
+	padding: 1rem;
+	background: #f7fafc;
+	border-radius: 8px;
+	border-left: 4px solid #667eea;
+}
+
+.tasksPerPageLabel {
+	font-family: "Raleway", sans-serif;
+	font-size: 0.875rem;
+	font-weight: 500;
+	color: #4a5568;
+}
+
+.tasksPerPageSelect {
+	font-family: "Raleway", sans-serif;
+	font-size: 0.875rem;
+	padding: 0.5rem 1rem;
+	border: 2px solid #e2e8f0;
+	border-radius: 6px;
+	background: white;
+	cursor: pointer;
+	transition: all 0.2s ease;
+}
+
+.tasksPerPageSelect:focus {
+	outline: none;
+	border-color: #667eea;
+	box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.paginationInfo {
+	font-family: "Raleway", sans-serif;
+	font-size: 0.875rem;
+	color: #718096;
+	text-align: center;
+	margin: 1rem 0;
+	padding: 0.5rem;
+	background: #f7fafc;
+	border-radius: 6px;
+}
+
+@media (max-width: 1024px) {
+	.taskGrid {
+		grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+	}
+}
+
+@media (max-width: 768px) {
+	.taskListContainer {
+		padding: 1.5rem;
+	}
+
+	.taskGrid {
+		grid-template-columns: 1fr;
+		gap: 1rem;
+	}
+
+	.tasksPerPageSelector {
+		flex-direction: column;
+		align-items: stretch;
+	}
+}
+
+@media (max-width: 480px) {
+	.taskListContainer {
+		padding: 1rem;
+	}
+
+	.taskListTitle {
+		font-size: 1.25rem;
+	}
+}

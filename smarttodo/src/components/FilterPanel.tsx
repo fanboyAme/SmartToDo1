@@ -1,6 +1,5 @@
-import React from "react";
 import { useTask } from "./TaskManager";
-import { Priority } from "../types/task";
+import "../styles/FilterPanel.css";
 
 function FilterPanel() {
 	const {
@@ -14,97 +13,85 @@ function FilterPanel() {
 	} = useTask();
 
 	return (
-		<div>
-			<div>
+		<aside className="filterPanel">
+			<h3>Фильтры</h3>
+
+			{/* Search input */}
+			<div className="searchGroup">
 				<input
+					type="text"
 					value={filterTitle}
 					onChange={(e) => setFilterTitle(e.target.value)}
-					placeholder="Поиск по названию"
+					className="searchInput"
+					placeholder=" "
 				/>
+				<span className="searchLabel">Поиск по названию</span>
 			</div>
 
-			{/* Приоритеты */}
-			<div>
-				<input
-					type="checkbox"
-					id="priority-low"
-					checked={filterPriorities.includes("low")}
-					onChange={(e) => {
-						if (e.target.checked) {
-							setFilterPriorities([...filterPriorities, "low"]);
-						} else {
-							setFilterPriorities(filterPriorities.filter((p) => p !== "low"));
-						}
-					}}
-				/>
-				<label htmlFor="priority-low">Low</label>
+			{/* Priorities */}
+			<div className="filterSection">
+				<h4>Приоритет</h4>
+				{["high", "medium", "low"].map((priority) => (
+					<div key={priority} className="checkboxGroup">
+						<input
+							type="checkbox"
+							id={`priority-${priority}`}
+							checked={filterPriorities.includes(priority as any)}
+							onChange={(e) => {
+								if (e.target.checked) {
+									setFilterPriorities([...filterPriorities, priority as any]);
+								} else {
+									setFilterPriorities(
+										filterPriorities.filter((p) => p !== priority)
+									);
+								}
+							}}
+						/>
+						<label htmlFor={`priority-${priority}`}>
+							{priority.charAt(0).toUpperCase() + priority.slice(1)}
+						</label>
+					</div>
+				))}
 			</div>
 
-			<div>
-				<input
-					type="checkbox"
-					id="priority-medium"
-					checked={filterPriorities.includes("medium")}
-					onChange={(e) => {
-						if (e.target.checked) {
-							setFilterPriorities([...filterPriorities, "medium"]);
-						} else {
-							setFilterPriorities(
-								filterPriorities.filter((p) => p !== "medium")
-							);
-						}
-					}}
-				/>
-				<label htmlFor="priority-medium">Medium</label>
+			{/* Status */}
+			<div className="filterSection">
+				<h4>Статус</h4>
+				<div className="statusButtons">
+					<button
+						type="button"
+						onClick={() => setFilterCompleted(null)}
+						className={`statusButton ${
+							filterCompleted === null ? "active" : ""
+						}`}
+					>
+						Все задачи
+					</button>
+					<button
+						type="button"
+						onClick={() => setFilterCompleted(true)}
+						className={`statusButton ${
+							filterCompleted === true ? "active" : ""
+						}`}
+					>
+						Выполненные
+					</button>
+					<button
+						type="button"
+						onClick={() => setFilterCompleted(false)}
+						className={`statusButton ${
+							filterCompleted === false ? "active" : ""
+						}`}
+					>
+						Не выполненные
+					</button>
+				</div>
 			</div>
 
-			<div>
-				<input
-					type="checkbox"
-					id="priority-high"
-					checked={filterPriorities.includes("high")}
-					onChange={(e) => {
-						if (e.target.checked) {
-							setFilterPriorities([...filterPriorities, "high"]);
-						} else {
-							setFilterPriorities(filterPriorities.filter((p) => p !== "high"));
-						}
-					}}
-				/>
-				<label htmlFor="priority-high">High</label>
-			</div>
-
-			{/* Статус выполнения */}
-			<div>
-				<button
-					type="button"
-					onClick={() => setFilterCompleted(null)}
-					className={filterCompleted === null ? "active" : ""}
-				>
-					Все задачи
-				</button>
-				<button
-					type="button"
-					onClick={() => setFilterCompleted(true)}
-					className={filterCompleted === true ? "active" : ""}
-				>
-					Выполненные
-				</button>
-				<button
-					type="button"
-					onClick={() => setFilterCompleted(false)}
-					className={filterCompleted === false ? "active" : ""}
-				>
-					Не выполненные
-				</button>
-			</div>
-
-			<div>
-				<button type="button" onClick={handleResetFilter}>
-					Сбросить фильтры
-				</button>
-			</div>
-		</div>
+			<button type="button" onClick={handleResetFilter} className="resetButton">
+				Сбросить фильтры
+			</button>
+		</aside>
 	);
 }
 

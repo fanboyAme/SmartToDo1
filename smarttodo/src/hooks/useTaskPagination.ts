@@ -12,14 +12,14 @@ export const useTaskPagination = ({
 	currentPage,
 	tasksPerPage,
 }: UseTaskPaginationProps) => {
-	const { currentTasks, totalPage } = useMemo(() => {
+	const { paginatedTasks, totalPage } = useMemo(() => {
 		const indexOfLastTask = currentPage * tasksPerPage;
 		const indexOfFirstTask = indexOfLastTask - tasksPerPage;
-		const currentTasks = tasks.slice(indexOfFirstTask, indexOfLastTask);
+		const paginatedTasks = tasks.slice(indexOfFirstTask, indexOfLastTask);
 		const totalPage = Math.ceil(tasks.length / tasksPerPage);
 
-		return { currentTasks, totalPage };
+		return { paginatedTasks, totalPage };
 	}, [tasks, currentPage, tasksPerPage]);
 
-	return { currentTasks, totalPage };
+	return { paginatedTasks, totalPage };
 };

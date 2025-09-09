@@ -1,9 +1,75 @@
-.ModalWindow {
-	background-color: black;
+.appContainer {
+	min-height: 100vh;
+	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+	padding: 2rem;
 }
-.TaskList {
-	display: grid;
-	grid-template-columns: repeat(5, 0.5fr);
+
+.appContent {
+	max-width: 1400px;
 	margin: 0 auto;
-	max-width: 1200px;
+	display: grid;
+	grid-template-columns: 300px 1fr;
+	gap: 2rem;
+	align-items: start;
+}
+
+.header {
+	grid-column: 1 / -1;
+	background: white;
+	padding: 1.5rem 2rem;
+	border-radius: 12px;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 1rem;
+}
+
+.headerTitle {
+	font-family: "Raleway", sans-serif;
+	font-size: 1.5rem;
+	font-weight: 600;
+	color: #2d3748;
+	margin: 0;
+}
+
+.headerStats {
+	font-family: "Raleway", sans-serif;
+	font-size: 1rem;
+	color: #718096;
+}
+
+.headerButton {
+	font-family: "Raleway", sans-serif;
+	font-weight: 600;
+	padding: 0.75rem 1.5rem;
+	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+	color: white;
+	border: none;
+	border-radius: 8px;
+	cursor: pointer;
+	transition: all 0.2s ease;
+}
+
+.headerButton:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 6px 12px rgba(102, 126, 234, 0.3);
+}
+
+@media (max-width: 1024px) {
+	.appContent {
+		grid-template-columns: 1fr;
+	}
+}
+
+@media (max-width: 768px) {
+	.appContainer {
+		padding: 1rem;
+	}
+
+	.header {
+		flex-direction: column;
+		gap: 1rem;
+		text-align: center;
+	}
 }

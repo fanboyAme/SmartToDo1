@@ -1,11 +1,10 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { Task, Priority } from "../types/task";
 import { useTaskStorage } from "./useTaskStorage";
 import { useTaskFilter } from "./useTaskFilter";
 import { useTaskPagination } from "./useTaskPagination";
 
 export const useTaskManager = () => {
-	// Хранилище
 	const {
 		tasks,
 		isLoading,
@@ -17,7 +16,6 @@ export const useTaskManager = () => {
 		deleteTask,
 	} = useTaskStorage();
 
-	// Фильтрация
 	const [filterTitle, setFilterTitle] = useState("");
 	const [filterPriorities, setFilterPriorities] = useState<Priority[]>([]);
 	const [filterCompleted, setFilterCompleted] = useState<boolean | null>(null);
@@ -29,21 +27,18 @@ export const useTaskManager = () => {
 		filterCompleted,
 	});
 
-	// Пагинация
 	const [currentPage, setCurrentPage] = useState(1);
-	const tasksPerPage = 20;
+	const [tasksPerPage, setTasksPerPage] = useState(20);
 
-	const { currentTasks, totalPage } = useTaskPagination({
+	const { paginatedTasks, totalPage } = useTaskPagination({
 		tasks: filteredTasks,
 		currentPage,
 		tasksPerPage,
 	});
 
-	// UI состояния
 	const [isFormVisible, setIsFormVisible] = useState(false);
 	const [editingTask, setEditingTask] = useState<Task | null>(null);
 
-	// Методы
 	const handleResetFilter = useCallback(() => {
 		setFilterTitle("");
 		setFilterPriorities([]);
@@ -84,26 +79,31 @@ export const useTaskManager = () => {
 	const closeEditModal = useCallback(() => {
 		setEditingTask(null);
 	}, []);
+	useEffect(() => {
+		const newTotalPage = Math.ceil(filteredTasks.length / tasksPerPage);
+
+		if (currentPage > newTotalPage && newTotalPage > 0) {
+			setCurrentPage(1);
+		} else if (currentPage < 1 && filteredTasks.length > 0) {
+			setCurrentPage(1);
+		}
+	}, [tasksPerPage, filteredTasks.length, currentPage, setCurrentPage]);
 
 	return {
-		// Состояния
 		tasks,
 		isLoading,
 		taskCount: tasks.length,
-		currentTasks,
+		currentTasks: paginatedTasks,
 		totalPage,
 		currentPage,
 		tasksPerPage,
 		isFormVisible,
 		editingTask,
 		storageType,
-
-		// Фильтры
 		filterTitle,
 		filterPriorities,
 		filterCompleted,
-
-		// Сеттеры
+		setTasksPerPage,
 		setFilterTitle,
 		setFilterPriorities,
 		setFilterCompleted,
@@ -111,8 +111,6 @@ export const useTaskManager = () => {
 		setIsFormVisible,
 		setEditingTask,
 		setStorageType,
-
-		// Методы
 		closeEditModal,
 		loadTasks,
 		addNewTask,

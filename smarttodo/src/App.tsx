@@ -1,20 +1,28 @@
 import { useTask } from "./components/TaskManager";
 import TaskList from "./components/TaskList";
-import Pagination from "./components/Pagination";
+import PaginationButton from "./components/PaginationButton";
 import FilterPanel from "./components/FilterPanel";
+import "./styles/Main.css";
+import "./styles/Base.css";
 
 function App() {
 	const { isLoading } = useTask();
 
 	return (
-		<div>
+		<div
+			style={{
+				display: "flex",
+				minHeight: "100vh",
+				padding: "2rem",
+				gap: "2rem",
+			}}
+		>
 			{isLoading ? (
 				<div>Загрузка...</div>
 			) : (
 				<>
 					<FilterPanel />
 					<TaskList />
-					<Pagination />
 				</>
 			)}
 		</div>
