@@ -1,26 +1,32 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useTask } from "./components/TaskManager";
+import TaskList from "./components/TaskList";
+import PaginationButton from "./components/PaginationButton";
+import FilterPanel from "./components/FilterPanel";
+import "./styles/Main.css";
+import "./styles/Base.css";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	const { isLoading } = useTask();
+
+	return (
+		<div
+			style={{
+				display: "flex",
+				minHeight: "100vh",
+				padding: "2rem",
+				gap: "2rem",
+			}}
+		>
+			{isLoading ? (
+				<div>Загрузка...</div>
+			) : (
+				<>
+					<FilterPanel />
+					<TaskList />
+				</>
+			)}
+		</div>
+	);
 }
 
 export default App;
