@@ -1,160 +1,99 @@
 import React, { useState } from "react";
-import { Task, Priority } from "../types/task";
+import { Priority } from "../types/task";
 import { TaskFormProps } from "../interfaces/TaskFormProps";
+import "../styles/Modals.css";
 
 function TaskForm({
 	onAddTask,
 	storageType,
 	onStorageType,
-	filterCompleted,
-	filterPriorities,
-	filterTitle,
-	onFilterCompleted,
-	onFilterPriorities,
-	onFiltredTitle,
-	onResetFilter,
+	onClose,
 }: TaskFormProps) {
 	const [title, setTitle] = useState("");
 	const [description, setDescription] = useState("");
 	const [priority, setPriority] = useState<Priority>("low");
 
-	const inputTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
-		setTitle(event.target.value);
-	};
-	const inputDescription = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-		setDescription(event.target.value);
-	};
-	const selectPriopity = (event: React.ChangeEvent<HTMLSelectElement>) => {
-		setPriority(event.target.value as Priority);
-	};
-	const selectStorage = (event: React.ChangeEvent<HTMLSelectElement>) => {
-		const newValue = event.target.value as "local" | "indexeddb";
-		localStorage.setItem("smarttodo-storage-types", newValue);
-		onStorageType(newValue);
-	};
-	function handleSubmit(event: React.ChangeEvent<HTMLFormElement>) {
+	const handleSubmit = (event: React.FormEvent) => {
 		event.preventDefault();
-		onAddTask({ title, priority, description });
-	}
+		onAddTask({ title, description, priority });
+		setTitle("");
+		setDescription("");
+		setPriority("low");
+	};
+
 	return (
-		<form onSubmit={handleSubmit}>
-			<div>
-				<label>
-					Название
-					<input type="text" value={title} onChange={inputTitle}></input>
-				</label>
+		<div className="modalOverlay" onClick={onClose}>
+			<div className="ModalWindow" onClick={(e) => e.stopPropagation()}>
+				<div className="modalHeader">
+					<h2 className="modalTitle">Создание новой задачи</h2>
+					<button className="closeButton" onClick={onClose}>
+						×
+					</button>
+				</div>
+
+				<div className="modalBody">
+					<form onSubmit={handleSubmit}>
+						<div className="formGroup">
+							<input
+								type="text"
+								value={title}
+								onChange={(e) => setTitle(e.target.value)}
+								className="formInput"
+								placeholder=" "
+								required
+							/>
+							<label className="formLabel">Название</label>
+						</div>
+
+						<div className="formGroup">
+							<textarea
+								value={description}
+								onChange={(e) => setDescription(e.target.value)}
+								className="formTextarea"
+								placeholder=" "
+								rows={4}
+							/>
+							<label className="formLabel">Описание</label>
+						</div>
+
+						<div className="selectGroup">
+							<label>Приоритет</label>
+							<select
+								value={priority}
+								onChange={(e) => setPriority(e.target.value as Priority)}
+							>
+								<option value="low">Low</option>
+								<option value="medium">Medium</option>
+								<option value="high">High</option>
+							</select>
+						</div>
+
+						<div className="selectGroup">
+							<label>Сохранить в:</label>
+							<select
+								value={storageType}
+								onChange={(e) =>
+									onStorageType(e.target.value as "local" | "indexeddb")
+								}
+							>
+								<option value="local">LocalStorage</option>
+								<option value="indexeddb">IndexedDB</option>
+							</select>
+						</div>
+
+						<div className="buttonGroup">
+							<button type="button" onClick={onClose} className="cancelButton">
+								Отменить
+							</button>
+							<button type="submit" className="submitButton">
+								Добавить задачу
+							</button>
+						</div>
+					</form>
+				</div>
 			</div>
-			<div>
-				<label>
-					Описание
-					<textarea
-						value={description}
-						onChange={inputDescription}
-					></textarea>{" "}
-				</label>
-			</div>
-			<div>
-				<label>
-					Приоритет
-					<select value={priority} onChange={selectPriopity}>
-						<option value={"low"}>low</option>
-						<option value={"medium"}>medium</option>
-						<option value={"high"}>high</option>
-					</select>
-				</label>
-			</div>
-			<div>
-				<label>
-					Сохранить:
-					<select value={storageType} onChange={selectStorage}>
-						<option value={"local"}>LocalStorage</option>
-						<option value={"indexeddb"}>IndexedDb</option>
-					</select>
-				</label>
-			</div>
-			<button type="submit">Добавить</button>
-			<div>
-				<input
-					value={filterTitle}
-					onChange={(e) => onFiltredTitle(e.target.value)}
-				></input>
-			</div>
-			<div>
-				<input
-					type="checkbox"
-					id="priority-low"
-					checked={filterPriorities.includes("low")}
-					onChange={(e) => {
-						if (e.target.checked) {
-							onFilterPriorities([...filterPriorities, "low"]);
-						} else {
-							onFilterPriorities(filterPriorities.filter((p) => p !== "low"));
-						}
-					}}
-				/>
-				<label htmlFor="priority-low">Low</label>
-			</div>
-			<div>
-				<input
-					type="checkbox"
-					id="priority-medium"
-					checked={filterPriorities.includes("medium")}
-					onChange={(e) => {
-						if (e.target.checked) {
-							onFilterPriorities([...filterPriorities, "medium"]);
-						} else {
-							onFilterPriorities(
-								filterPriorities.filter((p) => p !== "medium")
-							);
-						}
-					}}
-				/>
-				<label htmlFor="priority-medium">Medium</label>
-			</div>
-			<div>
-				<input
-					type="checkbox"
-					id="priority-high"
-					checked={filterPriorities.includes("high")}
-					onChange={(e) => {
-						if (e.target.checked) {
-							onFilterPriorities([...filterPriorities, "high"]);
-						} else {
-							onFilterPriorities(filterPriorities.filter((p) => p !== "high"));
-						}
-					}}
-				/>
-				<label htmlFor="priority-high">High</label>
-			</div>
-			<div>
-				<button
-					type="button"
-					onClick={() => onFilterCompleted(null)}
-					className={filterCompleted === null ? "active" : ""}
-				>
-					Все задачи
-				</button>
-				<button
-					type="button"
-					onClick={() => onFilterCompleted(true)}
-					className={filterCompleted === true ? "active" : ""}
-				>
-					Выполненные
-				</button>
-				<button
-					type="button"
-					onClick={() => onFilterCompleted(false)}
-					className={filterCompleted === false ? "active" : ""}
-				>
-					Не выполненные
-				</button>
-			</div>
-			<div>
-				<button type="button" onClick={onResetFilter}>
-					Сбросить фильтры
-				</button>
-			</div>
-		</form>
+		</div>
 	);
 }
+
 export default TaskForm;

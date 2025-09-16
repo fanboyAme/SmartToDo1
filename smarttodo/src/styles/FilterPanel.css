@@ -1,0 +1,193 @@
+.filterPanel {
+	background: white;
+	padding: 1.5rem;
+	border-radius: 12px;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+	height: fit-content;
+	position: sticky;
+	top: 2rem;
+}
+
+.filterPanel h3 {
+	font-family: "Raleway", sans-serif;
+	font-size: 1.25rem;
+	font-weight: 600;
+	color: #2d3748;
+	margin-bottom: 1.5rem;
+	padding-bottom: 0.5rem;
+	border-bottom: 2px solid #e2e8f0;
+}
+
+.searchGroup {
+	position: relative;
+	margin-bottom: 2rem;
+}
+
+.searchInput {
+	font-family: "Raleway", sans-serif;
+	font-size: 1rem;
+	width: 100%;
+	padding: 1rem 0.75rem;
+	border: 2px solid #e2e8f0;
+	border-radius: 8px;
+	background: white;
+	transition: all 0.2s ease;
+}
+
+.searchInput:focus {
+	outline: none;
+	border-color: #667eea;
+	box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.searchLabel {
+	position: absolute;
+	top: -0.75rem;
+	left: 0.5rem;
+	font-family: "Raleway", sans-serif;
+	font-size: 0.875rem;
+	color: #667eea;
+	background: white;
+	padding: 0 0.25rem;
+	font-weight: 500;
+}
+
+.filterSection {
+	margin-bottom: 2rem;
+}
+
+.filterSection h4 {
+	font-family: "Raleway", sans-serif;
+	font-size: 1rem;
+	font-weight: 600;
+	color: #2d3748;
+	margin-bottom: 1rem;
+}
+
+.checkboxGroup {
+	display: flex;
+	align-items: center;
+	margin-bottom: 0.75rem;
+	padding: 0.75rem;
+	border: 2px solid #e2e8f0;
+	border-radius: 8px;
+	transition: all 0.2s ease;
+	cursor: pointer;
+	background: white;
+}
+
+.checkboxGroup:hover {
+	border-color: #cbd5e0;
+	background-color: #f7fafc;
+}
+
+.checkboxGroup input[type="checkbox"] {
+	width: 20px;
+	height: 20px;
+	margin-right: 0.75rem;
+	accent-color: #667eea;
+	cursor: pointer;
+}
+
+.checkboxGroup label {
+	font-family: "Raleway", sans-serif;
+	font-size: 0.875rem;
+	color: #4a5568;
+	cursor: pointer;
+	flex: 1;
+	font-weight: 500;
+}
+
+.checkboxGroup:has(input:checked) {
+	border-color: #667eea;
+	background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+}
+
+.checkboxGroup:has(input:checked) label {
+	color: #667eea;
+	font-weight: 600;
+}
+
+.statusButtons {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
+
+.statusButton {
+	font-family: "Raleway", sans-serif;
+	font-size: 0.875rem;
+	font-weight: 500;
+	padding: 0.75rem 1rem;
+	border: 2px solid #e2e8f0;
+	background: white;
+	color: #4a5568;
+	border-radius: 8px;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	text-align: center;
+}
+
+.statusButton:hover {
+	border-color: #cbd5e0;
+	background-color: #f7fafc;
+}
+
+.statusButton.active {
+	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+	color: white;
+	border-color: #667eea;
+	font-weight: 600;
+}
+
+.resetButton {
+	font-family: "Raleway", sans-serif;
+	font-weight: 600;
+	width: 100%;
+	padding: 0.75rem;
+	background: linear-gradient(135deg, #fc8181 0%, #e53e3e 100%);
+	color: white;
+	border: none;
+	border-radius: 8px;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	margin-top: 1rem;
+}
+
+.resetButton:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 4px 12px rgba(252, 129, 129, 0.3);
+}
+
+@media (max-width: 1024px) {
+	.filterPanel {
+		position: static;
+		margin-bottom: 2rem;
+	}
+}
+
+@media (max-width: 768px) {
+	.filterPanel {
+		padding: 1.25rem;
+	}
+
+	.statusButtons {
+		flex-direction: row;
+		flex-wrap: wrap;
+	}
+
+	.statusButton {
+		flex: 1;
+		min-width: 120px;
+	}
+}
+
+@media (max-width: 480px) {
+	.statusButtons {
+		flex-direction: column;
+	}
+
+	.statusButton {
+		min-width: unset;
+	}
+}
