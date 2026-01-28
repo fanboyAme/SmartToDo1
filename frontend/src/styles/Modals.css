@@ -1,0 +1,240 @@
+.modalOverlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0, 0, 0, 0.6);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 1000;
+	padding: 1rem;
+	backdrop-filter: blur(4px);
+}
+
+.ModalWindow {
+	background: white;
+	border-radius: 16px;
+	box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+	width: 100%;
+	max-width: 500px;
+	max-height: 90vh;
+	overflow-y: auto;
+	position: relative;
+	animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+	from {
+		opacity: 0;
+		transform: translateY(-20px) scale(0.95);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0) scale(1);
+	}
+}
+
+.modalHeader {
+	padding: 1.5rem 2rem;
+	border-bottom: 2px solid #e2e8f0;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+	border-radius: 16px 16px 0 0;
+}
+
+.modalTitle {
+	font-family: "Raleway", sans-serif;
+	font-size: 1.5rem;
+	font-weight: 600;
+	color: #2d3748;
+	margin: 0;
+}
+
+.closeButton {
+	background: none;
+	border: none;
+	font-size: 1.5rem;
+	color: #718096;
+	cursor: pointer;
+	padding: 0.25rem;
+	border-radius: 4px;
+	transition: all 0.2s ease;
+}
+
+.closeButton:hover {
+	color: #2d3748;
+	background: #e2e8f0;
+}
+
+.modalBody {
+	padding: 2rem;
+}
+
+.formGroup {
+	position: relative;
+	margin-bottom: 2rem;
+	width: 100%;
+}
+
+.formInput,
+.formTextarea {
+	font-family: "Raleway", sans-serif;
+	font-size: 1rem;
+	width: 100%;
+	padding: 1rem 0.75rem;
+	border: 2px solid #e2e8f0;
+	border-radius: 8px;
+	background: white;
+	transition: all 0.2s ease;
+	resize: vertical;
+}
+
+.formInput:focus,
+.formTextarea:focus {
+	outline: none;
+	border-color: #667eea;
+	box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.formLabel {
+	position: absolute;
+	top: 1rem;
+	left: 0.75rem;
+	font-family: "Raleway", sans-serif;
+	font-size: 1rem;
+	color: #718096;
+	background: white;
+	padding: 0 0.25rem;
+	transition: all 0.2s ease;
+	pointer-events: none;
+}
+
+.formInput:focus + .formLabel,
+.formTextarea:focus + .formLabel,
+.formInput:not(:placeholder-shown) + .formLabel,
+.formTextarea:not(:placeholder-shown) + .formLabel {
+	top: -0.75rem;
+	left: 0.5rem;
+	font-size: 0.875rem;
+	color: #667eea;
+	font-weight: 500;
+}
+
+.selectGroup {
+	margin-bottom: 2rem;
+}
+
+.selectGroup label {
+	display: block;
+	font-family: "Raleway", sans-serif;
+	font-weight: 500;
+	margin-bottom: 0.5rem;
+	color: #2d3748;
+}
+
+.selectGroup select {
+	font-family: "Raleway", sans-serif;
+	font-size: 1rem;
+	width: 100%;
+	padding: 1rem 0.75rem;
+	border: 2px solid #e2e8f0;
+	border-radius: 8px;
+	background: white;
+	transition: all 0.2s ease;
+	appearance: none;
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+	background-repeat: no-repeat;
+	background-position: right 1rem center;
+	background-size: 1em;
+}
+
+.selectGroup select:focus {
+	outline: none;
+	border-color: #667eea;
+	box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.buttonGroup {
+	display: flex;
+	gap: 1rem;
+	justify-content: flex-end;
+	margin-top: 2rem;
+	padding-top: 1.5rem;
+	border-top: 2px solid #e2e8f0;
+}
+
+.submitButton {
+	font-family: "Raleway", sans-serif;
+	font-weight: 600;
+	padding: 0.75rem 2rem;
+	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+	color: white;
+	border: none;
+	border-radius: 8px;
+	cursor: pointer;
+	transition: all 0.2s ease;
+}
+
+.submitButton:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 6px 12px rgba(102, 126, 234, 0.3);
+}
+
+.cancelButton {
+	font-family: "Raleway", sans-serif;
+	font-weight: 500;
+	padding: 0.75rem 2rem;
+	background: #e2e8f0;
+	color: #4a5568;
+	border: none;
+	border-radius: 8px;
+	cursor: pointer;
+	transition: all 0.2s ease;
+}
+
+.cancelButton:hover {
+	background: #cbd5e0;
+}
+
+@media (max-width: 768px) {
+	.modalOverlay {
+		padding: 0.5rem;
+	}
+
+	.ModalWindow {
+		max-width: 100%;
+		margin: 0;
+		border-radius: 12px;
+	}
+
+	.modalHeader {
+		padding: 1.25rem 1.5rem;
+	}
+
+	.modalBody {
+		padding: 1.5rem;
+	}
+
+	.buttonGroup {
+		flex-direction: column;
+	}
+
+	.submitButton,
+	.cancelButton {
+		width: 100%;
+	}
+}
+
+@media (max-width: 480px) {
+	.modalBody {
+		padding: 1rem;
+	}
+
+	.formGroup {
+		margin-bottom: 1.5rem;
+	}
+}
