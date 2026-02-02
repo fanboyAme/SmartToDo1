@@ -11,11 +11,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IEmailService, EmailService>();
-builder.Services.AddScoped<IHelperService, HelperService>();
-builder.Services.AddScoped<IService, Service>();
+builder.Services.AddScoped<IHelperService, HelperAuthService>();
+builder.Services.AddScoped<IService, AuthService>();
 Console.WriteLine(builder.Configuration.GetConnectionString("DefaultConnection"));
 
-builder.Services.AddDbContext<DB>(options =>
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection"))
 );

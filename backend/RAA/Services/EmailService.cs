@@ -16,6 +16,9 @@ namespace RAA.Services
             _smtp = options.Value;
         }
 
+        // <summary>
+        // Отправка письма пользователю
+        // </summary>
         public async Task<bool> SendAsync(string toEmail, string subject, string text)
         {
             var message = new MimeMessage();

@@ -10,7 +10,7 @@ using RAA.Databases;
 
 namespace RAA.Migrations
 {
-    [DbContext(typeof(DB))]
+    [DbContext(typeof(ApplicationDbContext))]
     partial class DBModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

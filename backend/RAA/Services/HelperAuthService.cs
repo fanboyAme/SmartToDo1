@@ -7,19 +7,26 @@ namespace RAA.Services
     using RAA.Databases;
     using RAA.Interfaces;
     using RAA.Models;
-    using RAA.ProjectDTO;
+    using RAA.ProjectDtos;
 
-    public class HelperService: IHelperService
+    public class HelperAuthService: IHelperService
     {
-        private readonly DB _db;
-        public HelperService(DB db) {  _db = db; }
-        public async Task<bool> Auth(UserAuthDTO UserAuthDTO)
+        private readonly ApplicationDbContext _db;
+        public HelperAuthService(ApplicationDbContext db) {  _db = db; }
+
+        // <summary>
+        // Проверка данных пользователя
+        // </summary>
+        public async Task<bool> Auth(UserAuthDto UserAuthDto)
         {
-            if (UserAuthDTO is null) return false;
-            var currentUser = await _db.Users.SingleOrDefaultAsync(x => x.Login == UserAuthDTO.Login);
+            if (UserAuthDto is null) return false;
+            var currentUser = await _db.Users.SingleOrDefaultAsync(x => x.Login == UserAuthDto.Login);
             if (currentUser is null || !currentUser.EmailConfirmed) return false;
-            return BCrypt.Verify(UserAuthDTO.Password, currentUser.Password);
+            return BCrypt.Verify(UserAuthDto.Password, currentUser.Password);
         }
+        // <summary>
+        // Замена пароля
+        // </summary>
         public async Task<bool> ChangePass(string pass, Users? currentUser)
         {
             if (currentUser is null) return false;
@@ -28,21 +35,37 @@ namespace RAA.Services
             await _db.SaveChangesAsync();
             return true;
         }
+
+        // <summary>
+        // Хэширование пароля
+        // </summary>
         public string HashPass(string pass)
         {
             var Hash = BCrypt.HashPassword(pass);
             return Hash;
         }
+
+        // <summary>
+        // Поиск пользователя по email
+        // </summary>
         public async Task<Users?> FindUser(string email)
         {
             var currentUser = await _db.Users.SingleOrDefaultAsync(x => x.Email == email);
             if (currentUser is null) return null;
             return currentUser;
         }
+
+        // <summary>
+        // Генератор кода
+        // </summary>
         public string Generate()
         {
             return new Random().Next(100000, 999999).ToString();
         }
+
+        // <summary>
+        // Отправка сообщения пользователю
+        // </summary>
         public string MimeMessage(string token)
         {
             var message = $"Hello, your token: {token}";

@@ -1,15 +1,15 @@
 ﻿using RAA.Models;
-using RAA.ProjectDTO;
+using RAA.ProjectDtos;
 
 namespace RAA.Interfaces
 {
     public interface IService
     {
         public Task<List<Users>?> getAll(string email);
-        public Task<string?> Registration(UserRegDTO userRegDTO);
-        public Task<bool> Authorization(UserAuthDTO UserAuthDTO);
+        public Task<string?> Registration(UserRegDto userRegDto);
+        public Task<bool> Authorization(UserAuthDto UserAuthDto);
         public Task<bool> AuthEmail(string email);
-        public Task<bool> AuthToken(UserAuthTokenlDTO userAuthTokenlDTO);
-        public Task<string?> ForgotPass(UserForgotPassDTO userForgotPassDTO);
+        public Task<bool> AuthToken(UserAuthTokenDto userAuthTokenlDto);
+        public Task<string?> ForgotPass(UserForgotPassDto userForgotPassDto);
     }
 }

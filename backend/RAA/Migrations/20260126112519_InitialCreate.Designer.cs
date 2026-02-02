@@ -11,7 +11,7 @@ using RAA.Databases;
 
 namespace RAA.Migrations
 {
-    [DbContext(typeof(DB))]
+    [DbContext(typeof(ApplicationDbContext))]
     [Migration("20260126112519_InitialCreate")]
     partial class InitialCreate
     {

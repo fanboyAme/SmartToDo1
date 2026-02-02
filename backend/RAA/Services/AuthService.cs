@@ -5,21 +5,24 @@
     using RAA.Databases;
     using RAA.Interfaces;
     using RAA.Models;
-    using RAA.ProjectDTO;
+    using RAA.ProjectDtos;
     using System.Threading.Tasks;
 
-    public class Service : IService
+    public class AuthService : IService
     {
-        private readonly DB _db;
+        private readonly ApplicationDbContext _db;
         private readonly IEmailService _emailService;
         private readonly IHelperService _helperService;
 
-        public Service(DB db, IEmailService emailService, IHelperService helperService)
+        public AuthService(ApplicationDbContext db, IEmailService emailService, IHelperService helperService)
         {
             _db = db;
             _emailService = emailService;
             _helperService = helperService;
         }
+        // <summary>
+        // Получение всех пользователей
+        // </summary>    
         public async Task<List<Users>?> getAll(string email)
         {
             var access = await _helperService.FindUser(email);
@@ -29,7 +32,11 @@
             }
             else return null;
         }
-        public async Task<string?> Registration(UserRegDTO userRegDTO)
+
+        // <summary>
+        // Регистрация
+        // </summary>
+        public async Task<string?> Registration(UserRegDto userRegDTO)
         {
             if (await _db.Users.AnyAsync(x => x.Login == userRegDTO.Login))
             {
@@ -42,11 +49,17 @@
             if (!MailSent) return null;
             return newPerson.Email;
         }
-        public async Task<bool> Authorization(UserAuthDTO UserAuthDTO)
+        // <summary>
+        // Авторизация
+        // </summary>
+        public async Task<bool> Authorization(UserAuthDto UserAuthDTO)
         {
             return await _helperService.Auth(UserAuthDTO);
         }
 
+        // <summary>
+        // Авторизация почты
+        // </summary>
         public async Task<bool> AuthEmail(string email)
         {
             var currentUser = await _helperService.FindUser(email);
@@ -58,7 +71,11 @@
             if (!mailSender) { return false; }
             return true;
         }
-        public async Task<bool> AuthToken(UserAuthTokenlDTO userAuthTokenlDTO)
+
+        // <summary>
+        // Отправка токена на почту
+        // </summary>
+        public async Task<bool> AuthToken(UserAuthTokenDto userAuthTokenlDTO)
         {
             var currentUser = await _helperService.FindUser(userAuthTokenlDTO.Email);
             if (currentUser is null) return false;
@@ -72,7 +89,11 @@
             }
             else return false;
         }
-        public async Task<string?> ForgotPass(UserForgotPassDTO userForgotPassDTO)
+
+        // <summary>
+        // Замена пароля
+        // </summary>
+        public async Task<string?> ForgotPass(UserForgotPassDto userForgotPassDTO)
         {
             var currentUser = await _helperService.FindUser(userForgotPassDTO.Email);
             if (currentUser is null) return null;

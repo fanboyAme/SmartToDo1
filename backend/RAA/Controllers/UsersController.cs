@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RAA.Interfaces;
-using RAA.ProjectDTO;
+using RAA.ProjectDtos;
 
 namespace RAA.Controllers
 {
@@ -22,38 +22,38 @@ namespace RAA.Controllers
                 return Ok(person);
             } else return BadRequest("You are not an admin or your account not created ");
         }
-        [HttpPost("api/users/Reg")]
-        public async Task<IActionResult> Registration(UserRegDTO userRegDTO) 
+        [HttpPost("api/users/Registration")]
+        public async Task<IActionResult> Registration(UserRegDto userRegDto) 
         {
-            var reg = await _service.Registration(userRegDTO);
+            var reg = await _service.Registration(userRegDto);
             if (reg == null)
             {
                 return BadRequest();
-            } else return Ok(new { userRegDTO.Email });
+            } else return Ok(new { userRegDto.Email });
         }
         [HttpPost("api/users/Auth")]
-        public async Task<IActionResult> Authorization(UserAuthDTO userAuthDTO)
+        public async Task<IActionResult> Authorization(UserAuthDto userAuthDto)
         {
-            var auth = await _service.Authorization(userAuthDTO);
+            var auth = await _service.Authorization(userAuthDto);
             if (auth) return Ok(auth); else return BadRequest(auth);
         }
         [HttpPost("api/users/AuthToken")]
-        public async Task<IActionResult> AuthToken(UserAuthTokenlDTO userAuthTokenlDTO)
+        public async Task<IActionResult> AuthToken(UserAuthTokenDto userAuthTokenlDto)
         {
-            var authToken = await _service.AuthToken(userAuthTokenlDTO);
+            var authToken = await _service.AuthToken(userAuthTokenlDto);
             if (authToken) return Ok(); else return BadRequest();  
         }
 
-        [HttpPost("api/Users/CodeGen")]
+        [HttpPost("api/users/CodeGeneration")]
         public async Task<IActionResult> CodeGen(string email)
         {
             var codeGen = await _service.AuthEmail(email);
             if (codeGen) return Ok(); else return BadRequest(codeGen);
         }
-        [HttpPost("api/Users/ForgotPass")]
-        public async Task<IActionResult> ForgotPass(UserForgotPassDTO userForgotPassDTO)
+        [HttpPost("api/users/ForgotPass")]
+        public async Task<IActionResult> ForgotPass(UserForgotPassDto userForgotPassDto)
         {
-            var forgot = await _service.ForgotPass(userForgotPassDTO);
+            var forgot = await _service.ForgotPass(userForgotPassDto);
             if (forgot != null) return Ok(new {forgot}); else return BadRequest($"You dont have a token.");
         }
     }
