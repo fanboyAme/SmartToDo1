@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-
+using Microsoft.Extensions.Options;
 
 namespace RAA.Services
+
 {
     using BCrypt.Net;
     using RAA.Databases;
@@ -12,17 +13,23 @@ namespace RAA.Services
     public class HelperAuthService: IHelperService
     {
         private readonly ApplicationDbContext _db;
-        public HelperAuthService(ApplicationDbContext db) {  _db = db; }
+        private readonly JwtService _jwtService;
+        public HelperAuthService(ApplicationDbContext db, JwtService jwtService) {  _db = db; _jwtService = jwtService; }
 
         // <summary>
         // Проверка данных пользователя
         // </summary>
-        public async Task<bool> Auth(UserAuthDto UserAuthDto)
+        public async Task<string?> Auth(UserAuthDto UserAuthDto)
         {
-            if (UserAuthDto is null) return false;
+            if (UserAuthDto is null) 
+                return null;
             var currentUser = await _db.Users.SingleOrDefaultAsync(x => x.Login == UserAuthDto.Login);
-            if (currentUser is null || !currentUser.EmailConfirmed) return false;
-            return BCrypt.Verify(UserAuthDto.Password, currentUser.Password);
+            if (currentUser is null || !currentUser.EmailConfirmed) 
+                return null;
+            if (!BCrypt.Verify(UserAuthDto.Password, currentUser.Password)) 
+                return null;
+                return _jwtService.GenerateJwtToken(currentUser.Email, currentUser.Id);
+
         }
         // <summary>
         // Замена пароля
@@ -71,5 +78,6 @@ namespace RAA.Services
             var message = $"Hello, your token: {token}";
             return message;
         }
+
     }
 }

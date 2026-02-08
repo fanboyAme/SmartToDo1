@@ -12,6 +12,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IHelperService, HelperAuthService>();
+builder.Services.AddScoped<JwtService>();
 builder.Services.AddScoped<IService, AuthService>();
 Console.WriteLine(builder.Configuration.GetConnectionString("DefaultConnection"));
 
@@ -22,6 +23,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.Configure<SMTP>(
     builder.Configuration.GetSection("Smtp")
 );
+builder.Services.Configure<JwtOptions>(
+    builder.Configuration.GetSection("JwtOptions")
+);
+
 
 var app = builder.Build();
 

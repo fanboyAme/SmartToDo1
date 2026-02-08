@@ -52,7 +52,7 @@
         // <summary>
         // Авторизация
         // </summary>
-        public async Task<bool> Authorization(UserAuthDto UserAuthDTO)
+        public async Task<string?> Authorization(UserAuthDto UserAuthDTO)
         {
             return await _helperService.Auth(UserAuthDTO);
         }

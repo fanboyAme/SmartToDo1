@@ -5,7 +5,7 @@ namespace RAA.Interfaces
 {
     public interface IHelperService
     {
-        public Task<bool> Auth(UserAuthDto UserAuthDto);
+        public Task<string?> Auth(UserAuthDto UserAuthDto);
         public string HashPass(string pass);
         public Task<bool> ChangePass(string pass, Users? currentUser);
         public Task<Users?> FindUser(string email);

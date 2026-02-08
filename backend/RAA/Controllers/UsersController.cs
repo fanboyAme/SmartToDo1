@@ -35,7 +35,8 @@ namespace RAA.Controllers
         public async Task<IActionResult> Authorization(UserAuthDto userAuthDto)
         {
             var auth = await _service.Authorization(userAuthDto);
-            if (auth) return Ok(auth); else return BadRequest(auth);
+            if (auth is null) return BadRequest();
+            return Ok(new { auth });
         }
         [HttpPost("api/users/AuthToken")]
         public async Task<IActionResult> AuthToken(UserAuthTokenDto userAuthTokenlDto)
