@@ -2,10 +2,10 @@
 using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
-using RAA.Models;
 using Microsoft.Extensions.Options;
+using RAA.Models.AuthModels;
 
-namespace RAA.Services
+namespace RAA.Services.AuthServices
 {
     public class JwtService
     {
@@ -52,5 +52,6 @@ namespace RAA.Services
             return new JwtSecurityTokenHandler().WriteToken(token);
 
         }
+        
     }
 }

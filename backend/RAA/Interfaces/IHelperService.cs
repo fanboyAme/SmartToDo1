@@ -1,4 +1,4 @@
-﻿using RAA.Models;
+﻿using RAA.Models.AuthModels;
 using RAA.ProjectDtos;
 
 namespace RAA.Interfaces

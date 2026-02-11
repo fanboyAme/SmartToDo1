@@ -3,9 +3,9 @@ using MailKit.Security;
 using Microsoft.Extensions.Options;
 using MimeKit;
 using RAA.Interfaces;
-using RAA.Models;
+using RAA.Models.AuthModels;
 
-namespace RAA.Services
+namespace RAA.Services.AuthServices
 {
     public class EmailService: IEmailService
     {

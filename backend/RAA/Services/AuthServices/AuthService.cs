@@ -1,10 +1,10 @@
-﻿namespace RAA.Services
+﻿namespace RAA.Services.AuthServices
 
 {
     using Microsoft.EntityFrameworkCore;
     using RAA.Databases;
     using RAA.Interfaces;
-    using RAA.Models;
+    using RAA.Models.AuthModels;
     using RAA.ProjectDtos;
     using System.Threading.Tasks;
 

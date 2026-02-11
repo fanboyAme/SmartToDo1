@@ -1,13 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
-namespace RAA.Services
+namespace RAA.Services.AuthServices
 
 {
     using BCrypt.Net;
     using RAA.Databases;
     using RAA.Interfaces;
-    using RAA.Models;
+    using RAA.Models.AuthModels;
     using RAA.ProjectDtos;
 
     public class HelperAuthService: IHelperService

@@ -1,5 +1,8 @@
-﻿namespace RAA.Models
-{ 
+﻿using RAA.Models.TaskModels;
+
+namespace RAA.Models.AuthModels
+{
+
     public class Users
     {
         public Guid Id { get; set; }
@@ -13,9 +16,11 @@
 
         public bool EmailConfirmed { get; set; }
 
-        public string? VerificationCode { get; set;  }
-        public Users(string login, string password, string email ) 
-        { 
+        public string? VerificationCode { get; set; }
+
+        public List<TaskModel>? Tasks { get; set; }
+        public Users(string login, string password, string email)
+        {
             Id = Guid.NewGuid();
             Email = email;
             Login = login;

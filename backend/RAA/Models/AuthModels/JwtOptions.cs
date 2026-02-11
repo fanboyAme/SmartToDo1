@@ -1,4 +1,4 @@
-﻿namespace RAA.Models
+﻿namespace RAA.Models.AuthModels
 {
     public class JwtOptions
     {
