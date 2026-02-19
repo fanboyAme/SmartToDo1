@@ -8,7 +8,7 @@
     using RAA.ProjectDtos;
     using System.Threading.Tasks;
 
-    public class AuthService : IService
+    public class AuthService : IAuthService
     {
         private readonly ApplicationDbContext _db;
         private readonly IEmailService _emailService;

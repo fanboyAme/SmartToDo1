@@ -3,7 +3,7 @@ using RAA.ProjectDtos;
 
 namespace RAA.Interfaces
 {
-    public interface IService
+    public interface IAuthService
     {
         public Task<List<Users>?> getAll(string email);
         public Task<string?> Registration(UserRegDto userRegDto);

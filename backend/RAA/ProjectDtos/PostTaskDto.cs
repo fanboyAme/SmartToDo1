@@ -1,4 +1,6 @@
-﻿namespace RAA.ProjectDtos
+﻿using RAA.Models.TaskModels;
+
+namespace RAA.ProjectDtos
 {
-    public record PostTaskDto(Guid Id, string Title, string? Description);
+    public record PostTaskDto(string Title, string? Description, Priority Priority);
 }

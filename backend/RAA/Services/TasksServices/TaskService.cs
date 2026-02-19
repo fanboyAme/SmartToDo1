@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RAA.Databases;
+using RAA.Interfaces;
 using RAA.Models.AuthModels;
 using RAA.Models.TaskModels;
 using RAA.ProjectDtos;
@@ -7,7 +8,7 @@ using RAA.ProjectDtos.ResponseDto;
 
 namespace RAA.Services.TasksServices
 {
-    public class TaskService
+    public class TaskService: ITaskService
     {
         private readonly ApplicationDbContext _db;
         private readonly CurrentUserService _currentUserService;
@@ -19,34 +20,36 @@ namespace RAA.Services.TasksServices
         }
         public async Task<TaskModel> GetTask(Guid id)
         {
-            var currentId = _currentUserService.CurrentUserId();
-            var currentUser = _db.Tasks.Any(t => t.UserId == currentId);
-            if (currentUser) { await _db.Tasks.SingleOrDefaultAsync(t => t.Id == id); }
+            var currentTask = await _db.Tasks.SingleOrDefaultAsync(t => t.Id == id);
+            if (currentTask is null) { throw new ArgumentNullException("Задача не найдена"); }
+            return currentTask;
         }
-        public async Task<List<TaskModel>> GetAllTasks()
+        public async Task<List<TaskModel>?> GetAllTasks()
         {
             var currentId = _currentUserService.CurrentUserId();
             return _db.Tasks.Where(u => u.UserId == currentId).ToList();
         }
-        public async Task<bool> AddTask(GetTaskDto addTaskDto)
+        public async Task<bool> AddTask(PostTaskDto postTaskDto)
         {
-            var addTask = await _db.Tasks.AddAsync(new (addTaskDto.Title,addTaskDto.Description));
+            var addTask = await _db.Tasks.AddAsync(new (postTaskDto.Title, postTaskDto.Description, postTaskDto.Priority));
             await _db.SaveChangesAsync();
             return true;
         }
-        public async Task<List<TaskModel>> UpdateTask(PostTaskDto postTaskDto) 
+        public async Task<TaskModel> UpdateTask(PatchTaskDto patchTaskDto, Guid id) 
         {
-            var currentTask = await GetTask(postTaskDto.Id);
-            currentTask.Title = postTaskDto.Title;
-            currentTask.Description = postTaskDto.Description;
+            var currentTask = await GetTask(id);
+            currentTask.Title = patchTaskDto.Title;
+            currentTask.Description = patchTaskDto.Description;
             _db.Tasks.Update(currentTask);
-            _db.SaveChanges();
+            await _db.SaveChangesAsync();
             return currentTask;
         }
         public async Task<bool> DeleteTask(Guid id)
         {
-            var currentTask = GetTask(id);
-            await _db.Tasks.ExecuteDeleteAsync(currentTask);
+            var currentTask = await GetTask(id);
+            if (currentTask is null) return false;
+            _db.Tasks.Remove(currentTask);
+            await _db.SaveChangesAsync();
             return true;
         }
     }

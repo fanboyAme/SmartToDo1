@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RAA.Interfaces;
+using RAA.Models.AuthModels;
 using RAA.ProjectDtos;
+using RAA.Services.AuthServices;
+using System.Security.Claims;
 
 namespace RAA.Controllers
 {
@@ -9,8 +12,8 @@ namespace RAA.Controllers
     [Route("api/users")]
     public class UsersController: ControllerBase
     {
-        private readonly IService _service;
-        public UsersController(IService service)
+        private readonly IAuthService _service;
+        public UsersController(IAuthService service)
         {
             _service = service;
         }
@@ -63,6 +66,6 @@ namespace RAA.Controllers
         public string secret()
         {
             return "secret";
-        }
+        }    
     }
 }

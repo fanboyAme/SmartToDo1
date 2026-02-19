@@ -20,14 +20,14 @@ namespace RAA.Models.TaskModels
 
         public Users? User { get; set; }
 
-        public TaskModel(string title, string? description)
+        public TaskModel(string title, string? description, Priority priority)
         {
             Id = Guid.NewGuid();
             Title = title; 
             Description = description; 
             IsCompleted = false;
             CreatedAt = DateTime.UtcNow;
-            Priority = Priority.Low;
+            Priority = priority;
         }
     }
 }

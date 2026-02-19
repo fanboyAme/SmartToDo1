@@ -5,8 +5,8 @@ using Microsoft.IdentityModel.Tokens;
 using RAA.Databases;
 using RAA.Interfaces;
 using RAA.Models.AuthModels;
-using RAA.Services;
 using RAA.Services.AuthServices;
+using RAA.Services.TasksServices;
 using System.Text;
 
 
@@ -27,11 +27,11 @@ builder.Services.AddCors(options =>
             .AllowAnyMethod();
     });
 });
-
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IHelperService, HelperAuthService>();
 builder.Services.AddScoped<JwtService>();
-builder.Services.AddScoped<IService, AuthService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<ITaskService, TaskService>();
 Console.WriteLine(builder.Configuration.GetConnectionString("DefaultConnection"));
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
