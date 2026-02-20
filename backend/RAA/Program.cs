@@ -29,7 +29,7 @@ builder.Services.AddCors(options =>
 });
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IHelperService, HelperAuthService>();
-builder.Services.AddScoped<JwtService>();
+builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ITaskService, TaskService>();
 Console.WriteLine(builder.Configuration.GetConnectionString("DefaultConnection"));

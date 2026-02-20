@@ -66,6 +66,11 @@ namespace RAA.Controllers
         public string secret()
         {
             return "secret";
-        }    
+        }
+        [HttpPost]
+        //public Task<IActionResult> Refresh()
+        //{
+        //    var refr = Request.Cookies["refreshToken"]
+        //}
     }
 }

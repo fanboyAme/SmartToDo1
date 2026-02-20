@@ -4,18 +4,22 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Options;
 using RAA.Models.AuthModels;
+using System.Security.Cryptography;
 
 namespace RAA.Services.AuthServices
 {
-    public class JwtService
+    public class TokenService
     {
         private readonly JwtOptions _options;
+        private readonly TokenModel _tokenModel;
+        // private readonly ILogger<TokenService> _logger;
 
-        public JwtService(IOptions<JwtOptions> options)
+        public TokenService(IOptions<JwtOptions> options, TokenModel tokenModel)
         {
             _options = options.Value;
+            _tokenModel = tokenModel;
         }
-        public string GenerateJwtToken(string email, Guid userId)
+        public string GenerateAccessToken(string email, Guid userId)
         {
             var claims = new[]
             {
@@ -42,7 +46,7 @@ namespace RAA.Services.AuthServices
                 issuer: _options.Issure, //
                 audience: _options.Audience,
                 claims: claims,
-                expires: DateTime.UtcNow.AddHours(_options.TimeAlive),
+                expires: DateTime.UtcNow.AddMinutes(_options.TimeAlive),
                 signingCredentials: creds
                 );
 
@@ -52,6 +56,21 @@ namespace RAA.Services.AuthServices
             return new JwtSecurityTokenHandler().WriteToken(token);
 
         }
-        
+        public string GenerateRefreshToken()
+        {
+            var randomNumber = new byte[32];
+
+            using var randomNumberGenerator = RandomNumberGenerator.Create();
+
+            randomNumberGenerator.GetBytes(randomNumber);
+
+            return Convert.ToBase64String(randomNumber);
+        } 
+        public string HashRefreshToken(string refreshToken)
+        {
+            using var sha = SHA256.Create();
+            var bytes = sha.ComputeHash(Encoding.UTF8.GetBytes(refreshToken));
+            return Convert.ToBase64String(bytes);
+        }
     }
 }

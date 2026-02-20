@@ -40,6 +40,8 @@ namespace RAA.Services.TasksServices
             var currentTask = await GetTask(id);
             currentTask.Title = patchTaskDto.Title;
             currentTask.Description = patchTaskDto.Description;
+            currentTask.Priority = patchTaskDto.Priority;
+            currentTask.IsCompleted = patchTaskDto.IsCompleted;
             _db.Tasks.Update(currentTask);
             await _db.SaveChangesAsync();
             return currentTask;

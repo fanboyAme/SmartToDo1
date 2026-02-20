@@ -28,7 +28,7 @@ namespace RAA.Services.AuthServices
                 return null;
             if (!BCrypt.Verify(UserAuthDto.Password, currentUser.Password)) 
                 return null;
-                return _jwtService.GenerateJwtToken(currentUser.Email, currentUser.Id);
+                return _jwtService.GenerateAccessToken(currentUser.Email, currentUser.Id);
 
         }
         // <summary>
