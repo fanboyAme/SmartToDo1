@@ -9,27 +9,43 @@ namespace RAA.Services.AuthServices
     using RAA.Interfaces;
     using RAA.Models.AuthModels;
     using RAA.ProjectDtos;
+    using RAA.ProjectDtos.ResponceDto;
 
     public class HelperAuthService: IHelperService
     {
         private readonly ApplicationDbContext _db;
-        private readonly JwtService _jwtService;
-        public HelperAuthService(ApplicationDbContext db, JwtService jwtService) {  _db = db; _jwtService = jwtService; }
+        private readonly TokenService _jwtService;
+        public HelperAuthService(ApplicationDbContext db, TokenService jwtService) {  _db = db; _jwtService = jwtService; }
 
         // <summary>
         // Проверка данных пользователя
         // </summary>
-        public async Task<string?> Auth(UserAuthDto UserAuthDto)
+        public async Task<AuthResponceDto?> Auth(UserAuthDto UserAuthDto)
         {
             if (UserAuthDto is null) 
                 return null;
             var currentUser = await _db.Users.SingleOrDefaultAsync(x => x.Login == UserAuthDto.Login);
             if (currentUser is null || !currentUser.EmailConfirmed) 
                 return null;
-            if (!BCrypt.Verify(UserAuthDto.Password, currentUser.Password)) 
+            if (!BCrypt.Verify(UserAuthDto.Password, currentUser.PasswordHash)) 
                 return null;
-                return _jwtService.GenerateAccessToken(currentUser.Email, currentUser.Id);
+            var accesToken = _jwtService.GenerateAccessToken(currentUser.Email, currentUser.Id);
+            var refreshToken = _jwtService.GenerateRefreshToken();
+            var refreshTokenHash = _jwtService.HashRefreshToken(refreshToken);
 
+            var tokenEntity = new TokenModel
+                (refreshTokenHash, 
+                currentUser.Id, 
+                DateTime.UtcNow.AddMonths(1));
+            _db.Tokens.Add(tokenEntity);
+
+            _db.SaveChanges();
+
+            return new AuthResponceDto 
+            { 
+                AccessToken = accesToken, 
+                RefreshToken = refreshToken
+            };
         }
         // <summary>
         // Замена пароля
@@ -37,7 +53,7 @@ namespace RAA.Services.AuthServices
         public async Task<bool> ChangePass(string pass, Users? currentUser)
         {
             if (currentUser is null) return false;
-            try { currentUser.Password = BCrypt.HashPassword(pass); }
+            try { currentUser.PasswordHash = BCrypt.HashPassword(pass); }
             catch (Exception ex) { return false; }
             await _db.SaveChangesAsync();
             return true;

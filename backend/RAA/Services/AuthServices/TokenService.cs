@@ -11,13 +11,11 @@ namespace RAA.Services.AuthServices
     public class TokenService
     {
         private readonly JwtOptions _options;
-        private readonly TokenModel _tokenModel;
         // private readonly ILogger<TokenService> _logger;
 
-        public TokenService(IOptions<JwtOptions> options, TokenModel tokenModel)
+        public TokenService(IOptions<JwtOptions> options)
         {
             _options = options.Value;
-            _tokenModel = tokenModel;
         }
         public string GenerateAccessToken(string email, Guid userId)
         {

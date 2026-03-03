@@ -1,11 +1,12 @@
 ﻿using RAA.Models.AuthModels;
 using RAA.ProjectDtos;
+using RAA.ProjectDtos.ResponceDto;
 
 namespace RAA.Interfaces
 {
     public interface IHelperService
     {
-        public Task<string?> Auth(UserAuthDto UserAuthDto);
+        public Task<AuthResponceDto?> Auth(UserAuthDto UserAuthDto);
         public string HashPass(string pass);
         public Task<bool> ChangePass(string pass, Users? currentUser);
         public Task<Users?> FindUser(string email);

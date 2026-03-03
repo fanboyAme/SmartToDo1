@@ -1,11 +1,13 @@
 ﻿namespace RAA.Services.AuthServices
 
 {
+    using Azure.Core;
     using Microsoft.EntityFrameworkCore;
     using RAA.Databases;
     using RAA.Interfaces;
     using RAA.Models.AuthModels;
     using RAA.ProjectDtos;
+    using RAA.ProjectDtos.ResponceDto;
     using System.Threading.Tasks;
 
     public class AuthService : IAuthService
@@ -13,12 +15,14 @@
         private readonly ApplicationDbContext _db;
         private readonly IEmailService _emailService;
         private readonly IHelperService _helperService;
+        private readonly TokenService _tokenService;
 
-        public AuthService(ApplicationDbContext db, IEmailService emailService, IHelperService helperService)
+        public AuthService(ApplicationDbContext db, IEmailService emailService, IHelperService helperService, TokenService tokenService)
         {
             _db = db;
             _emailService = emailService;
             _helperService = helperService;
+            _tokenService = tokenService;
         }
         // <summary>
         // Получение всех пользователей
@@ -26,7 +30,7 @@
         public async Task<List<Users>?> getAll(string email)
         {
             var access = await _helperService.FindUser(email);
-            if (access != null && access.isAdmin != false)
+            if (access != null && access.IsAdmin != false)
             {
                 return _db.Users.ToList();
             }
@@ -52,7 +56,7 @@
         // <summary>
         // Авторизация
         // </summary>
-        public async Task<string?> Authorization(UserAuthDto UserAuthDTO)
+        public async Task<AuthResponceDto?> Authorization(UserAuthDto UserAuthDTO)
         {
             return await _helperService.Auth(UserAuthDTO);
         }
@@ -105,6 +109,38 @@
                 return currentUser.Email;
             }
             else return null;
+        }
+        public async Task<AuthResponceDto?> RefreshToken(string refreshToken)
+        {
+            var refreshTokenHash = _tokenService.HashRefreshToken(refreshToken);
+            var currentToken = await _db.Tokens.Include(t => t.User).SingleOrDefaultAsync(t => t.RefreshTokenHash == refreshTokenHash);
+            if(currentToken is null)  return null;
+            if (currentToken.IsRevoked) return null;
+            if(currentToken.IsExpired) return null;
+
+            var currentUser = currentToken.User;
+
+            var newAccessToken = _tokenService.GenerateAccessToken(currentUser.Email, currentUser.Id);
+
+            var newRefreshToken = _tokenService.GenerateRefreshToken();
+
+            currentToken.IsRevoked = true;
+
+            var tokenEntity = new TokenModel
+                (_tokenService.HashRefreshToken(newRefreshToken),
+                currentUser.Id,
+                DateTime.UtcNow.AddMonths(1));
+
+            await _db.Tokens.AddAsync(tokenEntity);
+
+            await _db.SaveChangesAsync();
+
+            return new AuthResponceDto
+            {
+                AccessToken = newAccessToken,
+                RefreshToken = newRefreshToken
+            };
+
         }
     }
 }
