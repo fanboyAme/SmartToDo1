@@ -8,14 +8,14 @@ namespace RAA.Services.AuthServices
     using RAA.Databases;
     using RAA.Interfaces;
     using RAA.Models.AuthModels;
-    using RAA.ProjectDtos;
     using RAA.ProjectDtos.ResponceDto;
+    using RAA.ProjectDtos.UserDtos;
 
     public class HelperAuthService: IHelperService
     {
         private readonly ApplicationDbContext _db;
-        private readonly TokenService _jwtService;
-        public HelperAuthService(ApplicationDbContext db, TokenService jwtService) {  _db = db; _jwtService = jwtService; }
+        private readonly TokenService _tokenService;
+        public HelperAuthService(ApplicationDbContext db, TokenService jwtService) {  _db = db; _tokenService = jwtService; }
 
         // <summary>
         // Проверка данных пользователя
@@ -29,9 +29,9 @@ namespace RAA.Services.AuthServices
                 return null;
             if (!BCrypt.Verify(UserAuthDto.Password, currentUser.PasswordHash)) 
                 return null;
-            var accesToken = _jwtService.GenerateAccessToken(currentUser.Email, currentUser.Id);
-            var refreshToken = _jwtService.GenerateRefreshToken();
-            var refreshTokenHash = _jwtService.HashRefreshToken(refreshToken);
+            var accesToken = _tokenService.GenerateAccessToken(currentUser.Email, currentUser.Id);
+            var refreshToken = _tokenService.GenerateRefreshToken();
+            var refreshTokenHash = _tokenService.HashRefreshToken(refreshToken);
 
             var tokenEntity = new TokenModel
                 (refreshTokenHash, 

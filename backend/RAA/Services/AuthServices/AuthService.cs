@@ -8,6 +8,7 @@
     using RAA.Models.AuthModels;
     using RAA.ProjectDtos;
     using RAA.ProjectDtos.ResponceDto;
+    using RAA.ProjectDtos.UserDtos;
     using System.Threading.Tasks;
 
     public class AuthService : IAuthService
