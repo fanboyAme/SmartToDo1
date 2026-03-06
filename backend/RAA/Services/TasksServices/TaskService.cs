@@ -3,8 +3,9 @@ using RAA.Databases;
 using RAA.Interfaces;
 using RAA.Models.AuthModels;
 using RAA.Models.TaskModels;
-using RAA.ProjectDtos;
 using RAA.ProjectDtos.ResponseDto;
+using RAA.ProjectDtos.TaskDtos;
+using RAA.Services.AuthServices;
 
 namespace RAA.Services.TasksServices
 {
@@ -27,7 +28,7 @@ namespace RAA.Services.TasksServices
         public async Task<List<TaskModel>?> GetAllTasks()
         {
             var currentId = _currentUserService.CurrentUserId();
-            return _db.Tasks.Where(u => u.UserId == currentId).ToList();
+            return await _db.Tasks.Where(u => u.UserId == currentId).ToListAsync();
         }
         public async Task<bool> AddTask(PostTaskDto postTaskDto)
         {

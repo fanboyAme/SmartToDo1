@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using RAA.Interfaces;
 using RAA.Models.AuthModels;
-using RAA.ProjectDtos;
+using RAA.ProjectDtos.UserDtos;
 using RAA.Services.AuthServices;
 using System.Security.Claims;
 
@@ -25,7 +25,7 @@ namespace RAA.Controllers
             return BadRequest("You are not an admin or your account not created ");
         }
         [HttpPost("Registration")]
-        public async Task<IActionResult> Registration(UserRegDto userRegDto) 
+        public async Task<IActionResult> Registration(UserRegistrationDto userRegDto) 
         {
             var reg = await _service.Registration(userRegDto);
             if (reg == null) return BadRequest();

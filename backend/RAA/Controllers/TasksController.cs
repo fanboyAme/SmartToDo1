@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RAA.ProjectDtos;
+using RAA.ProjectDtos.TaskDtos;
 using RAA.Services.TasksServices;
 
 namespace RAA.Controllers

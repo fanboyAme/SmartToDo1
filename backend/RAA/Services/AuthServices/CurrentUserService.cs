@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
-namespace RAA.Services
+namespace RAA.Services.AuthServices
 {
     public class CurrentUserService
     {

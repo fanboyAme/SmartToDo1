@@ -12,28 +12,23 @@ namespace RAA.Services.TasksServices
     {
         private readonly ApplicationDbContext _db;
         private readonly CurrentUserService _currentUserService;
-        public TaskFilterService(ApplicationDbContext db, CurrentUserService currentUserService)
+        private readonly TaskQueryBuilder _taskQueryBuilder;
+        public TaskFilterService(ApplicationDbContext db, CurrentUserService currentUserService, TaskQueryBuilder taskQueryBuilder)
         {
             _db = db;
             _currentUserService = currentUserService;
+            _taskQueryBuilder = taskQueryBuilder;
         }
 
-        public async Task<List<TaskModel>> GetTasksWithFiltred(TaskQueryDto filter)
+        public async Task<List<TaskModel>> GetTasksWithFiltred(TaskQueryDto TaskQuery)
         {
             var currentTaskList = _db.Tasks.Where(t => t.UserId == _currentUserService.CurrentUserId());
-            
-            if(!string.IsNullOrWhiteSpace(filter.Title))
-            {
-                currentTaskList = currentTaskList.Where(t => t.Title.ToLower().Contains(filter.Title.ToLower()));
-            }
-            if (filter.Priority != null)
-            {
-                currentTaskList = currentTaskList.Where(t => t.Priority == filter.Priority);
-            }
-            if (filter.IsCompleted != null)
-            {
-                currentTaskList = currentTaskList.Where(t => t.IsCompleted == filter.IsCompleted);
-            }
+
+            _taskQueryBuilder.ApplyFilters(currentTaskList, TaskQuery);
+
+            _taskQueryBuilder.ApplySorting(currentTaskList, TaskQuery.SortBy);
+
+
             return await currentTaskList.ToListAsync();
         }
     }

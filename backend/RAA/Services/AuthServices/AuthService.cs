@@ -6,7 +6,6 @@
     using RAA.Databases;
     using RAA.Interfaces;
     using RAA.Models.AuthModels;
-    using RAA.ProjectDtos;
     using RAA.ProjectDtos.ResponceDto;
     using RAA.ProjectDtos.UserDtos;
     using System.Threading.Tasks;
@@ -41,7 +40,7 @@
         // <summary>
         // Регистрация
         // </summary>
-        public async Task<string?> Registration(UserRegDto userRegDTO)
+        public async Task<string?> Registration(UserRegistrationDto userRegDTO)
         {
             if (await _db.Users.AnyAsync(x => x.Login == userRegDTO.Login))
             {
