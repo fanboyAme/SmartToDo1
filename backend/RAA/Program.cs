@@ -2,11 +2,16 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using RAA.Databases;
-using RAA.Interfaces;
-using RAA.Models.AuthModels;
-using RAA.Services.AuthServices;
-using RAA.Services.TasksServices;
+using RAA.Application.Interfaces.Auth;
+using RAA.Application.Interfaces.Services;
+using RAA.Application.Interfaces.Task;
+using RAA.Application.Services.AuthServices;
+using RAA.Application.Services.TasksServices;
+using RAA.Domain.Models.AuthModels;
+using RAA.Infrastructure.Databases;
+using RAA.Infrastructure.Queries;
+using RAA.Infrastructure.Services.AuthServices;
+using RAA.Infrastructure.Services.TasksServices;
 using System.Text;
 
 
@@ -27,11 +32,16 @@ builder.Services.AddCors(options =>
             .AllowAnyMethod();
     });
 });
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddScoped<TaskQueryBuilder>();
+builder.Services.AddScoped<CurrentUserService>();
+builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IHelperService, HelperAuthService>();
-builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ITaskService, TaskService>();
+builder.Services.AddScoped<ITaskFilterService, TaskFilterService>();
 Console.WriteLine(builder.Configuration.GetConnectionString("DefaultConnection"));
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
