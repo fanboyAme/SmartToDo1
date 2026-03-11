@@ -7,13 +7,14 @@ using RAA.Infrastructure.Services.AuthServices;
 
 namespace RAA.Application.Interfaces.Repositories
 {
-    public interface ITaskRepositories
+    public interface ITaskRepository
     {
         public Task<TaskModel?> GetTask(Guid id);
-        public Task<List<TaskModel>?> GetAllTasks();
+        public Task<List<TaskModel>?> GetAllTasks(Guid id);
         public Task<EntityEntry<TaskModel>?> AddTask(PostTaskDto postTaskDto);
-        public Task<TaskModel> UpdateTask(PatchTaskDto patchTaskDto, Guid id);
-        public Task<bool> DeleteTask(Guid id);
+        public void SaveChanges();
+        public void UpdateTask(TaskModel taskModel);
+        public void RemoveTask(TaskModel currentTask);
 
 
     }

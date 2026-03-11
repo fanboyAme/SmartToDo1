@@ -9,19 +9,20 @@
     using RAA.Application.ProjectDtos.UserDtos;
     using RAA.Domain.Models.AuthModels;
     using RAA.Infrastructure.Databases;
+    using RAA.Infrastructure.Repositories.UserRepository;
     using RAA.Infrastructure.Services.AuthServices;
     using System.Threading.Tasks;
 
     public class AuthService : IAuthService
     {
-        private readonly ApplicationDbContext _db;
+        private readonly UserRepository _usersRepository;
         private readonly IEmailService _emailService;
         private readonly IHelperService _helperService;
         private readonly TokenService _tokenService;
 
-        public AuthService(ApplicationDbContext db, IEmailService emailService, IHelperService helperService, TokenService tokenService)
+        public AuthService(UserRepository usersRepository, IEmailService emailService, IHelperService helperService, TokenService tokenService)
         {
-            _db = db;
+            _usersRepository = usersRepository;
             _emailService = emailService;
             _helperService = helperService;
             _tokenService = tokenService;
@@ -31,10 +32,10 @@
         // </summary>    
         public async Task<List<Users>?> getAll(string email)
         {
-            var access = await _helperService.FindUser(email);
+            var access = await _usersRepository.FindUserAsync(email);
             if (access != null && access.IsAdmin != false)
             {
-                return _db.Users.ToList();
+                return await _usersRepository.GetUsers();
             }
             else return null;
         }
@@ -42,15 +43,15 @@
         // <summary>
         // Регистрация
         // </summary>
-        public async Task<string?> Registration(UserRegistrationDto userRegDTO)
+        public async Task<string?> Registration(UserRegistrationDto userRegistrationDto)
         {
-            if (await _db.Users.AnyAsync(x => x.Login == userRegDTO.Login))
+            if (await _usersRepository.IsLoginTakenAsync(userRegistrationDto))
             {
                 return null;
             }
-            var newPerson = new Users(userRegDTO.Login, _helperService.HashPass(userRegDTO.Password), userRegDTO.Email);
-            await _db.Users.AddAsync(newPerson);
-            await _db.SaveChangesAsync();
+            var newPerson = new Users(userRegistrationDto.Login, _helperService.HashPass(userRegistrationDto.Password), userRegistrationDto.Email);
+            await _usersRepository.AddAsync(newPerson); //exep if(!await _usersRepository.AddAsync(newPerson)) 
+            await _usersRepository.SaveChangesAsync();
             var MailSent = await AuthEmail(newPerson.Email);
             if (!MailSent) return null;
             return newPerson.Email;
@@ -68,11 +69,11 @@
         // </summary>
         public async Task<bool> AuthEmail(string email)
         {
-            var currentUser = await _helperService.FindUser(email);
+            var currentUser = await _usersRepository.FindUserAsync(email);
             if (currentUser is null) return false;
             var TryToken = _helperService.Generate();
             currentUser.VerificationCode = TryToken;
-            await _db.SaveChangesAsync();
+            await _usersRepository.SaveChangesAsync();
             var mailSender = await _emailService.SendAsync(email, "Token", _helperService.MimeMessage(TryToken));
             if (!mailSender) { return false; }
             return true;
@@ -83,14 +84,14 @@
         // </summary>
         public async Task<bool> AuthToken(UserAuthTokenDto userAuthTokenlDTO)
         {
-            var currentUser = await _helperService.FindUser(userAuthTokenlDTO.Email);
+            var currentUser = await _usersRepository.FindUserAsync(userAuthTokenlDTO.Email);
             if (currentUser is null) return false;
             if (userAuthTokenlDTO.Token.ToString() == currentUser.VerificationCode)
             {
 
                 currentUser.VerificationCode = null;
                 currentUser.EmailConfirmed = true;
-                await _db.SaveChangesAsync();
+                await _usersRepository.SaveChangesAsync();
                 return true;
             }
             else return false;
@@ -101,13 +102,13 @@
         // </summary>
         public async Task<string?> ForgotPass(UserForgotPassDto userForgotPassDTO)
         {
-            var currentUser = await _helperService.FindUser(userForgotPassDTO.Email);
+            var currentUser = await _usersRepository.FindUserAsync(userForgotPassDTO.Email);
             if (currentUser is null) return null;
             if (userForgotPassDTO.Token.ToString() == currentUser.VerificationCode)
             {
                 await _helperService.ChangePass(userForgotPassDTO.Password, currentUser);
                 currentUser.VerificationCode = null;
-                await _db.SaveChangesAsync();
+                await _usersRepository.SaveChangesAsync();
                 return currentUser.Email;
             }
             else return null;
@@ -115,8 +116,8 @@
         public async Task<AuthResponseDto?> RefreshToken(string refreshToken)
         {
             var refreshTokenHash = _tokenService.HashRefreshToken(refreshToken);
-            var currentToken = await _db.Tokens.Include(t => t.User).SingleOrDefaultAsync(t => t.RefreshTokenHash == refreshTokenHash);
-            if(currentToken is null)  return null;
+            var currentToken = await _usersRepository.FindTokenWithUserAsync(refreshTokenHash);
+            if (currentToken is null)  return null;
             if (currentToken.IsRevoked) return null;
             if(currentToken.IsExpired) return null;
 
@@ -133,9 +134,9 @@
                 currentUser.Id,
                 DateTime.UtcNow.AddMonths(1));
 
-            await _db.Tokens.AddAsync(tokenEntity);
+            await _usersRepository.AddAsync(tokenEntity);
 
-            await _db.SaveChangesAsync();
+            await _usersRepository.SaveChangesAsync();
 
             return new AuthResponseDto
             {

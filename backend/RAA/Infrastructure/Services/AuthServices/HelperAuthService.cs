@@ -69,16 +69,6 @@ namespace RAA.Infrastructure.Services.AuthServices
         }
 
         // <summary>
-        // Поиск пользователя по email
-        // </summary>
-        public async Task<Users?> FindUser(string email)
-        {
-            var currentUser = await _db.Users.SingleOrDefaultAsync(x => x.Email == email);
-            if (currentUser is null) return null;
-            return currentUser;
-        }
-
-        // <summary>
         // Генератор кода
         // </summary>
         public string Generate()

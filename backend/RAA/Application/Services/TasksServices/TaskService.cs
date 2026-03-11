@@ -3,38 +3,36 @@ using RAA.Application.Interfaces.Task;
 using RAA.Application.ProjectDtos.TaskDtos;
 using RAA.Domain.Models.TaskModels;
 using RAA.Infrastructure.Databases;
-using RAA.Infrastructure.Repositories;
+using RAA.Infrastructure.Repositories.TaskRepository;
 using RAA.Infrastructure.Services.AuthServices;
 
 namespace RAA.Application.Services.TasksServices
 {
     public class TaskService: ITaskService
     {
-        private readonly ApplicationDbContext _db;
         private readonly CurrentUserService _currentUserService;
         private readonly TaskRepository _taskRepository;
 
-        public TaskService(ApplicationDbContext db, CurrentUserService currentUserService, TaskRepository taskRepository)
+        public TaskService(CurrentUserService currentUserService, TaskRepository taskRepository)
         {
-            _db = db;
             _currentUserService = currentUserService;
             _taskRepository = taskRepository;
         }
         public async Task<TaskModel> GetTask(Guid id)
         {
-            var currentTask = await _taskRepository.GetTask(id);
+            var currentTask = await _taskRepository.GetTaskAsync(id);
             if (currentTask is null) { throw new ArgumentNullException("Задача не найдена"); }
             return currentTask;
         }
         public async Task<List<TaskModel>?> GetAllTasks()
         {
             var currentId = _currentUserService.CurrentUserId();
-            return await _taskRepository.GetAllTasks(currentId);
+            return await _taskRepository.GetAllTasksAsync(currentId);
         }
         public async Task<bool> AddTask(PostTaskDto postTaskDto)
         {
-            var addTask = await _db.Tasks.AddAsync(new (postTaskDto.Title, postTaskDto.Description, postTaskDto.Priority));
-            await _db.SaveChangesAsync();
+            var a = await _taskRepository.AddTaskAsync(postTaskDto);
+            await _taskRepository.SaveChangesAsync();
             return true;
         }
         public async Task<TaskModel> UpdateTask(PatchTaskDto patchTaskDto, Guid id) 
@@ -44,16 +42,16 @@ namespace RAA.Application.Services.TasksServices
             currentTask.Description = patchTaskDto.Description;
             currentTask.Priority = patchTaskDto.Priority;
             currentTask.IsCompleted = patchTaskDto.IsCompleted;
-            _db.Tasks.Update(currentTask);
-            await _db.SaveChangesAsync();
+            _taskRepository.UpdateTask(currentTask);
+            await _taskRepository.SaveChangesAsync();
             return currentTask;
         }
         public async Task<bool> DeleteTask(Guid id)
         {
             var currentTask = await GetTask(id);
             if (currentTask is null) return false;
-            _db.Tasks.Remove(currentTask);
-            await _db.SaveChangesAsync();
+            _taskRepository.RemoveTask(currentTask);
+            await _taskRepository.SaveChangesAsync();
             return true;
         }
     }
