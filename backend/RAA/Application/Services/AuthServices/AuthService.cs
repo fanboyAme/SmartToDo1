@@ -1,14 +1,11 @@
 ﻿namespace RAA.Application.Services.AuthServices
 
 {
-    using Azure.Core;
-    using Microsoft.EntityFrameworkCore;
     using RAA.Application.Interfaces.Auth;
     using RAA.Application.Interfaces.Services;
     using RAA.Application.ProjectDtos.ResponceDto;
     using RAA.Application.ProjectDtos.UserDtos;
     using RAA.Domain.Models.AuthModels;
-    using RAA.Infrastructure.Databases;
     using RAA.Infrastructure.Repositories.UserRepository;
     using RAA.Infrastructure.Services.AuthServices;
     using System.Threading.Tasks;
@@ -50,7 +47,11 @@
                 return null;
             }
             var newPerson = new Users(userRegistrationDto.Login, _helperService.HashPass(userRegistrationDto.Password), userRegistrationDto.Email);
-            await _usersRepository.AddAsync(newPerson); //exep if(!await _usersRepository.AddAsync(newPerson)) 
+            var addNewPerson = await _usersRepository.AddAsync(newPerson);
+            if(!addNewPerson)
+            {
+                throw new Exception("Failed to add new person");
+            }
             await _usersRepository.SaveChangesAsync();
             var MailSent = await AuthEmail(newPerson.Email);
             if (!MailSent) return null;
@@ -115,6 +116,7 @@
         }
         public async Task<AuthResponseDto?> RefreshToken(string refreshToken)
         {
+            if(string.IsNullOrWhiteSpace(refreshToken)) return null;
             var refreshTokenHash = _tokenService.HashRefreshToken(refreshToken);
             var currentToken = await _usersRepository.FindTokenWithUserAsync(refreshTokenHash);
             if (currentToken is null)  return null;
@@ -134,7 +136,11 @@
                 currentUser.Id,
                 DateTime.UtcNow.AddMonths(1));
 
-            await _usersRepository.AddAsync(tokenEntity);
+            var addNewPerson = await _usersRepository.AddAsync(tokenEntity);
+            if (!addNewPerson)
+            {
+                throw new Exception("Failed to add new token");
+            }
 
             await _usersRepository.SaveChangesAsync();
 

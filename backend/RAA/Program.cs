@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+using Serilog;
 using Microsoft.IdentityModel.Tokens;
 using RAA.Application.Interfaces.Auth;
 using RAA.Application.Interfaces.Services;
@@ -13,7 +13,12 @@ using RAA.Infrastructure.Queries;
 using RAA.Infrastructure.Services.AuthServices;
 using RAA.Infrastructure.Services.TasksServices;
 using System.Text;
+using RAA.Infrastructure.Middleware;
 
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .WriteTo.File("Logs.log.txt", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
 
 var builder = WebApplication.CreateBuilder(args);
 var JwtOptions = builder.Configuration.GetSection("JwtOptions").Get<JwtOptions>();
@@ -33,6 +38,7 @@ builder.Services.AddCors(options =>
     });
 });
 builder.Services.AddHttpContextAccessor();
+builder.Host.UseSerilog();
 
 builder.Services.AddScoped<TaskQueryBuilder>();
 builder.Services.AddScoped<CurrentUserService>();
@@ -77,21 +83,8 @@ app.UseCors();
 app.UseDeveloperExceptionPage();
 app.UseSwagger();
 app.UseSwaggerUI();
-app.Use(async (context, next) =>
-{
-    Console.WriteLine("---- REQUEST ----");
-    Console.WriteLine($"Time: {DateTime.Now}");
-    Console.WriteLine($"Method: {context.Request.Method}");
-    Console.WriteLine($"Path: {context.Request.Path}");
-    Console.WriteLine($"Auth header: {context.Request.Headers["Authorization"]}");
-    Console.WriteLine("-----------------");
-
-    await next();
-
-    Console.WriteLine("---- RESPONSE ----");
-    Console.WriteLine($"Status: {context.Response.StatusCode}");
-    Console.WriteLine("------------------");
-});
+app.UseSerilogRequestLogging();
+app.UseCustomExceptionMiddleware();
 app.UseAuthentication();
 app.UseAuthorization();
 
