@@ -1,40 +1,38 @@
 ﻿namespace RAA.Application.Services.AuthServices
 
 {
+    using RAA.Application.Exceptions;
     using RAA.Application.Interfaces.Auth;
+    using RAA.Application.Interfaces.Repositories;
     using RAA.Application.Interfaces.Services;
     using RAA.Application.ProjectDtos.ResponceDto;
     using RAA.Application.ProjectDtos.UserDtos;
     using RAA.Domain.Models.AuthModels;
-    using RAA.Infrastructure.Repositories.UserRepository;
-    using RAA.Infrastructure.Services.AuthServices;
     using System.Threading.Tasks;
+    using BCrypt.Net;
 
     public class AuthService : IAuthService
     {
-        private readonly UserRepository _usersRepository;
+        private readonly ILogger<AuthService> _logger;
+        private readonly IUserRepository _usersRepository;
         private readonly IEmailService _emailService;
         private readonly IHelperService _helperService;
-        private readonly TokenService _tokenService;
+        private readonly ITokenService _tokenService;
 
-        public AuthService(UserRepository usersRepository, IEmailService emailService, IHelperService helperService, TokenService tokenService)
+        public AuthService(IUserRepository usersRepository, IEmailService emailService, IHelperService helperService, ITokenService tokenService, ILogger<AuthService> logger)
         {
             _usersRepository = usersRepository;
             _emailService = emailService;
             _helperService = helperService;
             _tokenService = tokenService;
+            _logger = logger;
         }
         // <summary>
         // Получение всех пользователей
         // </summary>    
-        public async Task<List<Users>?> getAll(string email)
+        public async Task<List<Users>> GetAllUsers()
         {
-            var access = await _usersRepository.FindUserAsync(email);
-            if (access != null && access.IsAdmin != false)
-            {
-                return await _usersRepository.GetUsers();
-            }
-            else return null;
+            return await _usersRepository.GetUsers();
         }
 
         // <summary>
@@ -42,19 +40,18 @@
         // </summary>
         public async Task<string?> Registration(UserRegistrationDto userRegistrationDto)
         {
-            if (await _usersRepository.IsLoginTakenAsync(userRegistrationDto))
+            if (await _usersRepository.IsLoginTakenAsync(userRegistrationDto) || await _usersRepository.IsEmailTakenAsync(userRegistrationDto))
             {
-                return null;
+                throw new ConflictException("Логин или почта уже занят");
             }
-            var newPerson = new Users(userRegistrationDto.Login, _helperService.HashPass(userRegistrationDto.Password), userRegistrationDto.Email);
+            var newPerson = new Users(userRegistrationDto.Login, BCrypt.HashPassword(userRegistrationDto.Password), userRegistrationDto.Email);
             var addNewPerson = await _usersRepository.AddAsync(newPerson);
             if(!addNewPerson)
             {
-                throw new Exception("Failed to add new person");
+                throw new UserRegistrationException("Ошибка создания пользователя");
             }
             await _usersRepository.SaveChangesAsync();
-            var MailSent = await AuthEmail(newPerson.Email);
-            if (!MailSent) return null;
+            await AuthEmail(newPerson.Email);
             return newPerson.Email;
         }
         // <summary>
@@ -71,31 +68,44 @@
         public async Task<bool> AuthEmail(string email)
         {
             var currentUser = await _usersRepository.FindUserAsync(email);
-            if (currentUser is null) return false;
-            var TryToken = _helperService.Generate();
-            currentUser.VerificationCode = TryToken;
-            await _usersRepository.SaveChangesAsync();
-            var mailSender = await _emailService.SendAsync(email, "Token", _helperService.MimeMessage(TryToken));
-            if (!mailSender) { return false; }
-            return true;
+            if(currentUser is not null)
+            {
+                try
+                {
+                    var currentToken = _helperService.Generate();
+                    currentUser.VerificationCode = currentToken;
+                    await _usersRepository.SaveChangesAsync();
+                    await _emailService.SendAsync(email, "Token", _helperService.MimeMessage(currentToken));
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Ошибка отправки письма");
+                    return false;
+                }
+            }
+            return false;
+            
         }
 
         // <summary>
         // Отправка токена на почту
         // </summary>
-        public async Task<bool> AuthToken(UserAuthTokenDto userAuthTokenlDTO)
+        public async Task<bool> VerifyEmailToken(UserAuthTokenDto userAuthTokenDTO)
         {
-            var currentUser = await _usersRepository.FindUserAsync(userAuthTokenlDTO.Email);
-            if (currentUser is null) return false;
-            if (userAuthTokenlDTO.Token.ToString() == currentUser.VerificationCode)
+            var currentUser = await _usersRepository.FindUserAsync(userAuthTokenDTO.Email);
+            if (currentUser is null || 
+                currentUser.VerificationCode is null || 
+                userAuthTokenDTO.Token.ToString() != currentUser.VerificationCode)
             {
-
-                currentUser.VerificationCode = null;
-                currentUser.EmailConfirmed = true;
-                await _usersRepository.SaveChangesAsync();
-                return true;
+                throw new BadRequestException("Неверный код подтверждения");
             }
-            else return false;
+            
+            currentUser.VerificationCode = null;
+            currentUser.EmailConfirmed = true;
+
+            await _usersRepository.SaveChangesAsync();
+            return true;
         }
 
         // <summary>
@@ -104,28 +114,29 @@
         public async Task<string?> ForgotPass(UserForgotPassDto userForgotPassDTO)
         {
             var currentUser = await _usersRepository.FindUserAsync(userForgotPassDTO.Email);
-            if (currentUser is null) return null;
-            if (userForgotPassDTO.Token.ToString() == currentUser.VerificationCode)
+            if (currentUser is null ||
+                currentUser.VerificationCode is null ||
+                userForgotPassDTO.Token.ToString() != currentUser.VerificationCode)
             {
-                await _helperService.ChangePass(userForgotPassDTO.Password, currentUser);
-                currentUser.VerificationCode = null;
-                await _usersRepository.SaveChangesAsync();
-                return currentUser.Email;
+                throw new BadRequestException("Неверный код подтверждения");
             }
-            else return null;
+            await _helperService.ChangePass(userForgotPassDTO.Password, currentUser);
+            currentUser.VerificationCode = null;
+
+            await _usersRepository.SaveChangesAsync();
+            return currentUser.Email;
         }
         public async Task<AuthResponseDto?> RefreshToken(string refreshToken)
         {
-            if(string.IsNullOrWhiteSpace(refreshToken)) return null;
+            if(string.IsNullOrWhiteSpace(refreshToken)) throw new UnauthorizedException("RefreshToken обязателен");
             var refreshTokenHash = _tokenService.HashRefreshToken(refreshToken);
             var currentToken = await _usersRepository.FindTokenWithUserAsync(refreshTokenHash);
-            if (currentToken is null)  return null;
-            if (currentToken.IsRevoked) return null;
-            if(currentToken.IsExpired) return null;
+            if (currentToken is null || currentToken.IsRevoked || currentToken.IsExpired) throw new UnauthorizedException("RefreshToken недействителен");
+
 
             var currentUser = currentToken.User;
 
-            var newAccessToken = _tokenService.GenerateAccessToken(currentUser.Email, currentUser.Id);
+            var newAccessToken = _tokenService.GenerateAccessToken(currentUser.Email, currentUser.Id, currentUser.UserRole.ToString());
 
             var newRefreshToken = _tokenService.GenerateRefreshToken();
 
@@ -139,7 +150,7 @@
             var addNewPerson = await _usersRepository.AddAsync(tokenEntity);
             if (!addNewPerson)
             {
-                throw new Exception("Failed to add new token");
+                throw new UserRegistrationException("Failed to add new token");
             }
 
             await _usersRepository.SaveChangesAsync();

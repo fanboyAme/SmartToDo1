@@ -2,10 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using RAA.Application.Interfaces.Auth;
 using RAA.Application.ProjectDtos.UserDtos;
-using RAA.Models.AuthModels;
-using RAA.Services.AuthServices;
-using System.Security.Claims;
-
 namespace RAA.API.Controllers
 {
     [ApiController]
@@ -17,10 +13,11 @@ namespace RAA.API.Controllers
         {
             _service = service;
         }
+        [Authorize(Roles = "Admin")]
         [HttpGet]
-        public async Task<IActionResult> getAll(string email)
+        public async Task<IActionResult> GetAll()
         {
-            var person = await _service.getAll(email);
+            var person = await _service.GetAllUsers();
             if (person != null) return Ok(person);
             return BadRequest("You are not an admin or your account not created ");
         }
@@ -41,7 +38,7 @@ namespace RAA.API.Controllers
         [HttpPost("AuthToken")]
         public async Task<IActionResult> AuthToken(UserAuthTokenDto userAuthTokenlDto)
         {
-            var authToken = await _service.AuthToken(userAuthTokenlDto);
+            var authToken = await _service.VerifyEmailToken(userAuthTokenlDto);
             if (authToken) return Ok();
             return BadRequest();  
         }

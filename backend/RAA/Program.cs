@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Serilog;
 using Microsoft.IdentityModel.Tokens;
 using RAA.Application.Interfaces.Auth;
 using RAA.Application.Interfaces.Services;
@@ -9,11 +8,14 @@ using RAA.Application.Services.AuthServices;
 using RAA.Application.Services.TasksServices;
 using RAA.Domain.Models.AuthModels;
 using RAA.Infrastructure.Databases;
+using RAA.Infrastructure.Middleware;
 using RAA.Infrastructure.Queries;
+using RAA.Infrastructure.Repositories.TaskRepository;
+using RAA.Infrastructure.Repositories.UserRepository;
 using RAA.Infrastructure.Services.AuthServices;
 using RAA.Infrastructure.Services.TasksServices;
+using Serilog;
 using System.Text;
-using RAA.Infrastructure.Middleware;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -43,6 +45,8 @@ builder.Host.UseSerilog();
 builder.Services.AddScoped<TaskQueryBuilder>();
 builder.Services.AddScoped<CurrentUserService>();
 builder.Services.AddScoped<TokenService>();
+builder.Services.AddScoped<UserRepository>();
+builder.Services.AddScoped<TaskRepository>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IHelperService, HelperAuthService>();
 builder.Services.AddScoped<IAuthService, AuthService>();

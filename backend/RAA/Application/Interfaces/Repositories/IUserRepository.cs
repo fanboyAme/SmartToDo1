@@ -7,8 +7,9 @@ namespace RAA.Application.Interfaces.Repositories
     public interface IUserRepository
     {
         public Task<Users?> FindUserAsync(string email);
-        public Task<List<Users>?> GetUsers();
+        public Task<List<Users>> GetUsers();
         public Task<bool> IsLoginTakenAsync(UserRegistrationDto userRegistrationDto);
+        public Task<bool> IsEmailTakenAsync(UserRegistrationDto userRegistrationDto);
         public Task<bool> AddAsync(Users user);
         public Task<bool> AddAsync(TokenModel tokenModel);
         public Task<bool> SaveChangesAsync();

@@ -2,7 +2,6 @@
 
 namespace RAA.Domain.Models.TaskModels
 {
-  // public enum TaskSortBy { SortNameA, SortNameZ, SortNewDate, SortOldDate, SortHighPriority, sortLowPriotrity };
     public enum Priority { Low , Medium , High };
     public class TaskModel
     {

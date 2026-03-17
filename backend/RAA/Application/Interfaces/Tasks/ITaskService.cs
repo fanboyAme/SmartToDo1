@@ -1,7 +1,7 @@
 ﻿using RAA.Application.ProjectDtos.TaskDtos;
 using RAA.Domain.Models.TaskModels;
 
-namespace RAA.Application.Interfaces.Task
+namespace RAA.Application.Interfaces.Tasks
 {
     public interface ITaskService
     {

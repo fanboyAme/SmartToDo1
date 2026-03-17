@@ -2,7 +2,7 @@
 
 namespace RAA.Domain.Models.AuthModels
 {
-
+    public enum UserRole { User, Admin} 
     public class Users
     {
         public Guid Id { get; set; }
@@ -12,7 +12,7 @@ namespace RAA.Domain.Models.AuthModels
         public string PasswordHash { get; set; }
 
         public string Email { get; set; }
-        public bool IsAdmin { get; set; }
+        public UserRole UserRole { get; set; }
 
         public bool EmailConfirmed { get; set; }
 
@@ -26,15 +26,13 @@ namespace RAA.Domain.Models.AuthModels
             Email = email;
             Login = login;
             PasswordHash = password;
-            IsAdmin = false;
+            UserRole = UserRole.User;
             EmailConfirmed = false;
             VerificationCode = null;
         }
-
-        public Users() { }
         public override string ToString()
         {
-            return $"{Id}, {Login}, {PasswordHash}, {Email} , {IsAdmin}";
+            return $"{Id}, {Login}, {PasswordHash}, {Email} , {UserRole.User}";
         }
     }
 }

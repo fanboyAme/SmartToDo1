@@ -20,7 +20,9 @@ namespace RAA.Infrastructure.Middleware
                 case BadRequestException: return StatusCodes.Status400BadRequest;
                 case ForbiddenException: return StatusCodes.Status403Forbidden;
                 case NotFoundException: return StatusCodes.Status404NotFound;
-                case UnauthorizedAccessException: return StatusCodes.Status401Unauthorized;
+                case UnauthorizedException: return StatusCodes.Status401Unauthorized;
+                case ConflictException: return StatusCodes.Status409Conflict;
+                case UserRegistrationException: return StatusCodes.Status500InternalServerError;
                 default: return StatusCodes.Status500InternalServerError;
             }
 

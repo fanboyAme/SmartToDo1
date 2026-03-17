@@ -22,13 +22,17 @@ namespace RAA.Infrastructure.Repositories.UserRepository
         {
             return await _db.Users.SingleOrDefaultAsync(x => x.Email == email);
         }
-        public async Task<List<Users>?> GetUsers()
+        public async Task<List<Users>> GetUsers()
         {
             return await _db.Users.ToListAsync();
         }
         public async Task<bool> IsLoginTakenAsync(UserRegistrationDto userRegistrationDto)
         {
             return await _db.Users.AnyAsync(x => x.Login == userRegistrationDto.Login);
+        }
+        public async Task<bool> IsEmailTakenAsync(UserRegistrationDto userRegistrationDto)
+        {
+            return await _db.Users.AnyAsync(x => x.Email == userRegistrationDto.Email);
         }
         public async Task<bool> AddAsync(Users user)
         {

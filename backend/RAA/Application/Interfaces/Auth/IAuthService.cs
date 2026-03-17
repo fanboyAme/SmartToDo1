@@ -6,7 +6,7 @@ namespace RAA.Application.Interfaces.Auth
 {
     public interface IAuthService
     {
-        public Task<List<Users>?> getAll(string email);
+        public Task<List<Users>> GetAllUsers();
         public Task<string?> Registration(UserRegistrationDto userRegDto);
         public Task<AuthResponseDto?> Authorization(UserAuthDto UserAuthDto);
         public Task<bool> AuthEmail(string email);

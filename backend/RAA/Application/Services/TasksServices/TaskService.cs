@@ -1,8 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using RAA.Application.Interfaces.Task;
+﻿using RAA.Application.Interfaces.Task;
 using RAA.Application.ProjectDtos.TaskDtos;
 using RAA.Domain.Models.TaskModels;
-using RAA.Infrastructure.Databases;
 using RAA.Infrastructure.Repositories.TaskRepository;
 using RAA.Infrastructure.Services.AuthServices;
 
@@ -31,7 +29,7 @@ namespace RAA.Application.Services.TasksServices
         }
         public async Task<bool> AddTask(PostTaskDto postTaskDto)
         {
-            var a = await _taskRepository.AddTaskAsync(postTaskDto);
+            await _taskRepository.AddTaskAsync(postTaskDto);
             await _taskRepository.SaveChangesAsync();
             return true;
         }

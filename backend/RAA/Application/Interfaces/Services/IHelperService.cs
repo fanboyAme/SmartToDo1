@@ -6,9 +6,8 @@ namespace RAA.Application.Interfaces.Services
 {
     public interface IHelperService
     {
-        public Task<AuthResponseDto?> Auth(UserAuthDto UserAuthDto);
-        public string HashPass(string pass);
-        public Task<bool> ChangePass(string pass, Users? currentUser);
+        public Task<AuthResponseDto> Auth(UserAuthDto UserAuthDto);
+        Task ChangePass(string pass, Users currentUser);
         public string Generate();
         public string MimeMessage(string token);
     }

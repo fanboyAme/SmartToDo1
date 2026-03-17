@@ -1,45 +1,49 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 
 namespace RAA.Infrastructure.Services.AuthServices
 
 {
     using BCrypt.Net;
+    using RAA.Application.Exceptions;
     using RAA.Application.Interfaces.Services;
     using RAA.Application.ProjectDtos.ResponceDto;
     using RAA.Application.ProjectDtos.UserDtos;
     using RAA.Domain.Models.AuthModels;
-    using RAA.Infrastructure.Databases;
+    using RAA.Infrastructure.Repositories.UserRepository;
 
     public class HelperAuthService: IHelperService
     {
-        private readonly ApplicationDbContext _db;
+        private readonly ILogger<HelperAuthService> _logger;
+        private readonly UserRepository _userRepository;
         private readonly TokenService _tokenService;
-        public HelperAuthService(ApplicationDbContext db, TokenService jwtService) {  _db = db; _tokenService = jwtService; }
+        public HelperAuthService(TokenService jwtService, UserRepository userRepository, ILogger<HelperAuthService> logger) 
+        {  
+            _userRepository = userRepository; 
+            _tokenService = jwtService; 
+            _logger = logger;
+        }
 
         // <summary>
         // Проверка данных пользователя
         // </summary>
-        public async Task<AuthResponseDto?> Auth(UserAuthDto UserAuthDto)
+        public async Task<AuthResponseDto> Auth(UserAuthDto UserAuthDto)
         {
-            if (UserAuthDto is null) 
-                return null;
-            var currentUser = await _db.Users.SingleOrDefaultAsync(x => x.Login == UserAuthDto.Login);
-            if (currentUser is null || !currentUser.EmailConfirmed) 
-                return null;
-            if (!BCrypt.Verify(UserAuthDto.Password, currentUser.PasswordHash)) 
-                return null;
-            var accesToken = _tokenService.GenerateAccessToken(currentUser.Email, currentUser.Id);
+            var currentUser = await _userRepository.FindUserByLoginAsync(UserAuthDto.Login);
+            if (currentUser is null || !currentUser.EmailConfirmed || !BCrypt.Verify(UserAuthDto.Password, currentUser.PasswordHash))
+            {
+                throw new UnauthorizedException("Неверный логин или пароль");
+            }
+            var accesToken = _tokenService.GenerateAccessToken(currentUser.Email, currentUser.Id, currentUser.UserRole.ToString());
             var refreshToken = _tokenService.GenerateRefreshToken();
             var refreshTokenHash = _tokenService.HashRefreshToken(refreshToken);
 
             var tokenEntity = new TokenModel
                 (refreshTokenHash, 
-                currentUser.Id, 
+                currentUser.Id,
                 DateTime.UtcNow.AddMonths(1));
-            _db.Tokens.Add(tokenEntity);
 
-            _db.SaveChanges();
+            await _userRepository.AddAsync(tokenEntity);
+            await _userRepository.SaveChangesAsync();
 
             return new AuthResponseDto 
             { 
@@ -50,24 +54,19 @@ namespace RAA.Infrastructure.Services.AuthServices
         // <summary>
         // Замена пароля
         // </summary>
-        public async Task<bool> ChangePass(string pass, Users? currentUser)
-        {
-            if (currentUser is null) return false;
-            try { currentUser.PasswordHash = BCrypt.HashPassword(pass); }
-            catch (Exception ex) { return false; }
-            await _db.SaveChangesAsync();
-            return true;
+        public async Task ChangePass(string pass, Users currentUser)
+        { 
+            try
+            {
+                currentUser.PasswordHash = BCrypt.HashPassword(pass);
+                await _userRepository.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Ошибка с хешированием пароля");
+                throw;
+            } 
         }
-
-        // <summary>
-        // Хэширование пароля
-        // </summary>
-        public string HashPass(string pass)
-        {
-            var Hash = BCrypt.HashPassword(pass);
-            return Hash;
-        }
-
         // <summary>
         // Генератор кода
         // </summary>
@@ -84,6 +83,5 @@ namespace RAA.Infrastructure.Services.AuthServices
             var message = $"Hello, your token: {token}";
             return message;
         }
-
     }
 }

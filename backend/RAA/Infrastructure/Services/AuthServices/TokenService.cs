@@ -5,10 +5,11 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Options;
 using System.Security.Cryptography;
 using RAA.Domain.Models.AuthModels;
+using RAA.Application.Interfaces.Auth;
 
 namespace RAA.Infrastructure.Services.AuthServices
 {
-    public class TokenService
+    public class TokenService: ITokenService
     {
         private readonly JwtOptions _options;
         // private readonly ILogger<TokenService> _logger;
@@ -17,7 +18,7 @@ namespace RAA.Infrastructure.Services.AuthServices
         {
             _options = options.Value;
         }
-        public string GenerateAccessToken(string email, Guid userId)
+        public string GenerateAccessToken(string email, Guid userId, string userRole)
         {
             var claims = new[]
             {
@@ -26,6 +27,7 @@ namespace RAA.Infrastructure.Services.AuthServices
                 //</summary>
                 new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
                 new Claim(ClaimTypes.Email, email),
+                new Claim(ClaimTypes.Role, userRole)
             };
             // <summary>
             // Создаем ключ из байтов секретного ключа

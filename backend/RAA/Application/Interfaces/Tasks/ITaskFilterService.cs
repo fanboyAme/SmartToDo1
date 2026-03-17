@@ -1,7 +1,7 @@
 ﻿using RAA.Application.ProjectDtos.ResponceDto;
 using RAA.Application.ProjectDtos.TaskDtos;
 
-namespace RAA.Application.Interfaces.Task
+namespace RAA.Application.Interfaces.Tasks
 {
     public interface ITaskFilterService
     {

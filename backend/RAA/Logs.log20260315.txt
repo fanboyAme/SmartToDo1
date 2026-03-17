@@ -1,0 +1,50 @@
+2026-03-15 18:43:28.941 +03:00 [INF] User profile is available. Using 'C:\Users\ame\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-03-15 18:43:29.267 +03:00 [INF] Now listening on: https://localhost:7177
+2026-03-15 18:43:29.269 +03:00 [INF] Now listening on: http://localhost:5088
+2026-03-15 18:43:29.323 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-03-15 18:43:29.324 +03:00 [INF] Hosting environment: Development
+2026-03-15 18:43:29.325 +03:00 [INF] Content root path: P:\project\SmartToDo1\backend\RAA
+2026-03-15 18:43:46.919 +03:00 [INF] User profile is available. Using 'C:\Users\ame\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-03-15 18:43:47.115 +03:00 [INF] Now listening on: https://localhost:7177
+2026-03-15 18:43:47.117 +03:00 [INF] Now listening on: http://localhost:5088
+2026-03-15 18:43:47.257 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-03-15 18:43:47.258 +03:00 [INF] Hosting environment: Development
+2026-03-15 18:43:47.259 +03:00 [INF] Content root path: P:\project\SmartToDo1\backend\RAA
+2026-03-15 18:43:50.771 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7177/ - null null
+2026-03-15 18:43:52.441 +03:00 [INF] HTTP GET / responded 404 in 1508.7185 ms
+2026-03-15 18:43:52.451 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7177/ - 404 null null 1690.125ms
+2026-03-15 18:43:52.459 +03:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7177/, Response status code: 404
+2026-03-15 18:43:58.811 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7177/swwagger - null null
+2026-03-15 18:43:58.819 +03:00 [INF] HTTP GET /swwagger responded 404 in 0.4846 ms
+2026-03-15 18:43:58.821 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7177/swwagger - 404 null null 10.212ms
+2026-03-15 18:43:58.824 +03:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7177/swwagger, Response status code: 404
+2026-03-15 18:44:21.223 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7177/swagger - null null
+2026-03-15 18:44:21.228 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7177/swagger - 301 null null 5.3721ms
+2026-03-15 18:44:21.236 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7177/swagger/index.html - null null
+2026-03-15 18:44:21.303 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7177/swagger/index.html - 200 null text/html;charset=utf-8 66.1462ms
+2026-03-15 18:44:21.381 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7177/swagger/swagger-ui.css - null null
+2026-03-15 18:44:21.383 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7177/_framework/aspnetcore-browser-refresh.js - null null
+2026-03-15 18:44:21.382 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7177/swagger/swagger-ui-bundle.js - null null
+2026-03-15 18:44:21.382 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7177/swagger/index.js - null null
+2026-03-15 18:44:21.381 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7177/swagger/index.css - null null
+2026-03-15 18:44:21.396 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7177/swagger/index.js - 200 null application/javascript;charset=utf-8 14.5175ms
+2026-03-15 18:44:21.382 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7177/swagger/swagger-ui-standalone-preset.js - null null
+2026-03-15 18:44:21.417 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7177/_framework/aspnetcore-browser-refresh.js - 200 16491 application/javascript; charset=utf-8 33.6724ms
+2026-03-15 18:44:21.424 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7177/swagger/index.css - 200 152 text/css 42.9699ms
+2026-03-15 18:44:21.430 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7177/swagger/swagger-ui.css - 200 26388 text/css 48.3618ms
+2026-03-15 18:44:21.430 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7177/swagger/swagger-ui-standalone-preset.js - 200 76581 text/javascript 47.9573ms
+2026-03-15 18:44:21.432 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7177/swagger/swagger-ui-bundle.js - 200 417806 text/javascript 49.9516ms
+2026-03-15 18:44:21.434 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7177/_vs/browserLink - null null
+2026-03-15 18:44:21.492 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7177/_vs/browserLink - 200 null text/javascript; charset=UTF-8 57.1295ms
+2026-03-15 18:44:21.546 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7177/swagger/v1/swagger.json - null null
+2026-03-15 18:44:21.555 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7177/swagger/favicon-32x32.png - null null
+2026-03-15 18:44:21.559 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7177/swagger/favicon-32x32.png - 200 628 image/png 3.5873ms
+2026-03-15 18:44:21.560 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7177/swagger/favicon-32x32.png - null null
+2026-03-15 18:44:21.564 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7177/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 17.8134ms
+2026-03-15 18:44:21.565 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7177/swagger/favicon-32x32.png - 304 null null 5.736ms
+2026-03-15 18:44:21.588 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7177/swagger/favicon-16x16.png - null null
+2026-03-15 18:44:21.591 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7177/swagger/favicon-16x16.png - 200 665 image/png 3.1187ms
+2026-03-15 18:44:21.620 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7177/swagger/favicon-32x32.png - null null
+2026-03-15 18:44:21.624 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7177/swagger/favicon-32x32.png - 304 null null 3.9435ms
+2026-03-15 18:44:21.628 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7177/swagger/favicon-16x16.png - null null
+2026-03-15 18:44:21.631 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7177/swagger/favicon-16x16.png - 304 null null 2.9423ms
