@@ -30,7 +30,7 @@ namespace RAA.API.Controllers
         public async Task<IActionResult> AddTask(PostTaskDto postTaskDto)
         {
             var addTask = await _taskService.AddTask(postTaskDto);
-            return Ok(addTask);
+            return CreatedAtAction(nameof(AddTask) addTask);
         }
         [HttpPatch("Update/{id}")]
         [Authorize]

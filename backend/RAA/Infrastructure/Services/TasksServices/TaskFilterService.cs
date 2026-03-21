@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using RAA.Application.Interfaces.Task;
+using RAA.Application.Interfaces.Tasks;
 using RAA.Application.ProjectDtos.ResponceDto;
 using RAA.Application.ProjectDtos.TaskDtos;
 using RAA.Infrastructure.Databases;

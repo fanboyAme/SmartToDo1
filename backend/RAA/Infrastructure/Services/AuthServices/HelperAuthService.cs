@@ -31,6 +31,7 @@ namespace RAA.Infrastructure.Services.AuthServices
             var currentUser = await _userRepository.FindUserByLoginAsync(UserAuthDto.Login);
             if (currentUser is null || !currentUser.EmailConfirmed || !BCrypt.Verify(UserAuthDto.Password, currentUser.PasswordHash))
             {
+                _logger.LogError("Неверный логин или пароль");
                 throw new UnauthorizedException("Неверный логин или пароль");
             }
             var accesToken = _tokenService.GenerateAccessToken(currentUser.Email, currentUser.Id, currentUser.UserRole.ToString());

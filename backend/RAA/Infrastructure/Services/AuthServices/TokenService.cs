@@ -12,7 +12,6 @@ namespace RAA.Infrastructure.Services.AuthServices
     public class TokenService: ITokenService
     {
         private readonly JwtOptions _options;
-        // private readonly ILogger<TokenService> _logger;
 
         public TokenService(IOptions<JwtOptions> options)
         {

@@ -2,6 +2,7 @@
 using MailKit.Security;
 using Microsoft.Extensions.Options;
 using MimeKit;
+using RAA.Application.Exceptions;
 using RAA.Application.Interfaces.Services;
 using RAA.Domain.Models.AuthModels;
 
@@ -10,10 +11,12 @@ namespace RAA.Infrastructure.Services.AuthServices
     public class EmailService: IEmailService
     {
         private readonly SMTP _smtp;
+        private readonly ILogger<EmailService> _logger;
 
-        public EmailService(IOptions<SMTP> options)
+        public EmailService(IOptions<SMTP> options, ILogger<EmailService> logger)
         {
             _smtp = options.Value;
+            _logger = logger;
         }
 
         // <summary>
@@ -39,9 +42,9 @@ namespace RAA.Infrastructure.Services.AuthServices
             }
             catch (Exception ex)
             {
-                // add log info and add SmtpExc
                 await client.DisconnectAsync(true);
-                return false;
+                _logger.LogError(ex, "Ошибка отправки письма пользователю с почтой: {Email}", toEmail);
+                throw new UserRegistrationException("Ошибка отправки письма");
             }
 
         }

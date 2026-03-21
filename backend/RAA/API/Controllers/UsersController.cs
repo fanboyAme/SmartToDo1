@@ -46,9 +46,8 @@ namespace RAA.API.Controllers
         [HttpPost("CodeGeneration")]
         public async Task<IActionResult> CodeGen(string email)
         {
-            var codeGen = await _service.AuthEmail(email);
-            if (codeGen) return Ok();
-            return BadRequest(codeGen);
+            await _service.AuthEmail(email);
+            return Ok();
         }
         [HttpPost("ForgotPass")]
         public async Task<IActionResult> ForgotPass(UserForgotPassDto userForgotPassDto)

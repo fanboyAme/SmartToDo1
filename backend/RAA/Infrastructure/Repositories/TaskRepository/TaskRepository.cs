@@ -25,10 +25,20 @@ namespace RAA.Infrastructure.Repositories.TaskRepository
         {
             return await _db.Tasks.Where(u => u.UserId == id).ToListAsync();
         }
-        public async Task<EntityEntry<TaskModel>?> AddTaskAsync(PostTaskDto postTaskDto)
+        public async Task<TaskModel?> AddTaskAsync(PostTaskDto postTaskDto, Guid userId)
         {
-            return await _db.Tasks.AddAsync(new(postTaskDto.Title, postTaskDto.Description, postTaskDto.Priority));
+            var task = new TaskModel(
+                postTaskDto.Title,
+                postTaskDto.Description,
+                postTaskDto.Priority
+            );
+
+            task.UserId = userId;
+
+            await _db.Tasks.AddAsync(task);
+            return task;
         }
+
 
         public async Task<bool> SaveChangesAsync()
         {

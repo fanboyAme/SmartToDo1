@@ -22,6 +22,10 @@ namespace RAA.Infrastructure.Repositories.UserRepository
         {
             return await _db.Users.SingleOrDefaultAsync(x => x.Email == email);
         }
+        public async Task<Users?> FindUserByLoginAsync(string login)
+        {
+            return await _db.Users.SingleOrDefaultAsync(x => x.Login == login);
+        }
         public async Task<List<Users>> GetUsers()
         {
             return await _db.Users.ToListAsync();

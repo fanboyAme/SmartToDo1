@@ -2,7 +2,7 @@
 
 namespace RAA.Domain.Models.AuthModels
 {
-    public enum UserRole { User, Admin} 
+    public enum UserRole { User, Admin } 
     public class Users
     {
         public Guid Id { get; set; }
