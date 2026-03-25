@@ -1,56 +1,22 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace RAA.Infrastructure.Services.AuthServices
+﻿namespace RAA.Infrastructure.Services.AuthServices
 
 {
     using BCrypt.Net;
-    using RAA.Application.Exceptions;
+    using RAA.Application.Interfaces.Auth;
+    using RAA.Application.Interfaces.Repositories;
     using RAA.Application.Interfaces.Services;
-    using RAA.Application.ProjectDtos.ResponceDto;
-    using RAA.Application.ProjectDtos.UserDtos;
     using RAA.Domain.Models.AuthModels;
-    using RAA.Infrastructure.Repositories.UserRepository;
 
     public class HelperAuthService: IHelperService
     {
         private readonly ILogger<HelperAuthService> _logger;
-        private readonly UserRepository _userRepository;
-        private readonly TokenService _tokenService;
-        public HelperAuthService(TokenService jwtService, UserRepository userRepository, ILogger<HelperAuthService> logger) 
+        private readonly IUserRepository _userRepository;
+        private readonly string _templatePath;
+        public HelperAuthService(ITokenService jwtService, IUserRepository userRepository, ILogger<HelperAuthService> logger) 
         {  
-            _userRepository = userRepository; 
-            _tokenService = jwtService; 
+            _userRepository = userRepository;  
             _logger = logger;
-        }
-
-        // <summary>
-        // Проверка данных пользователя
-        // </summary>
-        public async Task<AuthResponseDto> Auth(UserAuthDto UserAuthDto)
-        {
-            var currentUser = await _userRepository.FindUserByLoginAsync(UserAuthDto.Login);
-            if (currentUser is null || !currentUser.EmailConfirmed || !BCrypt.Verify(UserAuthDto.Password, currentUser.PasswordHash))
-            {
-                _logger.LogError("Неверный логин или пароль");
-                throw new UnauthorizedException("Неверный логин или пароль");
-            }
-            var accesToken = _tokenService.GenerateAccessToken(currentUser.Email, currentUser.Id, currentUser.UserRole.ToString());
-            var refreshToken = _tokenService.GenerateRefreshToken();
-            var refreshTokenHash = _tokenService.HashRefreshToken(refreshToken);
-
-            var tokenEntity = new TokenModel
-                (refreshTokenHash, 
-                currentUser.Id,
-                DateTime.UtcNow.AddMonths(1));
-
-            await _userRepository.AddAsync(tokenEntity);
-            await _userRepository.SaveChangesAsync();
-
-            return new AuthResponseDto 
-            { 
-                AccessToken = accesToken, 
-                RefreshToken = refreshToken
-            };
+            _templatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "EmailTemplate.html");
         }
         // <summary>
         // Замена пароля
@@ -61,6 +27,7 @@ namespace RAA.Infrastructure.Services.AuthServices
             {
                 currentUser.PasswordHash = BCrypt.HashPassword(pass);
                 await _userRepository.SaveChangesAsync();
+                _logger.LogInformation($"Успешная смена пароль пользователя: {currentUser.Id}");
             }
             catch (Exception ex)
             {
@@ -81,8 +48,13 @@ namespace RAA.Infrastructure.Services.AuthServices
         // </summary>
         public string MimeMessage(string token)
         {
-            var message = $"Hello, your token: {token}";
-            return message;
+            var template = File.ReadAllText(_templatePath);
+
+            var html = template
+                .Replace("{{TOKEN}}", token)
+                .Replace("{{YEAR}}", DateTime.Now.Year.ToString());
+
+            return html;
         }
     }
 }

@@ -17,6 +17,7 @@ namespace RAA.Domain.Models.AuthModels
         public bool EmailConfirmed { get; set; }
 
         public string? VerificationCode { get; set; }
+        public DateTime? VerificationCodeExpiry { get; set; }
 
         public List<TaskModel>? Tasks { get; set; } = new();
         public List<TokenModel> Token { get; set; } = new();
@@ -30,6 +31,8 @@ namespace RAA.Domain.Models.AuthModels
             EmailConfirmed = false;
             VerificationCode = null;
         }
+
+        public Users() { }
         public override string ToString()
         {
             return $"{Id}, {Login}, {PasswordHash}, {Email} , {UserRole.User}";

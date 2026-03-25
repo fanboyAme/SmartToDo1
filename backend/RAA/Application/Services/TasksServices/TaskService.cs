@@ -1,8 +1,8 @@
 ﻿using RAA.Application.Exceptions;
+using RAA.Application.Interfaces.Repositories;
 using RAA.Application.Interfaces.Tasks;
 using RAA.Application.ProjectDtos.TaskDtos;
 using RAA.Domain.Models.TaskModels;
-using RAA.Infrastructure.Repositories.TaskRepository;
 using RAA.Infrastructure.Services.AuthServices;
 
 namespace RAA.Application.Services.TasksServices
@@ -10,10 +10,10 @@ namespace RAA.Application.Services.TasksServices
     public class TaskService: ITaskService
     {
         private readonly CurrentUserService _currentUserService;
-        private readonly TaskRepository _taskRepository;
+        private readonly ITaskRepository _taskRepository;
         private readonly ILogger<TaskService> _logger;
 
-        public TaskService(CurrentUserService currentUserService, TaskRepository taskRepository, ILogger<TaskService> logger)
+        public TaskService(CurrentUserService currentUserService, ITaskRepository taskRepository, ILogger<TaskService> logger)
         {
             _currentUserService = currentUserService;
             _taskRepository = taskRepository;
@@ -51,7 +51,8 @@ namespace RAA.Application.Services.TasksServices
         }
         public async Task<TaskModel> UpdateTask(PatchTaskDto patchTaskDto, Guid id) 
         {
-            var currentTask = await GetTask(id);
+            var currentTask = await GetTask(id)
+                ?? throw new NotFoundException("Задача не найдена");
             currentTask.Title = patchTaskDto.Title;
             currentTask.Description = patchTaskDto.Description;
             currentTask.Priority = patchTaskDto.Priority;

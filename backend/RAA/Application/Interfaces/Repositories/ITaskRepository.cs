@@ -7,7 +7,7 @@ namespace RAA.Application.Interfaces.Repositories
     {
         public Task<TaskModel?> GetTaskAsync(Guid id);
         public Task<List<TaskModel>?> GetAllTasksAsync(Guid id);
-        public Task<TaskModel?> AddTaskAsync(PostTaskDto postTaskDto);
+        public Task<TaskModel> AddTaskAsync(PostTaskDto postTaskDto, Guid userId);
         public Task<bool> SaveChangesAsync();
         public void UpdateTask(TaskModel taskModel);
         public void RemoveTask(TaskModel currentTask);

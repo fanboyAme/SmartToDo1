@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using RAA.Application.Interfaces.Repositories;
 using RAA.Application.ProjectDtos.TaskDtos;
 using RAA.Domain.Models.TaskModels;
@@ -25,7 +24,7 @@ namespace RAA.Infrastructure.Repositories.TaskRepository
         {
             return await _db.Tasks.Where(u => u.UserId == id).ToListAsync();
         }
-        public async Task<TaskModel?> AddTaskAsync(PostTaskDto postTaskDto, Guid userId)
+        public async Task<TaskModel> AddTaskAsync(PostTaskDto postTaskDto, Guid userId)
         {
             var task = new TaskModel(
                 postTaskDto.Title,

@@ -18,29 +18,25 @@ namespace RAA.API.Controllers
         public async Task<IActionResult> GetAll()
         {
             var person = await _service.GetAllUsers();
-            if (person != null) return Ok(person);
-            return BadRequest("You are not an admin or your account not created ");
+            return Ok(person);
         }
         [HttpPost("Registration")]
         public async Task<IActionResult> Registration(UserRegistrationDto userRegDto) 
         {
             var reg = await _service.Registration(userRegDto);
-            if (reg == null) return BadRequest();
             return Ok(new { userRegDto.Email });
         }
         [HttpPost("Auth")]
         public async Task<IActionResult> Authorization(UserAuthDto userAuthDto)
         {
             var auth = await _service.Authorization(userAuthDto);
-            if (auth is null) return BadRequest();
             return Ok(new { auth.AccessToken, auth.RefreshToken });
         }
         [HttpPost("AuthToken")]
         public async Task<IActionResult> AuthToken(UserAuthTokenDto userAuthTokenlDto)
         {
             var authToken = await _service.VerifyEmailToken(userAuthTokenlDto);
-            if (authToken) return Ok();
-            return BadRequest();  
+            return Ok(); 
         }
 
         [HttpPost("CodeGeneration")]
@@ -53,8 +49,7 @@ namespace RAA.API.Controllers
         public async Task<IActionResult> ForgotPass(UserForgotPassDto userForgotPassDto)
         {
             var forgot = await _service.ForgotPass(userForgotPassDto);
-            if (forgot != null) return Ok(new { forgot });
-            return BadRequest($"You dont have a token.");
+            return Ok(new { forgot });
         }
         [Authorize]
         [HttpGet("sercer")]
@@ -66,7 +61,6 @@ namespace RAA.API.Controllers
         public async Task<IActionResult> Refresh(string refreshtoken)
         {
             var refreshToken = _service.RefreshToken(refreshtoken);
-            if (refreshToken is null) return Unauthorized();
             return Ok(new {refreshToken});
 
         }

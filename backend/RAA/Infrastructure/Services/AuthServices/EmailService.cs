@@ -22,13 +22,13 @@ namespace RAA.Infrastructure.Services.AuthServices
         // <summary>
         // Отправка письма пользователю
         // </summary>
-        public async Task<bool> SendAsync(string toEmail, string subject, string text)
+        public async Task<bool> SendAsync(string toEmail, string subject, string htmlBody)
         {
             var message = new MimeMessage();
             message.From.Add(MailboxAddress.Parse(_smtp.Username));
             message.To.Add(MailboxAddress.Parse(toEmail));
             message.Subject = subject;
-            message.Body = new TextPart("plain") { Text = text };
+            message.Body = new TextPart("html") { Text = htmlBody };
 
             using var client = new SmtpClient();
 
@@ -38,6 +38,9 @@ namespace RAA.Infrastructure.Services.AuthServices
                 await client.AuthenticateAsync(_smtp.Username, _smtp.Password);
                 await client.SendAsync(message);
                 await client.DisconnectAsync(true);
+
+                _logger.LogInformation("Письмо успешно оправлено пользователю с почтой: {Email}", toEmail);
+
                 return true;
             }
             catch (Exception ex)

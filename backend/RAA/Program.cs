@@ -2,8 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using RAA.Application.Interfaces.Auth;
+using RAA.Application.Interfaces.Repositories;
 using RAA.Application.Interfaces.Services;
-using RAA.Application.Interfaces.Task;
+using RAA.Application.Interfaces.Tasks;
 using RAA.Application.Services.AuthServices;
 using RAA.Application.Services.TasksServices;
 using RAA.Domain.Models.AuthModels;
@@ -44,9 +45,9 @@ builder.Host.UseSerilog();
 
 builder.Services.AddScoped<TaskQueryBuilder>();
 builder.Services.AddScoped<CurrentUserService>();
-builder.Services.AddScoped<TokenService>();
-builder.Services.AddScoped<UserRepository>();
-builder.Services.AddScoped<TaskRepository>();
+builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<ITaskRepository ,TaskRepository>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IHelperService, HelperAuthService>();
 builder.Services.AddScoped<IAuthService, AuthService>();

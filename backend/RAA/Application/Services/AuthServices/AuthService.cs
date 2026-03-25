@@ -1,6 +1,7 @@
 ﻿namespace RAA.Application.Services.AuthServices
 
 {
+    using BCrypt.Net;
     using RAA.Application.Exceptions;
     using RAA.Application.Interfaces.Auth;
     using RAA.Application.Interfaces.Repositories;
@@ -9,7 +10,6 @@
     using RAA.Application.ProjectDtos.UserDtos;
     using RAA.Domain.Models.AuthModels;
     using System.Threading.Tasks;
-    using BCrypt.Net;
 
     public class AuthService : IAuthService
     {
@@ -67,9 +67,39 @@
         // <summary>
         // Авторизация
         // </summary>
-        public async Task<AuthResponseDto?> Authorization(UserAuthDto UserAuthDTO)
+        public async Task<AuthResponseDto?> Authorization(UserAuthDto userAuthDTO)
         {
-            return await _helperService.Auth(UserAuthDTO);
+            var currentUser = await _usersRepository.FindUserByLoginAsync(userAuthDTO.Login);
+            if (currentUser is null || !BCrypt.Verify(userAuthDTO.Password, currentUser.PasswordHash))
+            {
+                _logger.LogError("Неверный логин или пароль");
+                throw new UnauthorizedException("Неверный логин или пароль");
+            }
+            if (!currentUser.EmailConfirmed)
+            {
+                await AuthEmail(currentUser.Email);
+                _logger.LogWarning("Пользователь {UserId} попытался войти в аккаунт без подтверждения почты. Отправлен новый токен", currentUser.Id);
+                throw new ForbiddenException("Аккаунт не подтвержден, код отправлен повторно");
+            }
+            var accesToken = _tokenService.GenerateAccessToken(currentUser.Email, currentUser.Id, currentUser.UserRole.ToString());
+            var refreshToken = _tokenService.GenerateRefreshToken();
+            var refreshTokenHash = _tokenService.HashRefreshToken(refreshToken);
+
+            var tokenEntity = new TokenModel
+                (refreshTokenHash,
+                currentUser.Id,
+                DateTime.UtcNow.AddMonths(1));
+
+            await _usersRepository.AddAsync(tokenEntity);
+            await _usersRepository.SaveChangesAsync();
+
+            _logger.LogInformation($"Успешная авторизация пользователя: {currentUser.Id}");
+
+            return new AuthResponseDto
+            {
+                AccessToken = accesToken,
+                RefreshToken = refreshToken
+            };
         }
 
         // <summary>
@@ -82,6 +112,7 @@
                 {
                     var currentToken = _helperService.Generate();
                     currentUser.VerificationCode = currentToken;
+                    currentUser.VerificationCodeExpiry = DateTime.UtcNow.AddMinutes(15);
                     await _usersRepository.SaveChangesAsync();
                     await _emailService.SendAsync(email, "Token", _helperService.MimeMessage(currentToken));
                 }
@@ -97,22 +128,34 @@
         // </summary>
         public async Task<bool> VerifyEmailToken(UserAuthTokenDto userAuthTokenDTO)
         {
-            var currentUser = await _usersRepository.FindUserAsync(userAuthTokenDTO.Email);
-            if (currentUser is null ||
-                currentUser.VerificationCode is null || 
-                userAuthTokenDTO.Token.ToString() != currentUser.VerificationCode)
+            var currentUser = await _usersRepository.FindUserAsync(userAuthTokenDTO.Email) 
+                ?? throw new NotFoundException($"Пользователь с почтой {userAuthTokenDTO.Email} не был найден");
+
+            if (string.IsNullOrEmpty(userAuthTokenDTO.Token.ToString())){
+                _logger.LogError("Отсутсвует токен пользователя: {Email}", currentUser.Email);
+                throw new BadRequestException("Код не найден");
+            }
+
+            if(currentUser.VerificationCodeExpiry < DateTime.UtcNow)
+            {
+                _logger.LogError("Введенный токен пользователя {Email} истек", currentUser.Email);
+                throw new BadRequestException("Срок действия кода истек. Запросите новый");
+            }
+            
+            if(userAuthTokenDTO.Token.ToString() != currentUser.VerificationCode)
             {
                 _logger.LogError(
-            "Неверный код подтверждения для пользователя {UserEmail}. Ожидался код: {ExpectedCode}, получен: {ReceivedCode}",
-            currentUser?.Email ?? userAuthTokenDTO.Email ?? "Неизвестный пользователь",
-            currentUser?.VerificationCode ?? "Отсутствует",
-            userAuthTokenDTO.Token.ToString());
+                "Неверный код подтверждения для пользователя {UserEmail}. Ожидался код: {ExpectedCode}, получен: {ReceivedCode}",
+                    currentUser?.Email ?? userAuthTokenDTO.Email ?? "Неизвестный пользователь",
+                    currentUser?.VerificationCode ?? "Отсутствует",
+                    userAuthTokenDTO.Token.ToString());
                 throw new BadRequestException("Неверный код подтверждения");
             }
 
-
             currentUser.VerificationCode = null;
+            currentUser.VerificationCodeExpiry = null;
             currentUser.EmailConfirmed = true;
+
 
             await _usersRepository.SaveChangesAsync();
 
@@ -128,6 +171,12 @@
         {
             var currentUser = await _usersRepository.FindUserAsync(userForgotPassDTO.Email) 
                 ?? throw new NotFoundException($"Пользователь с почтой {userForgotPassDTO.Email} не найден");
+            
+            if (currentUser.VerificationCodeExpiry < DateTime.UtcNow)
+            {
+                _logger.LogError("Введенный токен пользователя {Email} истек", currentUser.Email);
+                throw new BadRequestException("Срок действия кода истек. Запросите новый");
+            }
 
             if (currentUser.VerificationCode is null ||
                 userForgotPassDTO.Token.ToString() != currentUser.VerificationCode)
@@ -141,6 +190,7 @@
             }
             await _helperService.ChangePass(userForgotPassDTO.Password, currentUser);
             currentUser.VerificationCode = null;
+            currentUser.VerificationCodeExpiry = null;
 
             await _usersRepository.SaveChangesAsync();
 

@@ -33,13 +33,15 @@ namespace RAA.Infrastructure.Services.TasksServices
 
             var page = TaskQuery.Page ?? 1;
 
+            if (page < 1) page = 1;
+
             var pageSize = TaskQuery.PageSize ?? 9;
+
+            if (pageSize < 1) pageSize = 9;
 
             int totalPages = (totalTask + pageSize - 1) / pageSize;
 
-            if (TaskQuery.Page < 1) page = 1;
-
-            if (TaskQuery.Page > totalPages) page = totalPages;
+            if (page > totalPages) page = totalPages;
 
             currentTaskList = _taskQueryBuilder.ApplyPagination(currentTaskList, page, pageSize);
 

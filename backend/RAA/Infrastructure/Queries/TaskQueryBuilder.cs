@@ -45,6 +45,9 @@ namespace RAA.Infrastructure.Queries
 
         public IQueryable<TaskModel> ApplyPagination(IQueryable<TaskModel> query, int page, int pageSize)
         {
+            if (page < 1) page = 1;
+            if (pageSize < 1) pageSize = 9;
+
             var skip = (page - 1) * pageSize;
             return query.Skip(skip).Take(pageSize);
         }
