@@ -4559,3 +4559,493 @@ SELECT TOP(2) [u].[Id], [u].[Email], [u].[EmailConfirmed], [u].[Login], [u].[Pas
 FROM [Users] AS [u]
 WHERE [u].[Email] = @email
 2026-03-26 01:41:23.056 +03:00 [ERR] Неверный код подтверждения для пользователя test@example.com. Ожидался код: 268082, получен: 1
+2026-03-26 01:54:19.452 +03:00 [INF] User profile is available. Using 'C:\Users\ame\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-03-26 01:54:19.806 +03:00 [INF] Now listening on: https://localhost:7177
+2026-03-26 01:54:19.809 +03:00 [INF] Now listening on: http://localhost:5088
+2026-03-26 01:54:20.099 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-03-26 01:54:20.100 +03:00 [INF] Hosting environment: Development
+2026-03-26 01:54:20.102 +03:00 [INF] Content root path: P:\project\SmartToDo1\backend\RAA
+2026-03-26 01:54:43.431 +03:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5088/api/users/Registration - null null
+2026-03-26 01:54:43.469 +03:00 [INF] CORS policy execution successful.
+2026-03-26 01:54:43.483 +03:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5088/api/users/Registration - 204 null null 57.8257ms
+2026-03-26 01:54:43.491 +03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5088/api/users/Registration - application/json 63
+2026-03-26 01:54:43.497 +03:00 [INF] CORS policy execution successful.
+2026-03-26 01:54:43.562 +03:00 [INF] Executing endpoint 'RAA.API.Controllers.UsersController.Registration (RAA)'
+2026-03-26 01:54:43.585 +03:00 [INF] Route matched with {action = "Registration", controller = "Users"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Registration(RAA.Application.ProjectDtos.UserDtos.UserRegistrationDto) on controller RAA.API.Controllers.UsersController (RAA).
+2026-03-26 01:54:45.104 +03:00 [INF] Executed DbCommand (53ms) [Parameters=[@userRegistrationDto_Login='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [Users] AS [u]
+        WHERE [u].[Login] = @userRegistrationDto_Login) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2026-03-26 01:54:45.153 +03:00 [INF] Executed DbCommand (7ms) [Parameters=[@userRegistrationDto_Email='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [Users] AS [u]
+        WHERE [u].[Email] = @userRegistrationDto_Email) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2026-03-26 01:54:45.841 +03:00 [INF] Executed DbCommand (4ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?' (Size = 4000), @p2='?' (DbType = Boolean), @p3='?' (Size = 4000), @p4='?' (Size = 4000), @p5='?' (DbType = Int32), @p6='?' (Size = 4000), @p7='?' (DbType = DateTime2)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [Users] ([Id], [Email], [EmailConfirmed], [Login], [PasswordHash], [UserRole], [VerificationCode], [VerificationCodeExpiry])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7);
+2026-03-26 01:54:45.906 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[@email='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(2) [u].[Id], [u].[Email], [u].[EmailConfirmed], [u].[Login], [u].[PasswordHash], [u].[UserRole], [u].[VerificationCode], [u].[VerificationCodeExpiry]
+FROM [Users] AS [u]
+WHERE [u].[Email] = @email
+2026-03-26 01:54:45.925 +03:00 [INF] Executed DbCommand (3ms) [Parameters=[@p2='?' (DbType = Guid), @p0='?' (Size = 4000), @p1='?' (DbType = DateTime2)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+UPDATE [Users] SET [VerificationCode] = @p0, [VerificationCodeExpiry] = @p1
+OUTPUT 1
+WHERE [Id] = @p2;
+2026-03-26 01:54:50.118 +03:00 [INF] Письмо успешно оправлено пользователю с почтой: dimazinchenko5@gmail.com
+2026-03-26 01:54:50.120 +03:00 [INF] Пользователь "11698ba1-9612-48e0-8ace-c66352a58952" успешно создан
+2026-03-26 01:54:50.130 +03:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType0`1[[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-03-26 01:54:50.140 +03:00 [INF] Executed action RAA.API.Controllers.UsersController.Registration (RAA) in 6549.8134ms
+2026-03-26 01:54:50.143 +03:00 [INF] Executed endpoint 'RAA.API.Controllers.UsersController.Registration (RAA)'
+2026-03-26 01:54:50.148 +03:00 [INF] HTTP POST /api/users/Registration responded 200 in 6637.5678 ms
+2026-03-26 01:54:50.163 +03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5088/api/users/Registration - 200 null application/json; charset=utf-8 6672.7472ms
+2026-03-26 01:55:12.147 +03:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5088/api/users/AuthToken - null null
+2026-03-26 01:55:12.150 +03:00 [INF] CORS policy execution successful.
+2026-03-26 01:55:12.151 +03:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5088/api/users/AuthToken - 204 null null 4.6936ms
+2026-03-26 01:55:12.155 +03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5088/api/users/AuthToken - application/json 51
+2026-03-26 01:55:12.158 +03:00 [INF] CORS policy execution successful.
+2026-03-26 01:55:12.160 +03:00 [INF] Executing endpoint 'RAA.API.Controllers.UsersController.AuthToken (RAA)'
+2026-03-26 01:55:12.169 +03:00 [INF] Route matched with {action = "AuthToken", controller = "Users"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] AuthToken(RAA.Application.ProjectDtos.UserDtos.UserAuthTokenDto) on controller RAA.API.Controllers.UsersController (RAA).
+2026-03-26 01:55:12.219 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@email='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(2) [u].[Id], [u].[Email], [u].[EmailConfirmed], [u].[Login], [u].[PasswordHash], [u].[UserRole], [u].[VerificationCode], [u].[VerificationCodeExpiry]
+FROM [Users] AS [u]
+WHERE [u].[Email] = @email
+2026-03-26 01:55:12.232 +03:00 [INF] Executed DbCommand (3ms) [Parameters=[@p3='?' (DbType = Guid), @p0='?' (DbType = Boolean), @p1='?' (Size = 4000), @p2='?' (DbType = DateTime2)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+UPDATE [Users] SET [EmailConfirmed] = @p0, [VerificationCode] = @p1, [VerificationCodeExpiry] = @p2
+OUTPUT 1
+WHERE [Id] = @p3;
+2026-03-26 01:55:12.235 +03:00 [INF] Email пользователя dimazinchenko5@gmail.com успешно подтвержден
+2026-03-26 01:55:12.239 +03:00 [INF] Executing StatusCodeResult, setting HTTP status code 200
+2026-03-26 01:55:12.240 +03:00 [INF] Executed action RAA.API.Controllers.UsersController.AuthToken (RAA) in 69.4656ms
+2026-03-26 01:55:12.242 +03:00 [INF] Executed endpoint 'RAA.API.Controllers.UsersController.AuthToken (RAA)'
+2026-03-26 01:55:12.244 +03:00 [INF] HTTP POST /api/users/AuthToken responded 200 in 84.4365 ms
+2026-03-26 01:55:12.246 +03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5088/api/users/AuthToken - 200 0 null 91.5298ms
+2026-03-26 01:55:16.042 +03:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5088/api/users/Auth - null null
+2026-03-26 01:55:16.045 +03:00 [INF] CORS policy execution successful.
+2026-03-26 01:55:16.046 +03:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5088/api/users/Auth - 204 null null 4.2589ms
+2026-03-26 01:55:16.050 +03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5088/api/users/Auth - application/json 28
+2026-03-26 01:55:16.053 +03:00 [INF] CORS policy execution successful.
+2026-03-26 01:55:16.059 +03:00 [INF] Executing endpoint 'RAA.API.Controllers.UsersController.Authorization (RAA)'
+2026-03-26 01:55:16.068 +03:00 [INF] Route matched with {action = "Authorization", controller = "Users"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Authorization(RAA.Application.ProjectDtos.UserDtos.UserAuthDto) on controller RAA.API.Controllers.UsersController (RAA).
+2026-03-26 01:55:16.159 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[@login='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(2) [u].[Id], [u].[Email], [u].[EmailConfirmed], [u].[Login], [u].[PasswordHash], [u].[UserRole], [u].[VerificationCode], [u].[VerificationCodeExpiry]
+FROM [Users] AS [u]
+WHERE [u].[Login] = @login
+2026-03-26 01:55:16.716 +03:00 [INF] Executed DbCommand (3ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?' (DbType = DateTime2), @p2='?' (DbType = DateTime2), @p3='?' (DbType = Boolean), @p4='?' (Size = 450), @p5='?' (DbType = DateTime2), @p6='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [Tokens] ([Id], [CreatedAt], [Expires], [IsRevoked], [RefreshTokenHash], [RevokedAt], [UserId])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6);
+2026-03-26 01:55:16.719 +03:00 [INF] Успешная авторизация пользователя: 11698ba1-9612-48e0-8ace-c66352a58952
+2026-03-26 01:55:16.721 +03:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType1`2[[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-03-26 01:55:16.725 +03:00 [INF] Executed action RAA.API.Controllers.UsersController.Authorization (RAA) in 653.9414ms
+2026-03-26 01:55:16.726 +03:00 [INF] Executed endpoint 'RAA.API.Controllers.UsersController.Authorization (RAA)'
+2026-03-26 01:55:16.727 +03:00 [INF] HTTP POST /api/users/Auth responded 200 in 672.8044 ms
+2026-03-26 01:55:16.729 +03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5088/api/users/Auth - 200 null application/json; charset=utf-8 679.6563ms
+2026-03-26 01:55:16.752 +03:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5088/api/tasks?Page=1&PageSize=9&SortBy=SortNewDate - null null
+2026-03-26 01:55:16.754 +03:00 [INF] CORS policy execution successful.
+2026-03-26 01:55:16.755 +03:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5088/api/tasks?Page=1&PageSize=9&SortBy=SortNewDate - 204 null null 4.0217ms
+2026-03-26 01:55:16.759 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5088/api/tasks?Page=1&PageSize=9&SortBy=SortNewDate - application/json null
+2026-03-26 01:55:16.762 +03:00 [INF] CORS policy execution successful.
+2026-03-26 01:55:16.820 +03:00 [INF] Executing endpoint 'RAA.API.Controllers.TasksController.GetTasks (RAA)'
+2026-03-26 01:55:16.830 +03:00 [INF] Route matched with {action = "GetTasks", controller = "Tasks"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetTasks(RAA.Application.ProjectDtos.TaskDtos.TaskQueryDto) on controller RAA.API.Controllers.TasksController (RAA).
+2026-03-26 01:55:16.892 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[@CurrentUserId='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Tasks] AS [t]
+WHERE [t].[UserId] = @CurrentUserId
+2026-03-26 01:55:16.915 +03:00 [INF] Executed DbCommand (3ms) [Parameters=[@CurrentUserId='?' (DbType = Guid), @p='?' (DbType = Int32), @p2='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [t].[Id], [t].[CreatedAt], [t].[Description], [t].[IsCompleted], [t].[Priority], [t].[Title], [t].[UserId]
+FROM [Tasks] AS [t]
+WHERE [t].[UserId] = @CurrentUserId
+ORDER BY [t].[CreatedAt] DESC
+OFFSET @p ROWS FETCH NEXT @p2 ROWS ONLY
+2026-03-26 01:55:16.919 +03:00 [INF] Executing OkObjectResult, writing value of type 'RAA.Application.ProjectDtos.ResponceDto.TaskFilterResponseDto'.
+2026-03-26 01:55:16.945 +03:00 [INF] Executed action RAA.API.Controllers.TasksController.GetTasks (RAA) in 113.4037ms
+2026-03-26 01:55:16.947 +03:00 [INF] Executed endpoint 'RAA.API.Controllers.TasksController.GetTasks (RAA)'
+2026-03-26 01:55:16.948 +03:00 [INF] HTTP GET /api/tasks responded 200 in 183.5651 ms
+2026-03-26 01:55:16.950 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5088/api/tasks?Page=1&PageSize=9&SortBy=SortNewDate - 200 null application/json; charset=utf-8 190.8505ms
+2026-03-26 01:55:18.942 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5088/api/tasks?Page=1&PageSize=9&SortBy=SortNewDate - application/json null
+2026-03-26 01:55:18.946 +03:00 [INF] CORS policy execution successful.
+2026-03-26 01:55:18.949 +03:00 [INF] Executing endpoint 'RAA.API.Controllers.TasksController.GetTasks (RAA)'
+2026-03-26 01:55:18.950 +03:00 [INF] Route matched with {action = "GetTasks", controller = "Tasks"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetTasks(RAA.Application.ProjectDtos.TaskDtos.TaskQueryDto) on controller RAA.API.Controllers.TasksController (RAA).
+2026-03-26 01:55:18.954 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@CurrentUserId='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Tasks] AS [t]
+WHERE [t].[UserId] = @CurrentUserId
+2026-03-26 01:55:18.958 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@CurrentUserId='?' (DbType = Guid), @p='?' (DbType = Int32), @p2='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [t].[Id], [t].[CreatedAt], [t].[Description], [t].[IsCompleted], [t].[Priority], [t].[Title], [t].[UserId]
+FROM [Tasks] AS [t]
+WHERE [t].[UserId] = @CurrentUserId
+ORDER BY [t].[CreatedAt] DESC
+OFFSET @p ROWS FETCH NEXT @p2 ROWS ONLY
+2026-03-26 01:55:18.961 +03:00 [INF] Executing OkObjectResult, writing value of type 'RAA.Application.ProjectDtos.ResponceDto.TaskFilterResponseDto'.
+2026-03-26 01:55:18.962 +03:00 [INF] Executed action RAA.API.Controllers.TasksController.GetTasks (RAA) in 10.7854ms
+2026-03-26 01:55:18.964 +03:00 [INF] Executed endpoint 'RAA.API.Controllers.TasksController.GetTasks (RAA)'
+2026-03-26 01:55:18.965 +03:00 [INF] HTTP GET /api/tasks responded 200 in 17.5148 ms
+2026-03-26 01:55:18.967 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5088/api/tasks?Page=1&PageSize=9&SortBy=SortNewDate - 200 null application/json; charset=utf-8 24.6531ms
+2026-03-26 01:55:21.843 +03:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5088/api/tasks?Page=1&PageSize=9&SortBy=SortNewDate - null null
+2026-03-26 01:55:21.846 +03:00 [INF] CORS policy execution successful.
+2026-03-26 01:55:21.847 +03:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5088/api/tasks?Page=1&PageSize=9&SortBy=SortNewDate - 204 null null 4.2232ms
+2026-03-26 01:55:21.851 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5088/api/tasks?Page=1&PageSize=9&SortBy=SortNewDate - application/json null
+2026-03-26 01:55:21.854 +03:00 [INF] CORS policy execution successful.
+2026-03-26 01:55:21.856 +03:00 [INF] Executing endpoint 'RAA.API.Controllers.TasksController.GetTasks (RAA)'
+2026-03-26 01:55:21.858 +03:00 [INF] Route matched with {action = "GetTasks", controller = "Tasks"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetTasks(RAA.Application.ProjectDtos.TaskDtos.TaskQueryDto) on controller RAA.API.Controllers.TasksController (RAA).
+2026-03-26 01:55:21.865 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@CurrentUserId='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Tasks] AS [t]
+WHERE [t].[UserId] = @CurrentUserId
+2026-03-26 01:55:21.870 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@CurrentUserId='?' (DbType = Guid), @p='?' (DbType = Int32), @p2='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [t].[Id], [t].[CreatedAt], [t].[Description], [t].[IsCompleted], [t].[Priority], [t].[Title], [t].[UserId]
+FROM [Tasks] AS [t]
+WHERE [t].[UserId] = @CurrentUserId
+ORDER BY [t].[CreatedAt] DESC
+OFFSET @p ROWS FETCH NEXT @p2 ROWS ONLY
+2026-03-26 01:55:21.873 +03:00 [INF] Executing OkObjectResult, writing value of type 'RAA.Application.ProjectDtos.ResponceDto.TaskFilterResponseDto'.
+2026-03-26 01:55:21.874 +03:00 [INF] Executed action RAA.API.Controllers.TasksController.GetTasks (RAA) in 14.7557ms
+2026-03-26 01:55:21.876 +03:00 [INF] Executed endpoint 'RAA.API.Controllers.TasksController.GetTasks (RAA)'
+2026-03-26 01:55:21.877 +03:00 [INF] HTTP GET /api/tasks responded 200 in 21.8988 ms
+2026-03-26 01:55:21.878 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5088/api/tasks?Page=1&PageSize=9&SortBy=SortNewDate - 200 null application/json; charset=utf-8 27.2846ms
+2026-03-26 01:55:22.509 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5088/api/tasks?Page=1&PageSize=9&SortBy=SortNewDate - application/json null
+2026-03-26 01:55:22.512 +03:00 [INF] CORS policy execution successful.
+2026-03-26 01:55:22.513 +03:00 [INF] Executing endpoint 'RAA.API.Controllers.TasksController.GetTasks (RAA)'
+2026-03-26 01:55:22.514 +03:00 [INF] Route matched with {action = "GetTasks", controller = "Tasks"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetTasks(RAA.Application.ProjectDtos.TaskDtos.TaskQueryDto) on controller RAA.API.Controllers.TasksController (RAA).
+2026-03-26 01:55:22.518 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@CurrentUserId='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Tasks] AS [t]
+WHERE [t].[UserId] = @CurrentUserId
+2026-03-26 01:55:22.522 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@CurrentUserId='?' (DbType = Guid), @p='?' (DbType = Int32), @p2='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [t].[Id], [t].[CreatedAt], [t].[Description], [t].[IsCompleted], [t].[Priority], [t].[Title], [t].[UserId]
+FROM [Tasks] AS [t]
+WHERE [t].[UserId] = @CurrentUserId
+ORDER BY [t].[CreatedAt] DESC
+OFFSET @p ROWS FETCH NEXT @p2 ROWS ONLY
+2026-03-26 01:55:22.525 +03:00 [INF] Executing OkObjectResult, writing value of type 'RAA.Application.ProjectDtos.ResponceDto.TaskFilterResponseDto'.
+2026-03-26 01:55:22.526 +03:00 [INF] Executed action RAA.API.Controllers.TasksController.GetTasks (RAA) in 10.1554ms
+2026-03-26 01:55:22.528 +03:00 [INF] Executed endpoint 'RAA.API.Controllers.TasksController.GetTasks (RAA)'
+2026-03-26 01:55:22.529 +03:00 [INF] HTTP GET /api/tasks responded 200 in 15.8583 ms
+2026-03-26 01:55:22.531 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5088/api/tasks?Page=1&PageSize=9&SortBy=SortNewDate - 200 null application/json; charset=utf-8 21.6827ms
+2026-03-26 01:56:12.909 +03:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5088/api/users/Auth - null null
+2026-03-26 01:56:12.912 +03:00 [INF] CORS policy execution successful.
+2026-03-26 01:56:12.913 +03:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5088/api/users/Auth - 204 null null 4.4071ms
+2026-03-26 01:56:12.917 +03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5088/api/users/Auth - application/json 28
+2026-03-26 01:56:12.920 +03:00 [INF] CORS policy execution successful.
+2026-03-26 01:56:12.921 +03:00 [INF] Executing endpoint 'RAA.API.Controllers.UsersController.Authorization (RAA)'
+2026-03-26 01:56:12.922 +03:00 [INF] Route matched with {action = "Authorization", controller = "Users"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Authorization(RAA.Application.ProjectDtos.UserDtos.UserAuthDto) on controller RAA.API.Controllers.UsersController (RAA).
+2026-03-26 01:56:12.929 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[@login='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(2) [u].[Id], [u].[Email], [u].[EmailConfirmed], [u].[Login], [u].[PasswordHash], [u].[UserRole], [u].[VerificationCode], [u].[VerificationCodeExpiry]
+FROM [Users] AS [u]
+WHERE [u].[Login] = @login
+2026-03-26 01:56:13.097 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?' (DbType = DateTime2), @p2='?' (DbType = DateTime2), @p3='?' (DbType = Boolean), @p4='?' (Size = 450), @p5='?' (DbType = DateTime2), @p6='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [Tokens] ([Id], [CreatedAt], [Expires], [IsRevoked], [RefreshTokenHash], [RevokedAt], [UserId])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6);
+2026-03-26 01:56:13.099 +03:00 [INF] Успешная авторизация пользователя: 11698ba1-9612-48e0-8ace-c66352a58952
+2026-03-26 01:56:13.100 +03:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType1`2[[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-03-26 01:56:13.102 +03:00 [INF] Executed action RAA.API.Controllers.UsersController.Authorization (RAA) in 177.0259ms
+2026-03-26 01:56:13.103 +03:00 [INF] Executed endpoint 'RAA.API.Controllers.UsersController.Authorization (RAA)'
+2026-03-26 01:56:13.105 +03:00 [INF] HTTP POST /api/users/Auth responded 200 in 184.1551 ms
+2026-03-26 01:56:13.107 +03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5088/api/users/Auth - 200 null application/json; charset=utf-8 189.647ms
+2026-03-26 01:56:13.113 +03:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5088/api/tasks?Page=0&PageSize=9&SortBy=SortNewDate - null null
+2026-03-26 01:56:13.116 +03:00 [INF] CORS policy execution successful.
+2026-03-26 01:56:13.117 +03:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5088/api/tasks?Page=0&PageSize=9&SortBy=SortNewDate - 204 null null 3.6073ms
+2026-03-26 01:56:13.120 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5088/api/tasks?Page=0&PageSize=9&SortBy=SortNewDate - application/json null
+2026-03-26 01:56:13.123 +03:00 [INF] CORS policy execution successful.
+2026-03-26 01:56:13.125 +03:00 [INF] Executing endpoint 'RAA.API.Controllers.TasksController.GetTasks (RAA)'
+2026-03-26 01:56:13.126 +03:00 [INF] Route matched with {action = "GetTasks", controller = "Tasks"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetTasks(RAA.Application.ProjectDtos.TaskDtos.TaskQueryDto) on controller RAA.API.Controllers.TasksController (RAA).
+2026-03-26 01:56:13.132 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[@CurrentUserId='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Tasks] AS [t]
+WHERE [t].[UserId] = @CurrentUserId
+2026-03-26 01:56:13.138 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[@CurrentUserId='?' (DbType = Guid), @p='?' (DbType = Int32), @p2='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [t].[Id], [t].[CreatedAt], [t].[Description], [t].[IsCompleted], [t].[Priority], [t].[Title], [t].[UserId]
+FROM [Tasks] AS [t]
+WHERE [t].[UserId] = @CurrentUserId
+ORDER BY [t].[CreatedAt] DESC
+OFFSET @p ROWS FETCH NEXT @p2 ROWS ONLY
+2026-03-26 01:56:13.141 +03:00 [INF] Executing OkObjectResult, writing value of type 'RAA.Application.ProjectDtos.ResponceDto.TaskFilterResponseDto'.
+2026-03-26 01:56:13.142 +03:00 [INF] Executed action RAA.API.Controllers.TasksController.GetTasks (RAA) in 13.4959ms
+2026-03-26 01:56:13.144 +03:00 [INF] Executed endpoint 'RAA.API.Controllers.TasksController.GetTasks (RAA)'
+2026-03-26 01:56:13.145 +03:00 [INF] HTTP GET /api/tasks responded 200 in 20.0940 ms
+2026-03-26 01:56:13.147 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5088/api/tasks?Page=0&PageSize=9&SortBy=SortNewDate - 200 null application/json; charset=utf-8 26.2295ms
+2026-03-26 01:57:00.522 +03:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5088/api/tasks?Page=1&PageSize=9&SortBy=SortNewDate - null null
+2026-03-26 01:57:00.526 +03:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5088/api/tasks?Page=1&PageSize=9&SortBy=SortNewDate - null null
+2026-03-26 01:57:00.526 +03:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5088/api/tasks?Page=1&PageSize=9&SortBy=SortNewDate - null null
+2026-03-26 01:57:00.529 +03:00 [INF] CORS policy execution successful.
+2026-03-26 01:57:00.531 +03:00 [INF] CORS policy execution successful.
+2026-03-26 01:57:00.533 +03:00 [INF] CORS policy execution successful.
+2026-03-26 01:57:00.534 +03:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5088/api/tasks?Page=1&PageSize=9&SortBy=SortNewDate - 204 null null 11.4805ms
+2026-03-26 01:57:00.535 +03:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5088/api/tasks?Page=1&PageSize=9&SortBy=SortNewDate - 204 null null 8.8225ms
+2026-03-26 01:57:00.536 +03:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5088/api/tasks?Page=1&PageSize=9&SortBy=SortNewDate - 204 null null 9.8045ms
+2026-03-26 01:57:00.548 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5088/api/tasks?Page=1&PageSize=9&SortBy=SortNewDate - application/json null
+2026-03-26 01:57:00.550 +03:00 [INF] CORS policy execution successful.
+2026-03-26 01:57:00.552 +03:00 [INF] Executing endpoint 'RAA.API.Controllers.TasksController.GetTasks (RAA)'
+2026-03-26 01:57:00.553 +03:00 [INF] Route matched with {action = "GetTasks", controller = "Tasks"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetTasks(RAA.Application.ProjectDtos.TaskDtos.TaskQueryDto) on controller RAA.API.Controllers.TasksController (RAA).
+2026-03-26 01:57:00.559 +03:00 [INF] Executed DbCommand (3ms) [Parameters=[@CurrentUserId='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Tasks] AS [t]
+WHERE [t].[UserId] = @CurrentUserId
+2026-03-26 01:57:00.564 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[@CurrentUserId='?' (DbType = Guid), @p='?' (DbType = Int32), @p2='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [t].[Id], [t].[CreatedAt], [t].[Description], [t].[IsCompleted], [t].[Priority], [t].[Title], [t].[UserId]
+FROM [Tasks] AS [t]
+WHERE [t].[UserId] = @CurrentUserId
+ORDER BY [t].[CreatedAt] DESC
+OFFSET @p ROWS FETCH NEXT @p2 ROWS ONLY
+2026-03-26 01:57:00.567 +03:00 [INF] Executing OkObjectResult, writing value of type 'RAA.Application.ProjectDtos.ResponceDto.TaskFilterResponseDto'.
+2026-03-26 01:57:00.568 +03:00 [INF] Executed action RAA.API.Controllers.TasksController.GetTasks (RAA) in 13.792ms
+2026-03-26 01:57:00.570 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5088/api/tasks?Page=1&PageSize=9&SortBy=SortNewDate - application/json null
+2026-03-26 01:57:00.570 +03:00 [INF] Executed endpoint 'RAA.API.Controllers.TasksController.GetTasks (RAA)'
+2026-03-26 01:57:00.574 +03:00 [INF] CORS policy execution successful.
+2026-03-26 01:57:00.575 +03:00 [INF] HTTP GET /api/tasks responded 200 in 23.5186 ms
+2026-03-26 01:57:00.576 +03:00 [INF] Executing endpoint 'RAA.API.Controllers.TasksController.GetTasks (RAA)'
+2026-03-26 01:57:00.577 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5088/api/tasks?Page=1&PageSize=9&SortBy=SortNewDate - 200 null application/json; charset=utf-8 29.6127ms
+2026-03-26 01:57:00.579 +03:00 [INF] Route matched with {action = "GetTasks", controller = "Tasks"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetTasks(RAA.Application.ProjectDtos.TaskDtos.TaskQueryDto) on controller RAA.API.Controllers.TasksController (RAA).
+2026-03-26 01:57:00.586 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@CurrentUserId='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Tasks] AS [t]
+WHERE [t].[UserId] = @CurrentUserId
+2026-03-26 01:57:00.589 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@CurrentUserId='?' (DbType = Guid), @p='?' (DbType = Int32), @p2='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [t].[Id], [t].[CreatedAt], [t].[Description], [t].[IsCompleted], [t].[Priority], [t].[Title], [t].[UserId]
+FROM [Tasks] AS [t]
+WHERE [t].[UserId] = @CurrentUserId
+ORDER BY [t].[CreatedAt] DESC
+OFFSET @p ROWS FETCH NEXT @p2 ROWS ONLY
+2026-03-26 01:57:00.592 +03:00 [INF] Executing OkObjectResult, writing value of type 'RAA.Application.ProjectDtos.ResponceDto.TaskFilterResponseDto'.
+2026-03-26 01:57:00.594 +03:00 [INF] Executed action RAA.API.Controllers.TasksController.GetTasks (RAA) in 9.7218ms
+2026-03-26 01:57:00.594 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5088/api/tasks?Page=1&PageSize=9&SortBy=SortNewDate - application/json null
+2026-03-26 01:57:00.596 +03:00 [INF] Executed endpoint 'RAA.API.Controllers.TasksController.GetTasks (RAA)'
+2026-03-26 01:57:00.598 +03:00 [INF] CORS policy execution successful.
+2026-03-26 01:57:00.599 +03:00 [INF] HTTP GET /api/tasks responded 200 in 23.6226 ms
+2026-03-26 01:57:00.600 +03:00 [INF] Executing endpoint 'RAA.API.Controllers.TasksController.GetTasks (RAA)'
+2026-03-26 01:57:00.602 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5088/api/tasks?Page=1&PageSize=9&SortBy=SortNewDate - 200 null application/json; charset=utf-8 32.3079ms
+2026-03-26 01:57:00.603 +03:00 [INF] Route matched with {action = "GetTasks", controller = "Tasks"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetTasks(RAA.Application.ProjectDtos.TaskDtos.TaskQueryDto) on controller RAA.API.Controllers.TasksController (RAA).
+2026-03-26 01:57:00.611 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@CurrentUserId='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Tasks] AS [t]
+WHERE [t].[UserId] = @CurrentUserId
+2026-03-26 01:57:00.615 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@CurrentUserId='?' (DbType = Guid), @p='?' (DbType = Int32), @p2='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [t].[Id], [t].[CreatedAt], [t].[Description], [t].[IsCompleted], [t].[Priority], [t].[Title], [t].[UserId]
+FROM [Tasks] AS [t]
+WHERE [t].[UserId] = @CurrentUserId
+ORDER BY [t].[CreatedAt] DESC
+OFFSET @p ROWS FETCH NEXT @p2 ROWS ONLY
+2026-03-26 01:57:00.619 +03:00 [INF] Executing OkObjectResult, writing value of type 'RAA.Application.ProjectDtos.ResponceDto.TaskFilterResponseDto'.
+2026-03-26 01:57:00.621 +03:00 [INF] Executed action RAA.API.Controllers.TasksController.GetTasks (RAA) in 12.0065ms
+2026-03-26 01:57:00.623 +03:00 [INF] Executed endpoint 'RAA.API.Controllers.TasksController.GetTasks (RAA)'
+2026-03-26 01:57:00.624 +03:00 [INF] HTTP GET /api/tasks responded 200 in 24.3715 ms
+2026-03-26 01:57:00.627 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5088/api/tasks?Page=1&PageSize=9&SortBy=SortNewDate - 200 null application/json; charset=utf-8 32.2483ms
+2026-03-26 01:59:58.192 +03:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5088/api/tasks?Page=1&PageSize=9&SortBy=SortNewDate - null null
+2026-03-26 01:59:58.194 +03:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5088/api/tasks?Page=1&PageSize=9&SortBy=SortNewDate - null null
+2026-03-26 01:59:58.195 +03:00 [INF] CORS policy execution successful.
+2026-03-26 01:59:58.198 +03:00 [INF] CORS policy execution successful.
+2026-03-26 01:59:58.199 +03:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5088/api/tasks?Page=1&PageSize=9&SortBy=SortNewDate - null null
+2026-03-26 01:59:58.202 +03:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5088/api/tasks?Page=1&PageSize=9&SortBy=SortNewDate - 204 null null 9.7862ms
+2026-03-26 01:59:58.202 +03:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5088/api/tasks?Page=1&PageSize=9&SortBy=SortNewDate - null null
+2026-03-26 01:59:58.206 +03:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5088/api/tasks?Page=1&PageSize=9&SortBy=SortNewDate - 204 null null 11.5428ms
+2026-03-26 01:59:58.208 +03:00 [INF] CORS policy execution successful.
+2026-03-26 01:59:58.212 +03:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5088/api/tasks?Page=1&PageSize=9&SortBy=SortNewDate - null null
+2026-03-26 01:59:58.217 +03:00 [INF] CORS policy execution successful.
+2026-03-26 01:59:58.217 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5088/api/tasks?Page=1&PageSize=9&SortBy=SortNewDate - application/json null
+2026-03-26 01:59:58.221 +03:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5088/api/tasks?Page=1&PageSize=9&SortBy=SortNewDate - null null
+2026-03-26 01:59:58.222 +03:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5088/api/tasks?Page=1&PageSize=9&SortBy=SortNewDate - 204 null null 22.8734ms
+2026-03-26 01:59:58.225 +03:00 [INF] CORS policy execution successful.
+2026-03-26 01:59:58.226 +03:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5088/api/tasks?Page=1&PageSize=9&SortBy=SortNewDate - 204 null null 23.4598ms
+2026-03-26 01:59:58.228 +03:00 [INF] CORS policy execution successful.
+2026-03-26 01:59:58.232 +03:00 [INF] CORS policy execution successful.
+2026-03-26 01:59:58.238 +03:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5088/api/tasks?Page=1&PageSize=9&SortBy=SortNewDate - 204 null null 25.8478ms
+2026-03-26 01:59:58.242 +03:00 [INF] Executing endpoint 'RAA.API.Controllers.TasksController.GetTasks (RAA)'
+2026-03-26 01:59:58.243 +03:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5088/api/tasks?Page=1&PageSize=9&SortBy=SortNewDate - 204 null null 21.8511ms
+2026-03-26 01:59:58.247 +03:00 [INF] Route matched with {action = "GetTasks", controller = "Tasks"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetTasks(RAA.Application.ProjectDtos.TaskDtos.TaskQueryDto) on controller RAA.API.Controllers.TasksController (RAA).
+2026-03-26 01:59:58.257 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[@CurrentUserId='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Tasks] AS [t]
+WHERE [t].[UserId] = @CurrentUserId
+2026-03-26 01:59:58.261 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[@CurrentUserId='?' (DbType = Guid), @p='?' (DbType = Int32), @p2='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [t].[Id], [t].[CreatedAt], [t].[Description], [t].[IsCompleted], [t].[Priority], [t].[Title], [t].[UserId]
+FROM [Tasks] AS [t]
+WHERE [t].[UserId] = @CurrentUserId
+ORDER BY [t].[CreatedAt] DESC
+OFFSET @p ROWS FETCH NEXT @p2 ROWS ONLY
+2026-03-26 01:59:58.263 +03:00 [INF] Executing OkObjectResult, writing value of type 'RAA.Application.ProjectDtos.ResponceDto.TaskFilterResponseDto'.
+2026-03-26 01:59:58.264 +03:00 [INF] Executed action RAA.API.Controllers.TasksController.GetTasks (RAA) in 11.8986ms
+2026-03-26 01:59:58.265 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5088/api/tasks?Page=1&PageSize=9&SortBy=SortNewDate - application/json null
+2026-03-26 01:59:58.265 +03:00 [INF] Executed endpoint 'RAA.API.Controllers.TasksController.GetTasks (RAA)'
+2026-03-26 01:59:58.267 +03:00 [INF] CORS policy execution successful.
+2026-03-26 01:59:58.268 +03:00 [INF] HTTP GET /api/tasks responded 200 in 26.0057 ms
+2026-03-26 01:59:58.269 +03:00 [INF] Executing endpoint 'RAA.API.Controllers.TasksController.GetTasks (RAA)'
+2026-03-26 01:59:58.270 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5088/api/tasks?Page=1&PageSize=9&SortBy=SortNewDate - 200 null application/json; charset=utf-8 53.3347ms
+2026-03-26 01:59:58.272 +03:00 [INF] Route matched with {action = "GetTasks", controller = "Tasks"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetTasks(RAA.Application.ProjectDtos.TaskDtos.TaskQueryDto) on controller RAA.API.Controllers.TasksController (RAA).
+2026-03-26 01:59:58.278 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@CurrentUserId='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Tasks] AS [t]
+WHERE [t].[UserId] = @CurrentUserId
+2026-03-26 01:59:58.280 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@CurrentUserId='?' (DbType = Guid), @p='?' (DbType = Int32), @p2='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [t].[Id], [t].[CreatedAt], [t].[Description], [t].[IsCompleted], [t].[Priority], [t].[Title], [t].[UserId]
+FROM [Tasks] AS [t]
+WHERE [t].[UserId] = @CurrentUserId
+ORDER BY [t].[CreatedAt] DESC
+OFFSET @p ROWS FETCH NEXT @p2 ROWS ONLY
+2026-03-26 01:59:58.282 +03:00 [INF] Executing OkObjectResult, writing value of type 'RAA.Application.ProjectDtos.ResponceDto.TaskFilterResponseDto'.
+2026-03-26 01:59:58.284 +03:00 [INF] Executed action RAA.API.Controllers.TasksController.GetTasks (RAA) in 7.7379ms
+2026-03-26 01:59:58.284 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5088/api/tasks?Page=1&PageSize=9&SortBy=SortNewDate - application/json null
+2026-03-26 01:59:58.285 +03:00 [INF] Executed endpoint 'RAA.API.Controllers.TasksController.GetTasks (RAA)'
+2026-03-26 01:59:58.288 +03:00 [INF] CORS policy execution successful.
+2026-03-26 01:59:58.289 +03:00 [INF] HTTP GET /api/tasks responded 200 in 20.4773 ms
+2026-03-26 01:59:58.290 +03:00 [INF] Executing endpoint 'RAA.API.Controllers.TasksController.GetTasks (RAA)'
+2026-03-26 01:59:58.291 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5088/api/tasks?Page=1&PageSize=9&SortBy=SortNewDate - 200 null application/json; charset=utf-8 26.5443ms
+2026-03-26 01:59:58.293 +03:00 [INF] Route matched with {action = "GetTasks", controller = "Tasks"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetTasks(RAA.Application.ProjectDtos.TaskDtos.TaskQueryDto) on controller RAA.API.Controllers.TasksController (RAA).
+2026-03-26 01:59:58.299 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@CurrentUserId='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Tasks] AS [t]
+WHERE [t].[UserId] = @CurrentUserId
+2026-03-26 01:59:58.302 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@CurrentUserId='?' (DbType = Guid), @p='?' (DbType = Int32), @p2='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [t].[Id], [t].[CreatedAt], [t].[Description], [t].[IsCompleted], [t].[Priority], [t].[Title], [t].[UserId]
+FROM [Tasks] AS [t]
+WHERE [t].[UserId] = @CurrentUserId
+ORDER BY [t].[CreatedAt] DESC
+OFFSET @p ROWS FETCH NEXT @p2 ROWS ONLY
+2026-03-26 01:59:58.305 +03:00 [INF] Executing OkObjectResult, writing value of type 'RAA.Application.ProjectDtos.ResponceDto.TaskFilterResponseDto'.
+2026-03-26 01:59:58.307 +03:00 [INF] Executed action RAA.API.Controllers.TasksController.GetTasks (RAA) in 9.2684ms
+2026-03-26 01:59:58.308 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5088/api/tasks?Page=1&PageSize=9&SortBy=SortNewDate - application/json null
+2026-03-26 01:59:58.308 +03:00 [INF] Executed endpoint 'RAA.API.Controllers.TasksController.GetTasks (RAA)'
+2026-03-26 01:59:58.311 +03:00 [INF] CORS policy execution successful.
+2026-03-26 01:59:58.312 +03:00 [INF] HTTP GET /api/tasks responded 200 in 21.7697 ms
+2026-03-26 01:59:58.313 +03:00 [INF] Executing endpoint 'RAA.API.Controllers.TasksController.GetTasks (RAA)'
+2026-03-26 01:59:58.314 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5088/api/tasks?Page=1&PageSize=9&SortBy=SortNewDate - 200 null application/json; charset=utf-8 29.5255ms
+2026-03-26 01:59:58.315 +03:00 [INF] Route matched with {action = "GetTasks", controller = "Tasks"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetTasks(RAA.Application.ProjectDtos.TaskDtos.TaskQueryDto) on controller RAA.API.Controllers.TasksController (RAA).
+2026-03-26 01:59:58.321 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@CurrentUserId='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Tasks] AS [t]
+WHERE [t].[UserId] = @CurrentUserId
+2026-03-26 01:59:58.324 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@CurrentUserId='?' (DbType = Guid), @p='?' (DbType = Int32), @p2='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [t].[Id], [t].[CreatedAt], [t].[Description], [t].[IsCompleted], [t].[Priority], [t].[Title], [t].[UserId]
+FROM [Tasks] AS [t]
+WHERE [t].[UserId] = @CurrentUserId
+ORDER BY [t].[CreatedAt] DESC
+OFFSET @p ROWS FETCH NEXT @p2 ROWS ONLY
+2026-03-26 01:59:58.326 +03:00 [INF] Executing OkObjectResult, writing value of type 'RAA.Application.ProjectDtos.ResponceDto.TaskFilterResponseDto'.
+2026-03-26 01:59:58.328 +03:00 [INF] Executed action RAA.API.Controllers.TasksController.GetTasks (RAA) in 8.5426ms
+2026-03-26 01:59:58.329 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5088/api/tasks?Page=1&PageSize=9&SortBy=SortNewDate - application/json null
+2026-03-26 01:59:58.329 +03:00 [INF] Executed endpoint 'RAA.API.Controllers.TasksController.GetTasks (RAA)'
+2026-03-26 01:59:58.332 +03:00 [INF] CORS policy execution successful.
+2026-03-26 01:59:58.333 +03:00 [INF] HTTP GET /api/tasks responded 200 in 20.9911 ms
+2026-03-26 01:59:58.335 +03:00 [INF] Executing endpoint 'RAA.API.Controllers.TasksController.GetTasks (RAA)'
+2026-03-26 01:59:58.337 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5088/api/tasks?Page=1&PageSize=9&SortBy=SortNewDate - 200 null application/json; charset=utf-8 28.9613ms
+2026-03-26 01:59:58.338 +03:00 [INF] Route matched with {action = "GetTasks", controller = "Tasks"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetTasks(RAA.Application.ProjectDtos.TaskDtos.TaskQueryDto) on controller RAA.API.Controllers.TasksController (RAA).
+2026-03-26 01:59:58.343 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@CurrentUserId='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Tasks] AS [t]
+WHERE [t].[UserId] = @CurrentUserId
+2026-03-26 01:59:58.346 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@CurrentUserId='?' (DbType = Guid), @p='?' (DbType = Int32), @p2='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [t].[Id], [t].[CreatedAt], [t].[Description], [t].[IsCompleted], [t].[Priority], [t].[Title], [t].[UserId]
+FROM [Tasks] AS [t]
+WHERE [t].[UserId] = @CurrentUserId
+ORDER BY [t].[CreatedAt] DESC
+OFFSET @p ROWS FETCH NEXT @p2 ROWS ONLY
+2026-03-26 01:59:58.347 +03:00 [INF] Executing OkObjectResult, writing value of type 'RAA.Application.ProjectDtos.ResponceDto.TaskFilterResponseDto'.
+2026-03-26 01:59:58.349 +03:00 [INF] Executed action RAA.API.Controllers.TasksController.GetTasks (RAA) in 7.6237ms
+2026-03-26 01:59:58.350 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5088/api/tasks?Page=1&PageSize=9&SortBy=SortNewDate - application/json null
+2026-03-26 01:59:58.350 +03:00 [INF] Executed endpoint 'RAA.API.Controllers.TasksController.GetTasks (RAA)'
+2026-03-26 01:59:58.353 +03:00 [INF] CORS policy execution successful.
+2026-03-26 01:59:58.354 +03:00 [INF] HTTP GET /api/tasks responded 200 in 19.2959 ms
+2026-03-26 01:59:58.356 +03:00 [INF] Executing endpoint 'RAA.API.Controllers.TasksController.GetTasks (RAA)'
+2026-03-26 01:59:58.356 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5088/api/tasks?Page=1&PageSize=9&SortBy=SortNewDate - 200 null application/json; charset=utf-8 27.5415ms
+2026-03-26 01:59:58.358 +03:00 [INF] Route matched with {action = "GetTasks", controller = "Tasks"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetTasks(RAA.Application.ProjectDtos.TaskDtos.TaskQueryDto) on controller RAA.API.Controllers.TasksController (RAA).
+2026-03-26 01:59:58.363 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@CurrentUserId='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Tasks] AS [t]
+WHERE [t].[UserId] = @CurrentUserId
+2026-03-26 01:59:58.367 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@CurrentUserId='?' (DbType = Guid), @p='?' (DbType = Int32), @p2='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [t].[Id], [t].[CreatedAt], [t].[Description], [t].[IsCompleted], [t].[Priority], [t].[Title], [t].[UserId]
+FROM [Tasks] AS [t]
+WHERE [t].[UserId] = @CurrentUserId
+ORDER BY [t].[CreatedAt] DESC
+OFFSET @p ROWS FETCH NEXT @p2 ROWS ONLY
+2026-03-26 01:59:58.369 +03:00 [INF] Executing OkObjectResult, writing value of type 'RAA.Application.ProjectDtos.ResponceDto.TaskFilterResponseDto'.
+2026-03-26 01:59:58.370 +03:00 [INF] Executed action RAA.API.Controllers.TasksController.GetTasks (RAA) in 8.5621ms
+2026-03-26 01:59:58.372 +03:00 [INF] Executed endpoint 'RAA.API.Controllers.TasksController.GetTasks (RAA)'
+2026-03-26 01:59:58.372 +03:00 [INF] HTTP GET /api/tasks responded 200 in 17.2633 ms
+2026-03-26 01:59:58.374 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5088/api/tasks?Page=1&PageSize=9&SortBy=SortNewDate - 200 null application/json; charset=utf-8 24.2904ms
+2026-03-26 01:59:58.908 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5088/api/tasks?Page=1&PageSize=9&SortBy=SortNewDate - application/json null
+2026-03-26 01:59:58.912 +03:00 [INF] CORS policy execution successful.
+2026-03-26 01:59:58.913 +03:00 [INF] Executing endpoint 'RAA.API.Controllers.TasksController.GetTasks (RAA)'
+2026-03-26 01:59:58.914 +03:00 [INF] Route matched with {action = "GetTasks", controller = "Tasks"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetTasks(RAA.Application.ProjectDtos.TaskDtos.TaskQueryDto) on controller RAA.API.Controllers.TasksController (RAA).
+2026-03-26 01:59:58.919 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@CurrentUserId='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Tasks] AS [t]
+WHERE [t].[UserId] = @CurrentUserId
+2026-03-26 01:59:58.922 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@CurrentUserId='?' (DbType = Guid), @p='?' (DbType = Int32), @p2='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [t].[Id], [t].[CreatedAt], [t].[Description], [t].[IsCompleted], [t].[Priority], [t].[Title], [t].[UserId]
+FROM [Tasks] AS [t]
+WHERE [t].[UserId] = @CurrentUserId
+ORDER BY [t].[CreatedAt] DESC
+OFFSET @p ROWS FETCH NEXT @p2 ROWS ONLY
+2026-03-26 01:59:58.924 +03:00 [INF] Executing OkObjectResult, writing value of type 'RAA.Application.ProjectDtos.ResponceDto.TaskFilterResponseDto'.
+2026-03-26 01:59:58.926 +03:00 [INF] Executed action RAA.API.Controllers.TasksController.GetTasks (RAA) in 10.2137ms
+2026-03-26 01:59:58.928 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5088/api/tasks?Page=1&PageSize=9&SortBy=SortNewDate - application/json null
+2026-03-26 01:59:58.928 +03:00 [INF] Executed endpoint 'RAA.API.Controllers.TasksController.GetTasks (RAA)'
+2026-03-26 01:59:58.931 +03:00 [INF] CORS policy execution successful.
+2026-03-26 01:59:58.932 +03:00 [INF] HTTP GET /api/tasks responded 200 in 19.1222 ms
+2026-03-26 01:59:58.933 +03:00 [INF] Executing endpoint 'RAA.API.Controllers.TasksController.GetTasks (RAA)'
+2026-03-26 01:59:58.935 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5088/api/tasks?Page=1&PageSize=9&SortBy=SortNewDate - 200 null application/json; charset=utf-8 26.6931ms
+2026-03-26 01:59:58.936 +03:00 [INF] Route matched with {action = "GetTasks", controller = "Tasks"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetTasks(RAA.Application.ProjectDtos.TaskDtos.TaskQueryDto) on controller RAA.API.Controllers.TasksController (RAA).
+2026-03-26 01:59:58.944 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@CurrentUserId='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Tasks] AS [t]
+WHERE [t].[UserId] = @CurrentUserId
+2026-03-26 01:59:58.947 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@CurrentUserId='?' (DbType = Guid), @p='?' (DbType = Int32), @p2='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [t].[Id], [t].[CreatedAt], [t].[Description], [t].[IsCompleted], [t].[Priority], [t].[Title], [t].[UserId]
+FROM [Tasks] AS [t]
+WHERE [t].[UserId] = @CurrentUserId
+ORDER BY [t].[CreatedAt] DESC
+OFFSET @p ROWS FETCH NEXT @p2 ROWS ONLY
+2026-03-26 01:59:58.949 +03:00 [INF] Executing OkObjectResult, writing value of type 'RAA.Application.ProjectDtos.ResponceDto.TaskFilterResponseDto'.
+2026-03-26 01:59:58.950 +03:00 [INF] Executed action RAA.API.Controllers.TasksController.GetTasks (RAA) in 8.4148ms
+2026-03-26 01:59:58.952 +03:00 [INF] Executed endpoint 'RAA.API.Controllers.TasksController.GetTasks (RAA)'
+2026-03-26 01:59:58.953 +03:00 [INF] HTTP GET /api/tasks responded 200 in 20.1625 ms
+2026-03-26 01:59:58.955 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5088/api/tasks?Page=1&PageSize=9&SortBy=SortNewDate - 200 null application/json; charset=utf-8 27.0725ms
+2026-03-26 02:00:01.329 +03:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5088/api/users - null null
+2026-03-26 02:00:01.334 +03:00 [INF] CORS policy execution successful.
+2026-03-26 02:00:01.335 +03:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5088/api/users - 204 null null 5.8158ms
+2026-03-26 02:00:01.339 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5088/api/users - application/json null
+2026-03-26 02:00:01.342 +03:00 [INF] CORS policy execution successful.
+2026-03-26 02:00:01.346 +03:00 [INF] Executing endpoint 'RAA.API.Controllers.UsersController.GetAll (RAA)'
+2026-03-26 02:00:01.355 +03:00 [INF] Route matched with {action = "GetAll", controller = "Users"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller RAA.API.Controllers.UsersController (RAA).
+2026-03-26 02:00:01.359 +03:00 [INF] Получение списка всех пользователей
+2026-03-26 02:00:01.371 +03:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [u].[Id], [u].[Email], [u].[EmailConfirmed], [u].[Login], [u].[PasswordHash], [u].[UserRole], [u].[VerificationCode], [u].[VerificationCodeExpiry]
+FROM [Users] AS [u]
+2026-03-26 02:00:01.375 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[RAA.Domain.Models.AuthModels.Users, RAA, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-03-26 02:00:01.383 +03:00 [INF] Executed action RAA.API.Controllers.UsersController.GetAll (RAA) in 25.7875ms
+2026-03-26 02:00:01.385 +03:00 [INF] Executed endpoint 'RAA.API.Controllers.UsersController.GetAll (RAA)'
+2026-03-26 02:00:01.386 +03:00 [INF] HTTP GET /api/users responded 200 in 42.8421 ms
+2026-03-26 02:00:01.388 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5088/api/users - 200 null application/json; charset=utf-8 48.625ms
+2026-03-26 02:00:15.512 +03:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5088/api/users - null null
+2026-03-26 02:00:15.514 +03:00 [INF] CORS policy execution successful.
+2026-03-26 02:00:15.516 +03:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5088/api/users - 204 null null 4.438ms
+2026-03-26 02:00:15.519 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5088/api/users - application/json null
+2026-03-26 02:00:15.522 +03:00 [INF] CORS policy execution successful.
+2026-03-26 02:00:15.523 +03:00 [INF] Executing endpoint 'RAA.API.Controllers.UsersController.GetAll (RAA)'
+2026-03-26 02:00:15.524 +03:00 [INF] Route matched with {action = "GetAll", controller = "Users"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller RAA.API.Controllers.UsersController (RAA).
+2026-03-26 02:00:15.526 +03:00 [INF] Получение списка всех пользователей
+2026-03-26 02:00:15.530 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [u].[Id], [u].[Email], [u].[EmailConfirmed], [u].[Login], [u].[PasswordHash], [u].[UserRole], [u].[VerificationCode], [u].[VerificationCodeExpiry]
+FROM [Users] AS [u]
+2026-03-26 02:00:15.533 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[RAA.Domain.Models.AuthModels.Users, RAA, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-03-26 02:00:15.534 +03:00 [INF] Executed action RAA.API.Controllers.UsersController.GetAll (RAA) in 8.3634ms
+2026-03-26 02:00:15.535 +03:00 [INF] Executed endpoint 'RAA.API.Controllers.UsersController.GetAll (RAA)'
+2026-03-26 02:00:15.536 +03:00 [INF] HTTP GET /api/users responded 200 in 13.8247 ms
+2026-03-26 02:00:15.538 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5088/api/users - 200 null application/json; charset=utf-8 18.6037ms

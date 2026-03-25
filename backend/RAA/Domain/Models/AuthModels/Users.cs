@@ -1,4 +1,5 @@
 ﻿using RAA.Domain.Models.TaskModels;
+using System.Text.Json.Serialization;
 
 namespace RAA.Domain.Models.AuthModels
 {
@@ -6,9 +7,9 @@ namespace RAA.Domain.Models.AuthModels
     public class Users
     {
         public Guid Id { get; set; }
-
         public string Login { get; set; }
 
+        [JsonIgnore]
         public string PasswordHash { get; set; }
 
         public string Email { get; set; }
@@ -16,7 +17,9 @@ namespace RAA.Domain.Models.AuthModels
 
         public bool EmailConfirmed { get; set; }
 
+        [JsonIgnore]
         public string? VerificationCode { get; set; }
+        [JsonIgnore]
         public DateTime? VerificationCodeExpiry { get; set; }
 
         public List<TaskModel>? Tasks { get; set; } = new();
@@ -35,7 +38,7 @@ namespace RAA.Domain.Models.AuthModels
         public Users() { }
         public override string ToString()
         {
-            return $"{Id}, {Login}, {PasswordHash}, {Email} , {UserRole.User}";
+            return $"{Id}, {Login}, {Email} , {UserRole}";
         }
     }
 }

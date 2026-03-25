@@ -25,7 +25,7 @@ namespace RAA.Infrastructure.Services.AuthServices
         public async Task<bool> SendAsync(string toEmail, string subject, string htmlBody)
         {
             var message = new MimeMessage();
-            message.From.Add(MailboxAddress.Parse(_smtp.Username));
+            message.From.Add(new MailboxAddress("SmartToDo", "dimazinchenko5@gmail.com"));
             message.To.Add(MailboxAddress.Parse(toEmail));
             message.Subject = subject;
             message.Body = new TextPart("html") { Text = htmlBody };
