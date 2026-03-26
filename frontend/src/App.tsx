@@ -2,7 +2,7 @@ import { useTask } from "./components/TaskManager";
 import TaskList from "./components/TaskList";
 import PaginationButton from "./components/PaginationButton";
 import FilterPanel from "./components/FilterPanel";
-import "./styles/Main.css";
+import "./styles/main.css";
 import "./styles/Base.css";
 
 function App() {

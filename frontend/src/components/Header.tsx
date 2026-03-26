@@ -1,5 +1,5 @@
 import { useTask } from "./TaskManager";
-import "../styles/Main.css";
+import "../styles/main.css";
 
 function Header() {
 	const { taskCount, setIsFormVisible, isFormVisible } = useTask();
