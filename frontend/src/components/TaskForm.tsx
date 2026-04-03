@@ -1,14 +1,11 @@
 import React, { useState } from "react";
 import { Priority } from "../types/task";
 import { TaskFormProps } from "../interfaces/TaskFormProps";
+import { useTask } from "./TaskManager";
 import "../styles/Modals.css";
 
-function TaskForm({
-	onAddTask,
-	storageType,
-	onStorageType,
-	onClose,
-}: TaskFormProps) {
+function TaskForm({ onAddTask, onClose }: TaskFormProps) {
+	const { t } = useTask();
 	const [title, setTitle] = useState("");
 	const [description, setDescription] = useState("");
 	const [priority, setPriority] = useState<Priority>("low");
@@ -23,11 +20,11 @@ function TaskForm({
 
 	return (
 		<div className="modalOverlay" onClick={onClose}>
-			<div className="ModalWindow" onClick={(e) => e.stopPropagation()}>
+			<div className="ModalWindow" onClick={(event) => event.stopPropagation()}>
 				<div className="modalHeader">
-					<h2 className="modalTitle">Создание новой задачи</h2>
+					<h2 className="modalTitle">{t.createTaskTitle}</h2>
 					<button className="closeButton" onClick={onClose}>
-						×
+						x
 					</button>
 				</div>
 
@@ -37,56 +34,40 @@ function TaskForm({
 							<input
 								type="text"
 								value={title}
-								onChange={(e) => setTitle(e.target.value)}
+								onChange={(event) => setTitle(event.target.value)}
 								className="formInput"
 								placeholder=" "
 								required
 							/>
-							<label className="formLabel">Название</label>
+							<label className="formLabel">{t.title}</label>
 						</div>
 
 						<div className="formGroup">
 							<textarea
 								value={description}
-								onChange={(e) => setDescription(e.target.value)}
+								onChange={(event) => setDescription(event.target.value)}
 								className="formTextarea"
 								placeholder=" "
 								rows={4}
 							/>
-							<label className="formLabel">Описание</label>
+							<label className="formLabel">{t.description}</label>
 						</div>
 
 						<div className="selectGroup">
-							<label>Приоритет</label>
-							<select
-								value={priority}
-								onChange={(e) => setPriority(e.target.value as Priority)}
-							>
-								<option value="low">Low</option>
-								<option value="medium">Medium</option>
-								<option value="high">High</option>
-							</select>
-						</div>
-
-						<div className="selectGroup">
-							<label>Сохранить в:</label>
-							<select
-								value={storageType}
-								onChange={(e) =>
-									onStorageType(e.target.value as "local" | "indexeddb")
-								}
-							>
-								<option value="local">LocalStorage</option>
-								<option value="indexeddb">IndexedDB</option>
+							<label>{t.priority}</label>
+							<select value={priority} onChange={(event) => setPriority(event.target.value as Priority)}>
+								<option value="low">{t.priorityLowLabel}</option>
+								<option value="medium">{t.priorityMediumLabel}</option>
+								<option value="high">{t.priorityHighLabel}</option>
 							</select>
 						</div>
 
 						<div className="buttonGroup">
 							<button type="button" onClick={onClose} className="cancelButton">
-								Отменить
+								{t.cancel}
 							</button>
 							<button type="submit" className="submitButton">
-								Добавить задачу
+								{t.addTask}
 							</button>
 						</div>
 					</form>

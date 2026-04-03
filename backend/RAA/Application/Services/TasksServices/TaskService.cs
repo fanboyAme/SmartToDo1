@@ -1,5 +1,6 @@
 ﻿using RAA.Application.Exceptions;
 using RAA.Application.Interfaces.Repositories;
+using RAA.Application.Interfaces.Services;
 using RAA.Application.Interfaces.Tasks;
 using RAA.Application.ProjectDtos.TaskDtos;
 using RAA.Domain.Models.TaskModels;
@@ -9,11 +10,11 @@ namespace RAA.Application.Services.TasksServices
 {
     public class TaskService: ITaskService
     {
-        private readonly CurrentUserService _currentUserService;
+        private readonly ICurrentUserService _currentUserService;
         private readonly ITaskRepository _taskRepository;
         private readonly ILogger<TaskService> _logger;
 
-        public TaskService(CurrentUserService currentUserService, ITaskRepository taskRepository, ILogger<TaskService> logger)
+        public TaskService(ICurrentUserService currentUserService, ITaskRepository taskRepository, ILogger<TaskService> logger)
         {
             _currentUserService = currentUserService;
             _taskRepository = taskRepository;

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using RAA.Application.Interfaces.Services;
 using RAA.Application.Interfaces.Tasks;
 using RAA.Application.ProjectDtos.ResponceDto;
 using RAA.Application.ProjectDtos.TaskDtos;
@@ -11,9 +12,9 @@ namespace RAA.Infrastructure.Services.TasksServices
     public class TaskFilterService: ITaskFilterService
     {
         private readonly ApplicationDbContext _db;
-        private readonly CurrentUserService _currentUserService;
-        private readonly TaskQueryBuilder _taskQueryBuilder;
-        public TaskFilterService(ApplicationDbContext db, CurrentUserService currentUserService, TaskQueryBuilder taskQueryBuilder)
+        private readonly ICurrentUserService _currentUserService;
+        private readonly ITaskQueryBuilder _taskQueryBuilder;
+        public TaskFilterService(ApplicationDbContext db, ICurrentUserService currentUserService, ITaskQueryBuilder taskQueryBuilder)
         {
             _db = db;
             _currentUserService = currentUserService;

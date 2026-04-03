@@ -1,9 +1,10 @@
-﻿using RAA.Application.ProjectDtos.TaskDtos;
+﻿using RAA.Application.Interfaces.Tasks;
+using RAA.Application.ProjectDtos.TaskDtos;
 using RAA.Domain.Models.TaskModels;
 
 namespace RAA.Infrastructure.Queries
 {
-    public class TaskQueryBuilder
+    public class TaskQueryBuilder: ITaskQueryBuilder
     {
         public IQueryable<TaskModel> ApplyFilters(IQueryable<TaskModel> query, TaskQueryDto taskQuery)
         {
