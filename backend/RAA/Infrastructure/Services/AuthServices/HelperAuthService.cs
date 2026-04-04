@@ -16,7 +16,7 @@
         {  
             _userRepository = userRepository;  
             _logger = logger;
-            _templatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "EmailTemplate.html");
+            _templatePath = Path.Combine(Directory.GetCurrentDirectory(), "Infrastructure/Templates", "EmailTemplate.html");
         }
         // <summary>
         // Замена пароля

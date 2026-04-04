@@ -4,8 +4,6 @@ using RAA.Application.Interfaces.Tasks;
 using RAA.Application.ProjectDtos.ResponceDto;
 using RAA.Application.ProjectDtos.TaskDtos;
 using RAA.Infrastructure.Databases;
-using RAA.Infrastructure.Queries;
-using RAA.Infrastructure.Services.AuthServices;
 
 namespace RAA.Infrastructure.Services.TasksServices
 {
