@@ -8,18 +8,18 @@ interface UseTaskFilterProps {
 	filterCompleted: boolean | null;
 }
 
+const priorityWeight: Record<Priority, number> = {
+	high: 3,
+	medium: 2,
+	low: 1,
+};
+
 export const useTaskFilter = ({
 	tasks,
 	filterTitle,
 	filterPriorities,
 	filterCompleted,
 }: UseTaskFilterProps) => {
-	const priorityWeight = {
-		high: 3,
-		medium: 2,
-		low: 1,
-	};
-
 	const filteredTasks = useMemo(() => {
 		let result = tasks;
 

@@ -1,7 +1,8 @@
 import { Task } from "../types/task";
 export interface TaskCardProps {
 	task: Task;
-	onToggleTask: (id: string) => void;
-	onDeleteTask: (id: string) => void;
+	onToggleTask: (id: string) => Promise<void>;
+	onDeleteTask: (id: string) => Promise<void>;
 	onStartEditing: (task: Task) => void;
+	isBusy: boolean;
 }

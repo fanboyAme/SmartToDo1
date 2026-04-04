@@ -1,21 +1,45 @@
 import { useTask } from "./TaskManager";
-import "../styles/Main.css";
+import "../styles/main.css";
 
 function Header() {
-	const { taskCount, setIsFormVisible, isFormVisible } = useTask();
+	const {
+		taskCount,
+		setIsFormVisible,
+		isFormVisible,
+		logout,
+		theme,
+		toggleTheme,
+		toggleLanguage,
+		isAdmin,
+		openAdminUsersModal,
+		t,
+	} = useTask();
 
 	return (
 		<header className="header">
 			<div>
-				<h1 className="headerTitle">Менеджер задач</h1>
-				<p className="headerStats">Количество задач: {taskCount}</p>
+				<h1 className="headerTitle">{t.headerTitle}</h1>
+				<p className="headerStats">{t.totalTasks}: {taskCount}</p>
 			</div>
-			<button
-				className="headerButton"
-				onClick={() => setIsFormVisible(!isFormVisible)}
-			>
-				{isFormVisible ? "✕ Закрыть" : "+ Создать задачу"}
-			</button>
+			<div className="headerActions">
+				<button className="themeButton" onClick={toggleTheme}>
+					{theme === "dark" ? t.lightTheme : t.darkTheme}
+				</button>
+				<button className="themeButton" onClick={toggleLanguage}>
+					{t.language}
+				</button>
+				<button className="headerButton" onClick={() => setIsFormVisible(!isFormVisible)}>
+					{isFormVisible ? t.closeForm : `+ ${t.createTask}`}
+				</button>
+				{isAdmin && (
+					<button className="adminButton" onClick={openAdminUsersModal}>
+						{t.admin}
+					</button>
+				)}
+				<button className="logoutButton" onClick={logout}>
+					{t.logout}
+				</button>
+			</div>
 		</header>
 	);
 }

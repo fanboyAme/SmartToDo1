@@ -1,3 +1,4 @@
+import { useCallback, useState } from "react";
 import { useTask } from "./TaskManager";
 import TaskCard from "./TaskCard";
 import Pagination from "./PaginationButton";
@@ -11,18 +12,57 @@ function TaskList() {
 		startEditing,
 		tasksPerPage,
 		setTasksPerPage,
+		t,
 	} = useTask();
+	const [busyTaskIds, setBusyTaskIds] = useState<Set<string>>(new Set());
+
+	const runWithBusy = useCallback(async (id: string, action: () => Promise<void>) => {
+		setBusyTaskIds((prev) => {
+			const next = new Set(prev);
+			next.add(id);
+			return next;
+		});
+
+		try {
+			await action();
+		} finally {
+			setBusyTaskIds((prev) => {
+				const next = new Set(prev);
+				next.delete(id);
+				return next;
+			});
+		}
+	}, []);
+
+	const handleToggleTask = useCallback(
+		async (id: string) => {
+			if (busyTaskIds.has(id)) return;
+			await runWithBusy(id, async () => {
+				await toggleTask(id);
+			});
+		},
+		[busyTaskIds, runWithBusy, toggleTask]
+	);
+
+	const handleDeleteTask = useCallback(
+		async (id: string) => {
+			if (busyTaskIds.has(id)) return;
+			await runWithBusy(id, async () => {
+				await deleteTask(id);
+			});
+		},
+		[busyTaskIds, deleteTask, runWithBusy]
+	);
 
 	return (
 		<div className="taskListContainer">
-			<h2 className="taskListTitle">Список задач</h2>
+			<h2 className="taskListTitle">{t.tasks}</h2>
 
-			{/* Tasks per page selector */}
 			<div className="tasksPerPageSelector">
-				<span className="tasksPerPageLabel">Задач на странице:</span>
+				<span className="tasksPerPageLabel">{t.tasksPerPage}:</span>
 				<select
 					value={tasksPerPage}
-					onChange={(e) => setTasksPerPage(Number(e.target.value))}
+					onChange={(event) => setTasksPerPage(Number(event.target.value))}
 					className="tasksPerPageSelect"
 				>
 					<option value={5}>5</option>
@@ -32,24 +72,23 @@ function TaskList() {
 				</select>
 			</div>
 
-			{/* Tasks grid */}
 			<ul className="taskGrid">
 				{currentTasks.length === 0 ? (
-					<li className="emptyState">Задач не найдено</li>
+					<li className="emptyState">{t.noTasksFound}</li>
 				) : (
 					currentTasks.map((task) => (
 						<TaskCard
 							task={task}
 							key={task.id}
-							onToggleTask={toggleTask}
-							onDeleteTask={deleteTask}
+							onToggleTask={handleToggleTask}
+							onDeleteTask={handleDeleteTask}
 							onStartEditing={startEditing}
+							isBusy={busyTaskIds.has(task.id)}
 						/>
 					))
 				)}
 			</ul>
 
-			{/* Pagination */}
 			<Pagination />
 		</div>
 	);

@@ -1,13 +1,11 @@
 import { TaskCardProps } from "../interfaces/TaskCardProps";
+import { useTask } from "./TaskManager";
 import "../styles/TaskCard.css";
 
-function TaskCard({
-	task,
-	onToggleTask,
-	onDeleteTask,
-	onStartEditing,
-}: TaskCardProps) {
-	const formatDate = (date: Date) => {
+function TaskCard({ task, onToggleTask, onDeleteTask, onStartEditing, isBusy }: TaskCardProps) {
+	const { t } = useTask();
+
+	const formatDate = (date: string | Date) => {
 		return new Date(date).toLocaleDateString("ru-RU", {
 			day: "numeric",
 			month: "short",
@@ -15,66 +13,52 @@ function TaskCard({
 		});
 	};
 
-	const handleCheckboxChange = () => {
-		onToggleTask(task.id);
-	};
-
-	const handleEditClick = () => {
-		onStartEditing(task);
-	};
-
-	const handleDeleteClick = () => {
-		onDeleteTask(task.id);
-	};
+	const priorityLabel =
+		task.priority === "high"
+			? t.priorityHighLabel
+			: task.priority === "medium"
+				? t.priorityMediumLabel
+				: t.priorityLowLabel;
 
 	return (
-		<div
-			className="taskCard"
-			data-priority={task.priority}
-			data-completed={task.completed}
-		>
+		<div className="taskCard" data-priority={task.priority} data-completed={task.completed}>
 			<div className="taskHeader">
 				<div className="taskTitleSection">
-					<h3 className={`taskTitle ${task.completed ? "completed" : ""}`}>
-						{task.title}
-					</h3>
+					<h3 className={`taskTitle ${task.completed ? "completed" : ""}`}>{task.title}</h3>
 					<input
 						type="checkbox"
 						checked={task.completed}
-						onChange={handleCheckboxChange}
+						onChange={() => onToggleTask(task.id)}
 						className="taskCheckbox"
-						aria-label={
-							task.completed
-								? "Отметить как невыполненную"
-								: "Отметить как выполненную"
-						}
+						disabled={isBusy}
+						aria-label={task.completed ? t.undoneTasks : t.doneTasks}
 					/>
 				</div>
 
-				{task.description && (
-					<p className="taskDescription">{task.description}</p>
-				)}
+				<p className="taskDescription">{task.description || "\u00A0"}</p>
 			</div>
 
 			<div className="taskMeta">
-				<span className={`taskPriority ${task.priority}`}>{task.priority}</span>
+				<span className={`taskPriority ${task.priority}`}>{priorityLabel}</span>
 				<span className="taskDate">{formatDate(task.createdAt)}</span>
 			</div>
 
 			<div className="taskActions">
 				<button
-					onClick={handleEditClick}
+					onClick={() => onStartEditing(task)}
 					className="taskButton editButton"
-					aria-label="Редактировать задачу"
+					aria-label={t.edit}
+					disabled={isBusy}
 				>
-					Редактировать
+					{t.edit}
 				</button>
 				<button
-					onClick={handleDeleteClick}
+					onClick={() => onDeleteTask(task.id)}
 					className="taskButton deleteButton"
-					aria-label="Удалить задачу"
+					aria-label={t.delete}
+					disabled={isBusy}
 				>
-					Удалить
+					{isBusy ? "..." : t.delete}
 				</button>
 			</div>
 		</div>
