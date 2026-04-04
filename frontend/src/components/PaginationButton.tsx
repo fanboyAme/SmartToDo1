@@ -2,25 +2,25 @@ import { useTask } from "./TaskManager";
 import "../styles/PaginationButton.css";
 
 function PaginationButton() {
-	const { currentPage, totalPage, setCurrentPage, tasks, tasksPerPage } =
+	const { currentPage, totalPage, setCurrentPage, taskCount, tasksPerPage, currentTasks, t } =
 		useTask();
 
-	const totalTasks = tasks.length;
+	const totalTasks = taskCount;
 	const startIndex = totalTasks > 0 ? (currentPage - 1) * tasksPerPage + 1 : 0;
-	const endIndex = Math.min(currentPage * tasksPerPage, totalTasks);
+	const endIndex = totalTasks > 0 ? startIndex + currentTasks.length - 1 : 0;
 
 	const getVisiblePages = (
-		currentPage: number,
-		totalPage: number
+		currentPageValue: number,
+		totalPageValue: number
 	): (number | string)[] => {
-		if (totalPage <= 1) return [1];
-		if (totalPage === 0) return [];
+		if (totalPageValue <= 1) return [1];
+		if (totalPageValue === 0) return [];
 
 		const pages: (number | string)[] = [];
 		const showPages = 5;
 
-		let startPage = Math.max(1, currentPage - Math.floor(showPages / 2));
-		let endPage = Math.min(totalPage, startPage + showPages - 1);
+		let startPage = Math.max(1, currentPageValue - Math.floor(showPages / 2));
+		let endPage = Math.min(totalPageValue, startPage + showPages - 1);
 
 		if (endPage - startPage + 1 < showPages) {
 			startPage = Math.max(1, endPage - showPages + 1);
@@ -31,13 +31,13 @@ function PaginationButton() {
 			if (startPage > 2) pages.push("...");
 		}
 
-		for (let i = startPage; i <= endPage; i++) {
-			pages.push(i);
+		for (let index = startPage; index <= endPage; index += 1) {
+			pages.push(index);
 		}
 
-		if (endPage < totalPage) {
-			if (endPage < totalPage - 1) pages.push("...");
-			pages.push(totalPage);
+		if (endPage < totalPageValue) {
+			if (endPage < totalPageValue - 1) pages.push("...");
+			pages.push(totalPageValue);
 		}
 
 		return pages;
@@ -49,12 +49,8 @@ function PaginationButton() {
 		<>
 			{totalTasks > 0 && (
 				<div className="paginationInfo">
-					Показано{" "}
-					<strong>
-						{startIndex}-{endIndex}
-					</strong>{" "}
-					из <strong>{totalTasks}</strong> задач
-					{totalPage > 1 && ` (Страница ${currentPage} из ${totalPage})`}
+					{t.shown} <strong>{startIndex}-{endIndex}</strong> {t.of} <strong>{totalTasks}</strong>
+					{totalPage > 1 && ` (${t.page} ${currentPage} ${t.of} ${totalPage})`}
 				</div>
 			)}
 
@@ -65,16 +61,14 @@ function PaginationButton() {
 						disabled={currentPage === 1}
 						onClick={() => setCurrentPage(currentPage - 1)}
 					>
-						←
+						{"<"}
 					</button>
 
 					{getVisiblePages(currentPage, totalPage).map((item, index) =>
 						typeof item === "number" ? (
 							<button
 								key={index}
-								className={`paginationButton ${
-									currentPage === item ? "active" : ""
-								}`}
+								className={`paginationButton ${currentPage === item ? "active" : ""}`}
 								onClick={() => setCurrentPage(item)}
 							>
 								{item}
@@ -91,7 +85,7 @@ function PaginationButton() {
 						disabled={currentPage === totalPage}
 						onClick={() => setCurrentPage(currentPage + 1)}
 					>
-						→
+						{">"}
 					</button>
 				</div>
 			)}

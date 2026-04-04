@@ -1,30 +1,32 @@
 import { useTask } from "./components/TaskManager";
 import TaskList from "./components/TaskList";
-import PaginationButton from "./components/PaginationButton";
 import FilterPanel from "./components/FilterPanel";
-import "./styles/Main.css";
+import "./styles/main.css";
 import "./styles/Base.css";
 
 function App() {
-	const { isLoading } = useTask();
+	const { isLoading, isAuthChecking, isAuthenticated, t } = useTask();
+
+	if (isAuthChecking) {
+		return <div className="authCheck">{t.checkingAuth}</div>;
+	}
+
+	if (!isAuthenticated) {
+		return <div className="authPlaceholder" />;
+	}
 
 	return (
-		<div
-			style={{
-				display: "flex",
-				minHeight: "100vh",
-				padding: "2rem",
-				gap: "2rem",
-			}}
-		>
-			{isLoading ? (
-				<div>Загрузка...</div>
-			) : (
-				<>
-					<FilterPanel />
-					<TaskList />
-				</>
-			)}
+		<div className="appShell">
+			<div className="appLayout">
+				{isLoading ? (
+					<div className="loadingState">{t.loading}</div>
+				) : (
+					<>
+						<FilterPanel />
+						<TaskList />
+					</>
+				)}
+			</div>
 		</div>
 	);
 }

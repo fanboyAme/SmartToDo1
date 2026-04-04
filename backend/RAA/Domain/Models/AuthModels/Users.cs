@@ -1,0 +1,44 @@
+﻿using RAA.Domain.Models.TaskModels;
+using System.Text.Json.Serialization;
+
+namespace RAA.Domain.Models.AuthModels
+{
+    public enum UserRole { User, Admin } 
+    public class Users
+    {
+        public Guid Id { get; set; }
+        public string Login { get; set; }
+
+        [JsonIgnore]
+        public string PasswordHash { get; set; }
+
+        public string Email { get; set; }
+        public UserRole UserRole { get; set; }
+
+        public bool EmailConfirmed { get; set; }
+
+        [JsonIgnore]
+        public string? VerificationCode { get; set; }
+        [JsonIgnore]
+        public DateTime? VerificationCodeExpiry { get; set; }
+
+        public List<TaskModel>? Tasks { get; set; } = new();
+        public List<TokenModel> Token { get; set; } = new();
+        public Users(string login, string password, string email)
+        {
+            Id = Guid.NewGuid();
+            Email = email;
+            Login = login;
+            PasswordHash = password;
+            UserRole = UserRole.User;
+            EmailConfirmed = false;
+            VerificationCode = null;
+        }
+
+        public Users() { }
+        public override string ToString()
+        {
+            return $"{Id}, {Login}, {Email} , {UserRole}";
+        }
+    }
+}
